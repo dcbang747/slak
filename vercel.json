@@ -1,0 +1,13 @@
+{
+  "$comment": "Single Vercel project: builds the Vite SPA (frontend/) as static output and serves the FastAPI backend as a Python serverless function (api/index.py). Set the Vercel project Root Directory to the repo root (default).",
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist",
+  "functions": {
+    "api/index.py": {
+      "includeFiles": "backend/**"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index" }
+  ]
+}

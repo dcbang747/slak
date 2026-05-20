@@ -3,7 +3,7 @@ import Dropzone from './Dropzone';
 import {
   uploadTitles, uploadTraits, uploadNames,
   uploadReligions, uploadCultures,
-  startGeneration,
+  startGeneration, zipBlobUrl,
 } from '../api';
 
 const BASE_NAV = [
@@ -24,7 +24,7 @@ export default function LeftSidebar() {
     setParsedNames, clearParsedNames,
     setParsedReligions, clearParsedReligions,
     setParsedCultures, clearParsedCultures,
-    setDrawer, setTaskState, resetTask, buildPayload, resetAll,
+    setDrawer, setTaskState, setGenerationResult, resetTask, buildPayload, resetAll,
   } = useStore();
 
   const nav = task_state === 'SUCCESS'
@@ -49,9 +49,15 @@ export default function LeftSidebar() {
   const onGenerate = async () => {
     resetTask();
     setDrawer(true);
+    setTaskState({ task_state: 'RUNNING' });
     try {
-      const { task_id } = await startGeneration(buildPayload());
-      setTaskState({ task_id, task_state: 'PENDING', append_message: 'Submitted to worker.' });
+      const res = await startGeneration(buildPayload());
+      setGenerationResult({
+        characters: res.characters,
+        titles_with_history: res.titles_with_history,
+        family_tree: res.family_tree,
+        download_url: zipBlobUrl(res.zip_b64),
+      });
     } catch (err) {
       setTaskState({ task_state: 'FAILURE', task_error: err.message });
     }

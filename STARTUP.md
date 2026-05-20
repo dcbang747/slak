@@ -78,7 +78,7 @@ Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
 
 | Container | Role |
 |---|---|
-| `api-1` | FastAPI on port 8000 — handles uploads, `/generate`, and runs the simulation in an in-process thread pool (`jobs.py`) |
+| `api-1` | FastAPI on port 8000 — handles uploads and runs `/generate` synchronously (`generation.py`), returning the ZIP + family tree in one response |
 | `frontend-1` | Vite dev server on port 5173 — serves the React UI, proxies `/api/*` to api:8000 |
 
 ---

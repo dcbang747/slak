@@ -1,9 +1,0 @@
-{
-  "$comment": "Forwards same-origin /api/* calls from the Vercel SPA to the backend, stripping the /api prefix to match the backend's route names (mirrors the Vite dev proxy). Replace the destination host with your deployed backend URL (e.g. the Render service URL). Set Vercel's project Root Directory to 'frontend'.",
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://REPLACE-WITH-YOUR-RENDER-URL.onrender.com/$1"
-    }
-  ]
-}

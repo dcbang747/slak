@@ -9,8 +9,8 @@ amendment **v2.0** (`Jis_Additional.pdf`) end-to-end.
 | Layer    | Stack                                                      |
 | -------- | ---------------------------------------------------------- |
 | Frontend | React + Vite, Tailwind CSS (monochrome), Zustand state     |
-| API      | FastAPI (file uploads, /generate, /status, /download)      |
-| Generation | In-process thread pool + in-memory job store (`jobs.py`) — no Celery/Redis |
+| API      | FastAPI (file uploads + a single synchronous `/generate`)  |
+| Generation | Synchronous, in-request (`generation.py`) — stateless; one call returns stats + family tree + base64 ZIP |
 | Output   | Custom Paradox AST parser → simulation engine → ZIP bundle |
 
 ## Quick start
@@ -63,8 +63,8 @@ Minimum required to enable the Generate button: **Title History + Name Lists**.
 
 ## Spec coverage
 
-* **Ch. 1** — FastAPI queues generation on an in-process thread pool (`jobs.py`);
-  frontend polls `/status`; final ZIP at `/download/{task_id}`.
+* **Ch. 1** — FastAPI runs generation synchronously (`generation.py`) and returns
+  stats + family tree + the ZIP (base64) in one `/generate` response. Stateless.
 * **Ch. 2** — Three-column SPA: left sidebar (dropzones + nav + Generate),
   center contextual editor, right drawer with mock terminal log. Strict
   monochrome Tailwind palette.
@@ -107,7 +107,7 @@ Minimum required to enable the Generate button: **Title History + Name Lists**.
 backend/
   app/
     main.py          FastAPI endpoints
-    jobs.py          In-process thread-pool generation + job store
+    generation.py    Synchronous run_generation() → stats + tree + base64 ZIP
     parser.py        Paradox AST compiler (ch. 5)
     schemas.py       Pydantic models (ch. 4)
     genetics.py      Inheritance algorithm (ch. 6.1)
@@ -149,14 +149,10 @@ and implemented (secrets + relationships are rolled when their Global Settings f
 
 ## Deployment
 
-Two pieces: a static **frontend** and a single **FastAPI backend** (generation runs in an
-in-process thread pool — no Celery, Redis, or separate worker).
+The whole app deploys to **Vercel as one project** — the Vite SPA as static output
+plus the FastAPI backend as a Python serverless function (`api/index.py`), since
+generation is now stateless and synchronous. No separate backend host, no database.
 
-* **Frontend** (Vite SPA) → **Vercel**. In dev, `/api/*` is proxied to the backend by Vite;
-  on Vercel that proxy doesn't exist, so add a `vercel.json` rewrite from `/api/*` to your
-  backend URL, or point `api.js`'s `BASE` at a `VITE_API_*` env var.
-* **Backend** → any host that runs one always-(or sleep-)on web service: **Render free**
-  (sleeps when idle, ~30–60s cold start), Koyeb, Fly.io, or a small VM (Oracle Always Free,
-  etc.). It's a single process holding results in memory, so run **one instance** (no
-  horizontal autoscaling) and mount/keep a writable `RESULTS_DIR` for the ZIPs it streams.
-  Tighten CORS (currently `allow_origins=["*"]`) to your real domain before going public.
+See **[DEPLOYMENT.md](DEPLOYMENT.md)** for the full walkthrough (Vercel project
+setup, the `vercel.json` build + `/api` rewrite, custom domain on 1-grid, and the
+serverless caveats — execution time limit, response size, cold starts).

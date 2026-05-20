@@ -26,7 +26,7 @@ The spec has two documents:
 |---|---|
 | Frontend | React 18, Vite, Tailwind CSS, Zustand 4.5.5 |
 | Backend API | FastAPI (Python 3.11+) |
-| Generation | In-process `ThreadPoolExecutor` + in-memory job store (`jobs.py`) — no Celery/Redis |
+| Generation | Synchronous, in-request (`generation.py`) — stateless; one `/generate` call returns stats + family tree + base64 ZIP. No Celery/Redis/queue. |
 | Containerisation | Docker Compose (2 services: api, frontend) |
 | Output format | Paradox Clausewitz script |
 
@@ -55,7 +55,7 @@ cd backend
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
-Generation runs in an in-process thread pool inside the API (`jobs.py`), so there is no separate worker or broker to start.
+Generation runs synchronously inside the API request (`generation.py`), so there is no separate worker or broker to start.
 
 ### Local frontend
 ```bash
@@ -83,17 +83,16 @@ User defines dynasties in UI (Global Settings → Dynasties panel)
 
 User clicks Generate Simulation
     → store.buildPayload() serialises Zustand state → SimulationPayload JSON
-    → POST /generate
-    → jobs.submit_generation() queues the run on an in-process thread pool, task_id returned immediately
-    → RightDrawer polls GET /status/{task_id} every 1.2 s
-    → On SUCCESS: Download ZIP button appears → GET /download/{task_id}
+    → POST /generate  (generation.run_generation runs synchronously, ~0.1–1s)
+    → single JSON response: { characters, titles_with_history, family_tree, zip_b64 }
+    → store: tree_data set, Download ZIP built from zip_b64 (Blob object URL), stats shown
 ```
 
 ### Docker service topology
 
 ```
-api     (FastAPI) ← receives uploads + /generate; runs generation in a ThreadPoolExecutor (jobs.py)
-                    parse → simulate → render → ZIP, results held in an in-memory job store
+api     (FastAPI) ← receives uploads + /generate; runs generation synchronously (generation.py)
+                    parse → simulate → render → ZIP, returned inline (no queue, no result files)
 frontend (Vite)   ← proxies /api/* to api:8000
 ```
 
@@ -101,12 +100,11 @@ frontend (Vite)   ← proxies /api/* to api:8000
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `RESULTS_DIR` | `tempfile.gettempdir()` | Where result ZIPs are written (same instance serves them back) |
-| `GENERATION_WORKERS` | `4` | Thread-pool size for concurrent generations |
-| `JOB_TTL_SECONDS` | `3600` | Finished jobs (and their ZIPs) are pruned after this |
+| `CORS_ORIGINS` | `*` | Comma-separated allowed origins; set to your domain in production |
 | `VITE_API_PROXY` | `http://localhost:8000` | Frontend → backend proxy target (Docker overrides to `http://api:8000`) |
 
-On Windows, generated ZIPs land in `C:\Users\<user>\AppData\Local\Temp\`.
+Deployment: the whole app ships to Vercel as one project (static SPA + a Python
+serverless function at `api/index.py`). See `DEPLOYMENT.md`.
 
 ---
 
@@ -134,10 +132,10 @@ Changes in one place **require** matching changes in the other:
 | If you change… | You must also update… |
 |---|---|
 | Fields in `SimulationPayload` or nested schemas | `store.buildPayload()` in `store.js` |
-| `/status/{task_id}` response shape in `main.py` | `RightDrawer.jsx` (reads `data.state`, `data.message`, `data.result.*`, `data.error`) |
+| `/generate` response shape in `generation.py` | `LeftSidebar.onGenerate` (reads `characters`, `titles_with_history`, `family_tree`, `zip_b64`) |
 | `_pick_name()` key convention | `extract_name_lists()` key format |
 | Vite proxy path prefix (`/api`) | All `api.js` fetch calls + FastAPI route paths |
-| Output ZIP contents in `jobs.py` | Download handling in `RightDrawer.jsx` |
+| Output ZIP contents in `generation.py`/`output.py` | Download handling in `RightDrawer.jsx` (Blob from `zip_b64`) |
 | `DynastyDefinition` schema fields | Dynasty card UI in `GlobalSettings.jsx` + `store.js` defaults + `buildPayload()` |
 | `GlobalSettings` schema fields | `store.js` `global_settings` initial state + `buildPayload()` |
 | Personality trait exclusion groups in `schemas.py` | `_defaultPersonalityTraits()` in `store.js` (must mirror exactly) |
@@ -151,7 +149,7 @@ Changes in one place **require** matching changes in the other:
 |---|---|
 | `maximum_generations` | Simulation checks it but interacts with per-title sequence config — a single long sequence can exhaust all generations before timeline ends |
 | Bastard system | Fully implemented; bastards have no title succession rights (by design) |
-| S3 output | `boto3` in `requirements.txt` but never used; ZIPs go to `RESULTS_DIR` (local temp) |
+| ZIP delivery | Returned inline as base64 in the `/generate` response — never written to disk (keeps the backend stateless/serverless-friendly) |
 | Traits preview | Parsed and stored; no frontend view — used only during simulation |
 | Death reasons | Hardcoded by trait/age in `mortality.py` (no upload needed); the `/upload/deaths` endpoint + `deaths_txt` field still exist but are unused |
 | Title history `government`/`liege` | `DynastySequence` has `government_type` and `liege_title_id` fields but `output.py` does not yet write them to title history blocks |

@@ -134,13 +134,14 @@ export const useStore = create(persist((set, get) => ({
   tutorial_enabled: true,
   tutorial_step: 0,
 
-  // Simulation status
-  task_id: null,
+  // Simulation status. Generation is one synchronous request, so task_state is
+  // just 'RUNNING' | 'SUCCESS' | 'FAILURE'; download_url is an object URL built
+  // from the base64 ZIP returned by /generate.
   task_state: null,
-  task_messages: [],
   task_result: null,
   task_error: null,
   tree_data: null,
+  download_url: null,
 
   // ----- Setters -----
   setGlobal: (patch) => set((s) => ({ global_settings: { ...s.global_settings, ...patch } })),
@@ -390,15 +391,22 @@ export const useStore = create(persist((set, get) => ({
   setTutorialStep: (n) => set({ tutorial_step: n }),
 
   setTaskState: (patch) => set((s) => ({
-    task_id: patch.task_id ?? s.task_id,
     task_state: patch.task_state ?? s.task_state,
     task_result: patch.task_result ?? s.task_result,
     task_error: patch.task_error ?? s.task_error,
-    task_messages: patch.append_message
-      ? [...s.task_messages, patch.append_message]
-      : (patch.task_messages ?? s.task_messages),
   })),
-  resetTask: () => set({ task_id: null, task_state: null, task_result: null, task_error: null, task_messages: [], tree_data: null }),
+  // Store the full result of a synchronous generation in one shot.
+  setGenerationResult: ({ characters, titles_with_history, family_tree, download_url }) => set({
+    task_state: 'SUCCESS',
+    task_result: { characters, titles_with_history },
+    tree_data: family_tree,
+    download_url,
+    task_error: null,
+  }),
+  resetTask: () => set((s) => {
+    if (s.download_url) URL.revokeObjectURL(s.download_url);
+    return { task_state: null, task_result: null, task_error: null, tree_data: null, download_url: null };
+  }),
   setTreeData: (data) => set({ tree_data: data }),
 
   // Clear all uploaded files, dynasties, sequences, and settings back to defaults.
@@ -408,7 +416,7 @@ export const useStore = create(persist((set, get) => ({
     parsed_files: _defaultParsedFiles(),
     title_sequences: {},
     dynasty_definitions: [],
-    task_id: null, task_state: null, task_result: null, task_error: null, task_messages: [], tree_data: null,
+    task_state: null, task_result: null, task_error: null, tree_data: null, download_url: null,
   }),
 
   // Build the JSON payload for /generate

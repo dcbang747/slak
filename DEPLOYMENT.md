@@ -1,97 +1,86 @@
 # Deployment
 
-Two pieces, both free:
+The whole app deploys to **Vercel as a single project** — no separate backend
+host, no database, free beyond the domain:
 
 ```
-yourdomain.com ──► Vercel (React SPA) ──/api/*──► Render (FastAPI backend)
-   (1-grid DNS)                          rewrite
+yourdomain.com ──► Vercel
+                     ├─ Vite SPA (static)            ← frontend/dist
+                     └─ FastAPI on /api/* (Python fn) ← api/index.py
 ```
 
-- **Frontend** → Vercel (static Vite build).
-- **Backend** → Render free web service (single FastAPI process; generation runs
-  in an in-process thread pool — no Redis/worker).
-- **Domain** → bought at 1-grid, pointed at Vercel.
-
-Recurring cost: just the domain.
+Generation runs **synchronously** in one request (`POST /api/generate` returns the
+stats, family tree, and the ZIP as base64 in a single JSON response), so the
+backend is fully stateless and fits Vercel's serverless model.
 
 ---
 
-## 1. Push to GitHub
+## Layout that makes this work
 
-Make sure this repo is on GitHub (Render and Vercel both deploy from it).
-
----
-
-## 2. Backend on Render
-
-1. Render Dashboard → **New ➜ Blueprint** → connect this repo.
-2. Render reads [`render.yaml`](render.yaml) and proposes the
-   `ck3-history-generator-api` service (free, Docker, root dir `backend`). Click
-   **Apply**.
-3. Wait for the first deploy (a few minutes). Render builds `backend/Dockerfile`
-   and starts it (`uvicorn` binds Render's injected `$PORT` automatically).
-4. Copy the service URL, e.g. `https://ck3-history-generator-api.onrender.com`.
-   Confirm it's up: visiting `…/health` returns `{"status":"ok"}`.
-
-**Free-tier behaviour:** the service sleeps after ~15 min idle and cold-starts
-(~30–60s) on the next request — the first person to use it after a quiet spell
-waits a bit. Results (in-memory jobs + ZIPs) are ephemeral, which is fine because
-generate → download happens within seconds. Keep it to **one instance** (no
-autoscaling): results live in that process's memory.
+| File | Role |
+|---|---|
+| `frontend/` | Vite SPA. Built by Vercel into `frontend/dist`. |
+| `api/index.py` | Vercel Python serverless function. Mounts the FastAPI backend (`backend/app`) under `/api`. |
+| `requirements.txt` (repo root) | Python deps Vercel installs for the function. |
+| `vercel.json` (repo root) | Build command + output dir + `includeFiles: backend/**` + the `/api/*` rewrite. |
 
 ---
 
-## 3. Frontend on Vercel
+## Steps
 
-1. Edit [`frontend/vercel.json`](frontend/vercel.json) and replace
-   `REPLACE-WITH-YOUR-RENDER-URL.onrender.com` with your Render host from step 2.
-   Commit + push.
-   - This rewrites same-origin `/api/*` calls to the backend and strips the
-     `/api` prefix (matching the backend's route names). Same-origin means **no
-     CORS issues**.
-2. Vercel Dashboard → **Add New ➜ Project** → import this repo.
-3. Set **Root Directory** to `frontend` (Vercel then auto-detects Vite).
-4. Deploy. You'll get a `…vercel.app` URL — open it and confirm uploads +
-   Generate work end to end.
+1. **Push to GitHub.**
+2. **Vercel → Add New ➜ Project → import this repo.** Leave **Root Directory =
+   repo root** (the default — *not* `frontend`, because the Python function lives
+   in `api/` and needs the backend code via `includeFiles`).
+3. Vercel reads [`vercel.json`](vercel.json): it runs `cd frontend && npm install
+   && npm run build`, serves `frontend/dist`, and deploys `api/index.py` as a
+   Python function with `requirements.txt`.
+4. **Deploy**, then open the `…vercel.app` URL and test: upload a name list,
+   define a dynasty, Generate, download the ZIP, open the Family Tree.
 
-> Alternative to the rewrite: instead of `vercel.json`, set a Vercel env var
-> `VITE_API_BASE=https://<render-host>` and the SPA will call the backend
-> directly. That path needs CORS (step 5) since it's cross-origin. The rewrite is
-> simpler — prefer it.
+### Custom domain (1-grid)
+- Vercel project → **Settings ➜ Domains** → add `yourdomain.com`.
+- In the **1-grid DNS panel**, add the records Vercel shows (an **A record** for
+  the apex, a **CNAME** `www → cname.vercel-dns.com`). Vercel issues HTTPS
+  automatically once DNS propagates.
 
----
-
-## 4. Point the 1-grid domain at Vercel
-
-1. Vercel project → **Settings ➜ Domains** → add `yourdomain.com`.
-2. Vercel shows the DNS records to create. In the **1-grid DNS panel**, add them:
-   - Apex (`yourdomain.com`): the **A record** Vercel gives (or an ALIAS/ANAME if
-     1-grid supports it).
-   - `www`: a **CNAME** to `cname.vercel-dns.com`.
-3. Wait for DNS to propagate; Vercel issues HTTPS automatically.
-
-The backend stays on its `…onrender.com` URL — it doesn't need a custom domain
-(you can add `api.yourdomain.com` later if you want).
+### CORS
+Same-origin (the SPA and the API share the Vercel domain), so CORS isn't needed.
+The backend still honours a `CORS_ORIGINS` env var (default `*`) if you ever call
+it from another origin.
 
 ---
 
-## 5. Lock down CORS (before sharing publicly)
+## ⚠️ The one part not yet verified
 
-The backend defaults to `CORS_ORIGINS=*`. Once the domain is live, set it to your
-real origin so only your site can call the API:
+I could test the synchronous backend and the whole flow **locally**, but not the
+**Vercel Python routing** (no deploy from here). The setup follows the standard
+"static SPA + `api/` Python function" pattern and the mount logic is verified
+(`/api/generate` → backend `/generate`). If the first deploy returns 404s on
+`/api/*`, the fix is almost always one of:
 
-- Render → your service → **Environment** → set
-  `CORS_ORIGINS=https://yourdomain.com` (comma-separate multiple origins) → save
-  (it redeploys).
+- **Path mismatch.** Vercel routes `/api/*` to `api/index.py`; the function mounts
+  the backend under `/api`, so it expects to receive the original `/api/...` path.
+  If Vercel instead strips it, drop the `app.mount("/api", …)` in `api/index.py`
+  and expose the backend `app` directly (`from app.main import app`).
+- **Backend not bundled.** Confirm `includeFiles: "backend/**"` is in
+  `vercel.json` (the function imports `backend/app`).
+- **Deps.** Confirm the root `requirements.txt` was picked up in the build logs.
 
-> Note: if you used the **vercel.json rewrite** (step 3), browser calls are
-> same-origin and CORS isn't strictly required — but setting it is still good
-> hygiene and protects the `…vercel.app` and direct-URL cases.
+Check the runtime logs in the Vercel dashboard — they show the import error or the
+path the function actually received.
+
+### Caveats (free tier, serverless)
+- **Execution time limit** (~60s on Hobby — confirm current value). Typical runs
+  are ~0.1–1s, so only extreme configs (many thousands of characters) risk it.
+- **Response size:** the ZIP rides back as base64 in JSON. Fine for normal runs
+  (well under ~1 MB); enormous runs could approach Vercel's response limit.
+- **Cold starts** on the Python function after idle (first request slower).
 
 ---
 
 ## Local development is unchanged
 
-`docker compose up --build` still runs everything locally (the Dockerfile falls
-back to port 8000 when `$PORT` isn't set, and `api.js` falls back to `/api` via
-the Vite proxy when `VITE_API_BASE` isn't set).
+`docker compose up --build` still runs everything locally — the `api/` function
+and `vercel.json` are ignored locally; Docker runs `backend/app/main.py` via
+uvicorn and the Vite dev server proxies `/api/*` to it (`vite.config.js`).

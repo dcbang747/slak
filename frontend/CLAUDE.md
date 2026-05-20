@@ -38,7 +38,9 @@ Single source of truth. Key sections:
 | `tutorial_step` | number | Current coachmark index (ephemeral, resets to 0) |
 | `active_view` | string | `'global'` \| `'lifecycle'` \| `'events'` \| `'titles'` |
 | `drawer_open` | bool | Right drawer visibility |
-| `task_id/state/messages/result/error` | various | Simulation task state for the right drawer |
+| `task_state/result/error` | various | `'RUNNING'`\|`'SUCCESS'`\|`'FAILURE'` + stats/error for the right drawer (set from the one-shot `/generate` response — no polling) |
+| `tree_data` | object | Family-tree JSON from `/generate`, read by the Family Tree view |
+| `download_url` | string | Object URL built from the base64 ZIP; powers the Download button (revoked on reset) |
 
 ### `global_settings` shape
 
@@ -151,7 +153,9 @@ Single source of truth. Key sections:
 
 All `api.js` calls prefix `/api`. Vite proxies `/api → http://localhost:8000` in local dev (`vite.config.js`). In Docker, `VITE_API_PROXY=http://api:8000` overrides the target. FastAPI has no `/api` prefix on its routes — stripping is done entirely in the Vite config.
 
-`api.js` exports: `uploadTitles`, `uploadTraits`, `uploadDeaths`, `uploadNames`, `uploadReligions`, `uploadSecrets`, `startGeneration`, `fetchStatus`, `downloadUrl`.
+`api.js` exports: `uploadTitles`, `uploadTraits`, `uploadDeaths`, `uploadNames`, `uploadReligions`, `uploadSecrets`, `uploadCultures`, `startGeneration` (one-shot — returns the full result), `zipBlobUrl` (base64 ZIP → object URL). `BASE` is `import.meta.env.VITE_API_BASE || '/api'`.
+
+Generation is a single request: `LeftSidebar.onGenerate` awaits `startGeneration()`, then calls `setGenerationResult()` (sets `task_state='SUCCESS'`, `tree_data`, and `download_url` via `zipBlobUrl`). There is no `/status` polling, `/download`, or `fetchTree` — those endpoints and helpers were removed.
 
 Note: `uploadDynasties` does **not** exist — dynasties are user-defined via the UI, not uploaded from file.
 

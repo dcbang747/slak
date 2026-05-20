@@ -1,13 +1,13 @@
-"""FastAPI app: receives uploads + simulation payload, runs generation in an
-in-process thread pool, and exposes status polling and ZIP download endpoints."""
+"""FastAPI app: receives uploads + simulation payload, runs the (fast) generation
+synchronously, and returns stats + family tree + ZIP in a single response.
+Stateless — no task queue, polling, or result files."""
 
 import os
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
 
 from .schemas import SimulationPayload
-from .jobs import submit_generation, get_job
+from .generation import run_generation
 from .parser import (
     parse, extract_title_ids_from_history, extract_genetic_traits, extract_death_reasons,
     extract_name_lists, extract_dynasties, extract_religions, extract_secrets, extract_cultures,
@@ -112,55 +112,12 @@ async def upload_cultures(file: UploadFile = File(...)) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# Generation endpoints
+# Generation endpoint — runs synchronously, returns the full result.
+# Defined as a sync `def` so FastAPI runs the CPU-bound work in its threadpool
+# (keeps the event loop free and lets concurrent requests proceed).
 # ---------------------------------------------------------------------------
 
 @app.post("/generate")
 def generate(payload: SimulationPayload) -> dict:
-    """Queue the simulation in the in-process thread pool and return a task ID."""
-    task_id = submit_generation(payload.model_dump())
-    return {"task_id": task_id}
-
-
-@app.get("/status/{task_id}")
-def status(task_id: str) -> JSONResponse:
-    job = get_job(task_id)
-    if job is None:
-        return JSONResponse({"task_id": task_id, "state": "PENDING"})
-    body: dict = {"task_id": task_id, "state": job["state"]}
-    if job["state"] == "SUCCESS":
-        result = job["result"] or {}
-        body["result"] = {
-            k: v for k, v in result.items() if k != "family_tree"
-        }
-        body["message"] = "Done."
-    elif job["state"] == "FAILURE":
-        body["error"] = job.get("error", "")
-    elif job.get("message"):
-        body["message"] = job["message"]
-    return JSONResponse(body)
-
-
-@app.get("/result/{task_id}/tree")
-def get_tree(task_id: str):
-    job = get_job(task_id)
-    if job is None or job["state"] != "SUCCESS":
-        state = job["state"] if job else "UNKNOWN"
-        raise HTTPException(status_code=409, detail=f"Task is {state}")
-    return (job["result"] or {}).get("family_tree", {})
-
-
-@app.get("/download/{task_id}")
-def download(task_id: str):
-    job = get_job(task_id)
-    if job is None or job["state"] != "SUCCESS":
-        state = job["state"] if job else "UNKNOWN"
-        raise HTTPException(status_code=409, detail=f"Task is {state}")
-    zip_path = (job["result"] or {}).get("zip_path")
-    if not zip_path or not os.path.exists(zip_path):
-        raise HTTPException(status_code=404, detail="Result file missing")
-    return FileResponse(
-        zip_path,
-        media_type="application/zip",
-        filename="CK3_HISTORY_GENERATOR_OUTPUT.zip",
-    )
+    """Run the simulation and return {characters, titles_with_history, family_tree, zip_b64}."""
+    return run_generation(payload.model_dump())

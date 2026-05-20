@@ -5,7 +5,6 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useStore } from '../../store';
-import { fetchTree } from '../../api';
 import { toInGameYear } from '../../yearConvert';
 
 // Display a raw simulation year as its in-game era number, falling back to the
@@ -466,18 +465,9 @@ function TreeCanvas({ dynasty, allChars, rulerInfo, darkMode }) {
 // ---------------------------------------------------------------------------
 
 export default function FamilyTree() {
-  const { task_id, tree_data, setTreeData, dark_mode } = useStore();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  // tree_data is populated directly from the synchronous /generate response.
+  const { tree_data, dark_mode } = useStore();
   const [selectedDynasty, setSelectedDynasty] = useState(null);
-
-  useEffect(() => {
-    if (tree_data || !task_id) return;
-    setLoading(true);
-    fetchTree(task_id)
-      .then((data) => { setTreeData(data); setLoading(false); })
-      .catch((err) => { setError(err.message); setLoading(false); });
-  }, [task_id, tree_data, setTreeData]);
 
   const dynastyTabs = useMemo(() => {
     if (!tree_data?.characters) return [];
@@ -495,9 +485,7 @@ export default function FamilyTree() {
     if (dynastyTabs.length > 0 && !selectedDynasty) setSelectedDynasty(dynastyTabs[0]);
   }, [dynastyTabs, selectedDynasty]);
 
-  if (loading) return <div className="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">Loading family tree…</div>;
-  if (error) return <div className="flex items-center justify-center h-full text-red-500 dark:text-red-400">Failed to load tree: {error}</div>;
-  if (!tree_data) return <div className="flex items-center justify-center h-full text-gray-400 dark:text-gray-500">No tree data available.</div>;
+  if (!tree_data) return <div className="flex items-center justify-center h-full text-gray-400 dark:text-gray-500">No tree data available. Run a generation first.</div>;
 
   return (
     <div className="flex flex-col h-full -m-8">

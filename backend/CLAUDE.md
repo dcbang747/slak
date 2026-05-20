@@ -8,8 +8,8 @@ See root `CLAUDE.md` for architecture overview, commands, and coupling points.
 
 | File | Role |
 |---|---|
-| `main.py` | FastAPI endpoints. Thin layer: upload endpoints parse on-the-fly and return previews; `/generate` queues a job via `jobs.py`. |
-| `jobs.py` | In-process generation: a `ThreadPoolExecutor` + in-memory job store. `submit_generation()` queues a run (parse → `run_simulation()` → ZIP → `RESULTS_DIR`); `get_job()` reads its state. Replaces Celery/Redis. TTL-prunes finished jobs. |
+| `main.py` | FastAPI endpoints. Thin layer: upload endpoints parse on-the-fly and return previews; `/generate` runs generation synchronously via `generation.py`. |
+| `generation.py` | `run_generation(payload)` — synchronous: parse → `run_simulation()` → `package_zip()`. Returns `{characters, titles_with_history, family_tree, zip_b64}` (base64 ZIP, no files on disk). Stateless, so it runs as a serverless function too. |
 | `parser.py` | Paradox `.txt` → Python dict AST + all domain extractors. |
 | `schemas.py` | Pydantic models for `SimulationPayload` and all internal entities. |
 | `simulation.py` | `WorldState` class + `run_simulation()` year-tick loop + all transition helpers. |
@@ -31,12 +31,9 @@ See root `CLAUDE.md` for architecture overview, commands, and coupling points.
 | POST | `/upload/dynasties` | ⚠️ Exists but **unused by frontend** — dynasties are user-defined via UI, not uploaded |
 | POST | `/upload/religions` | Parses religion file → `{filename, religions (marital doctrines dict), raw}` |
 | POST | `/upload/secrets` | Parses secret types → `{filename, secret_ids (list), raw}` |
-| POST | `/generate` | Accepts `SimulationPayload`, queues a job, returns `{task_id}` |
-| GET | `/status/{task_id}` | Returns `{state, message?, result?, error?}` |
-| GET | `/result/{task_id}/tree` | Returns the family-tree JSON (used by the Family Tree view) |
-| GET | `/download/{task_id}` | Streams the result ZIP |
+| POST | `/generate` | Accepts `SimulationPayload`, runs synchronously, returns `{characters, titles_with_history, family_tree, zip_b64}` |
 
-The `/status` response shape: `state` (`PENDING`/`PROGRESS`/`SUCCESS`/`FAILURE`), `message` (during PROGRESS), `result.characters` + `result.titles_with_history` on SUCCESS, `error` on FAILURE. `RightDrawer.jsx` reads exactly these keys — do not rename them. `jobs.py` emits these state strings to match what the frontend already expected from Celery.
+`/generate` is the only generation endpoint — it runs the (fast, ~0.1–1s) simulation inline and returns everything in one JSON response: stats, the family-tree object, and the ZIP as base64. There is **no polling, no `/status`, no `/download`, no result files** — the backend is stateless. `LeftSidebar.jsx` awaits this response; `RightDrawer.jsx` shows the download (built from `zip_b64`) and stats; `FamilyTree.jsx` reads `family_tree`. Defined as a sync `def` so FastAPI runs the CPU work in its threadpool (keeps the event loop free, allows concurrent requests).
 
 ---
 
