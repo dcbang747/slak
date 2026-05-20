@@ -1,8 +1,0 @@
-# Format: <list_id>: name1, name2, name3
-# The simulator looks up `<culture>_<gender>`, then `<culture>`, then defaults.
-default_male: Aragorn, Boromir, Faramir, Denethor, Isildur, Anarion, Earendil, Elendil, Eldacar, Castamir
-default_female: Arwen, Eowyn, Galadriel, Idril, Luthien, Nimloth, Finduilas, Morwen, Beruthiel, Tar-Miriel
-gondorian_male: Aragorn, Boromir, Faramir, Denethor, Beren, Belecthor, Cirion, Eldacar
-gondorian_female: Arwen, Finduilas, Morwen, Lothiriel, Ivriniel
-dwarven_male: Thorin, Balin, Dwalin, Gimli, Gloin, Oin, Bifur, Bofur, Bombur, Dain
-dwarven_female: Dis, Mim, Hilda, Frar
