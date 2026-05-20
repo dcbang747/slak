@@ -10,7 +10,8 @@ from .celery_app import celery_app
 from .schemas import SimulationPayload
 from .tasks import run_generation
 from .parser import (
-    parse, transform_titles, extract_genetic_traits, extract_death_reasons,
+    parse, extract_title_ids_from_history, extract_genetic_traits, extract_death_reasons,
+    extract_name_lists, extract_dynasties, extract_religions, extract_secrets, extract_cultures,
 )
 
 
@@ -40,7 +41,7 @@ async def upload_titles(file: UploadFile = File(...)) -> dict:
     ast = parse(text)
     return {
         "filename": file.filename,
-        "titles": transform_titles(ast),
+        "title_ids": extract_title_ids_from_history(ast),
         "raw": text,
     }
 
@@ -69,18 +70,42 @@ async def upload_deaths(file: UploadFile = File(...)) -> dict:
 
 @app.post("/upload/names")
 async def upload_names(file: UploadFile = File(...)) -> dict:
-    """Each line: `<list_id>: name1, name2, name3`."""
     text = (await file.read()).decode("utf-8", errors="ignore")
-    name_lists: dict[str, list[str]] = {}
-    for line in text.splitlines():
-        line = line.strip()
-        if not line or ":" not in line:
-            continue
-        key, vals = line.split(":", 1)
-        names = [v.strip() for v in vals.split(",") if v.strip()]
-        if names:
-            name_lists[key.strip()] = names
+    ast = parse(text)
+    name_lists = extract_name_lists(ast)
     return {"filename": file.filename, "name_lists": name_lists, "raw": text}
+
+
+@app.post("/upload/dynasties")
+async def upload_dynasties(file: UploadFile = File(...)) -> dict:
+    text = (await file.read()).decode("utf-8", errors="ignore")
+    ast = parse(text)
+    dynasties = extract_dynasties(ast)
+    return {"filename": file.filename, "dynasties": dynasties, "raw": text}
+
+
+@app.post("/upload/religions")
+async def upload_religions(file: UploadFile = File(...)) -> dict:
+    text = (await file.read()).decode("utf-8", errors="ignore")
+    ast = parse(text)
+    religions = extract_religions(ast)
+    return {"filename": file.filename, "religions": religions, "raw": text}
+
+
+@app.post("/upload/secrets")
+async def upload_secrets(file: UploadFile = File(...)) -> dict:
+    text = (await file.read()).decode("utf-8", errors="ignore")
+    ast = parse(text)
+    secret_ids = extract_secrets(ast)
+    return {"filename": file.filename, "secret_ids": secret_ids, "raw": text}
+
+
+@app.post("/upload/cultures")
+async def upload_cultures(file: UploadFile = File(...)) -> dict:
+    text = (await file.read()).decode("utf-8", errors="ignore")
+    ast = parse(text)
+    cultures = extract_cultures(ast)
+    return {"filename": file.filename, "cultures": cultures}
 
 
 # ---------------------------------------------------------------------------
@@ -103,12 +128,20 @@ def status(task_id: str) -> JSONResponse:
     elif task.state == "SUCCESS":
         body["result"] = {
             k: v for k, v in (task.result or {}).items()
-            if k != "zip_b64"
+            if k not in ("zip_b64", "family_tree")
         }
         body["message"] = "Done."
     elif task.state == "FAILURE":
         body["error"] = str(task.info)
     return JSONResponse(body)
+
+
+@app.get("/result/{task_id}/tree")
+def get_tree(task_id: str):
+    task = celery_app.AsyncResult(task_id)
+    if task.state != "SUCCESS":
+        raise HTTPException(status_code=409, detail=f"Task is {task.state}")
+    return (task.result or {}).get("family_tree", {})
 
 
 @app.get("/download/{task_id}")
@@ -123,5 +156,5 @@ def download(task_id: str):
     return FileResponse(
         zip_path,
         media_type="application/zip",
-        filename=f"ck3_history_{task_id[:8]}.zip",
+        filename="CK3_HISTORY_GENERATOR_OUTPUT.zip",
     )

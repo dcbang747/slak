@@ -1,0 +1,121 @@
+﻿name_list_khyan = {
+	cadet_dynasty_names = {
+		"dynn_Artaxshasan"
+		"dynn_Mahyaran"
+		"dynn_Aldhradan"
+		"dynn_Dadfiruzen"
+		"dynn_Adarfiruzen"
+		"dynn_Bahlikaran"
+		"dynn_Khudaradmen"
+		"dynn_Esrecarzen"
+		"dynn_Tarimez"
+		"dynn_Phaxsharan"
+		"dynn_Visnarmaken"
+		"dynn_Kerhamez"
+		"dynn_Namdarez"
+		"dynn_Mentarez"
+		
+		"dynn_Ramzeket"
+		"dynn_Ganagahan"
+		"dynn_Darayavahu"
+		"dynn_Darayavahan"
+		"dynn_Shoburagan"
+		"dynn_Vihnahan"
+		"dynn_Haydahan"
+		"dynn_Mujahan"
+		"dynn_Ulvanahan"
+		"dynn_Shajanahan"
+		"dynn_Jahangir"
+		"dynn_Vindafarnahan"
+		"dynn_Khushnawazan"
+		"dynn_Arshishan"
+		"dynn_Arvanhahan"
+		"dynn_Dastanahan"
+		"dynn_Dinpanahan"
+		"dynn_Huafritahan"
+		"dynn_Ishvathan"
+		"dynn_Jangihan"
+		"dynn_Kamdelehan"
+		"dynn_Kersasphan"
+		"dynn_Khurshchehra"
+		"dynn_Mardbudhan"
+		"dynn_Mahburzinihan"
+		"dynn_Meherafshana"
+		"dynn_Rambaxan"
+		"dynn_Sarafrazan"
+		"dynn_Raminshtan"
+		"dynn_Safnahan"
+		"dynn_Pirangushnaspa"
+		"dynn_Vardanisan"
+		"dynn_Vasnahan"
+		"dynn_Zaoshan"
+		"dynn_Zirakahan"
+		"dynn_Zirakzadehan"
+
+	}
+
+	dynasty_names = {
+		"dynn_Artaxshasan"
+		"dynn_Mahyaran"
+		"dynn_Aldhradan"
+		"dynn_Dadfiruzen"
+		"dynn_Adarfiruzen"
+		"dynn_Bahlikaran"
+		"dynn_Khudaradmen"
+		"dynn_Esrecarzen"
+		"dynn_Tarimez"
+		"dynn_Phaxsharan"
+		"dynn_Visnarmaken"
+		"dynn_Kerhamez"
+		"dynn_Namdarez"
+		"dynn_Mentarez"
+
+		"dynn_Ramzeket"
+		"dynn_Ganagahan"
+		"dynn_Darayavahu"
+		"dynn_Darayavahan"
+		"dynn_Shoburagan"
+		"dynn_Vihnahan"
+		"dynn_Haydahan"
+		"dynn_Mujahan"
+		"dynn_Ulvanahan"
+		"dynn_Shajanahan"
+		"dynn_Jahangir"
+		"dynn_Vindafarnahan"
+		"dynn_Khushnawazan"
+
+	}
+
+	male_names = {
+		10 = { # most common
+			Abadard Adarbad Adarburzin Adarcher Adarfiroz Adarfra Adarmard Adarvan Adel Advi Afiveh Airyaman Amavand Anoshiruvan Arash Arasti Arawaostra Arshak Arsha_a_ma Arshis Arta Arvand Ashtad Aspandad Aspandyar Aspantaman Aurashaspa Aurvatasp Azadafroz Azadchehr Azadmard Bahadur Bahman Bahmard Bahram Bahramdad Bakhtafrid Bakhtyar Bardiya Barman Behbud Behzad Bundar Burzafrah Burzasp Burzincheher Chubin Dadafarin Dadbandad Dadfaruk Dadfiruz Dadmeher Daneshvar Darazdast Dastan Davrameshi Delawar Delir Delsuz Dinpanah Dinyar Dravasp Emet Erezwand Faravindad Fardad Farhad Farrokh Farrokhan Farrokhbondad Farrokhnezad Farrokhzad Farzan Ferozgar Frahimrawa Frahisrva Frashaoshtra Fravak Goberu Goraze Gushnasp Gushtahm Gushtas Habub Hoshang Hoshedar Hoshedarmah Hoshyar Huafrid Huafrita Huchithra Hukhshthra Husrav Hutan Huvaspa Huzvak Ishvat Izadyar Jahanabad Jamaspa Janafruz Jangi Kamdele Kamran Karan Kaykhusru Kersasp Khanvant Kharad Khordad Khorehomand Khorram Khorushasp Khubchehr Khubruy Khubyar Khudabax Khudadad Khudamard Khudamorad Khudaparasht Khudaram Khudayar Khufiruz Khurdad Khursand Khushchehr Khushmanish Khushmasta Khushnawaz Mahburzin Mahdat Mahyar Mardbud Meherab Meherafshan Meherasp Meheryar Meherzad Namdar Naoshad Naozad Nariman Nashak Nawazish Nekchehr Nekmard Nevazar Noved Orvadasp Peshotan Pirangushnasp Pishkar Porgav Rakhoh Ram Rambax Rambehesht Ramburzin Ramdin Ramgushnasp Ramin Ramisht Rayomand Razi Roshan Safna Sahi Sarafraz Sarosh Sherfiruz Shergir Shidasp Shidush Shirmard Shiruy Shirvanshah Shirzad Smardis Spityur Sriroxna Stivant Surin Tahm Tahmasp Upamana Urvakhsha Urvatatnara Vardanis Vasna Vindafarnah Vishnasp Vispanfria Vourunemangha Wehafrid Wehshapur Wehzan Yavisht Zaosh Zaran Zarmeher Zirak Zirakzadeh
+		}
+	}
+	female_names = {
+		10 = { # most common
+			Apama Aredetfredhi Arenavachi Armaiti Arta Artdokht Aryenish Arzu Asha Ashishvangh Azadeh Azarmidokht Aziedokht Bahmanbanu Bahmandokht Bakhtavar Banudadhush Banugul Banugushnasp Banuhufriya Banuhufriz Banuhuram Banuhururish Barsineh Behafrid Behdokht Behruz Behzad Buran Dadhush Dadhushfarrokh Delara Delaram Delbahar Delbanu Delbar Deldar Delkhush Delnavaz Delruba Delshad Dinbanu Elaheh Fahnik Farida Farkhonda Farnaza Faruzan Freny Goharafrid Gulafruz Gulafshan Gulandam Gulbadan Gulbaher Gulbanu Gulbarg Gulchehr Gulestan Gulkhandan Gulkhurshid Gulpaekar Gulroxar Gulrukh Gulshirin Homai Hufriya Hutosh Hutoxi Jahanara Jaleh Jamaspi Katin Keherafrid Kerbanu Khubchehr Khubrui Khurmand Khurshidbanu Khushchehr Khushmand Khushnama Khushnawaz Khyra Laleh Mahafrin Mahaziver Mahbanu Mahchehr Mahdokht Mahin Mahinbanu Mahkhurshid Mahpaekar Mahperviz Mahrokh Mahtab Mahzarin Makhmal Manizeh Meherafraz Meherafrid Meherafrin Meherafruz Meherangiz Meherbanu Meherchehr Meherokh Meherpaekar Morvarid Nadira Naheed Nakisa Nazbanu Nazchehr Nazneen Naztab Nekakhtar Nekbakht Nekchehr Nekdel Nezhat Pari Parvana Purgav Rakhshandeh Rambanu Rambehesht Rana Rokhsar Roshan Roshanaf Roshanak Roxenda Samanrukh Sanaz Sarafraz Sarosh Shaker Shakerbanu Shakernaz Shirin Shirinbanu Shokoufeh Simin Simindokht Sitareh Soraya Tabendeh Tanaz Uparmiya Utautha Vanushe Vashta Vispanfriva Yasman Yasna Yazdoi Yuta_a_b Zarin Zarmandokht Zohreh
+		}
+	}
+
+	dynasty_of_location_prefix = "dynnp_han"
+	patronym_suffix_male = "dynnpat_suf_pur"
+	patronym_suffix_female = "dynnpat_suf_dokht"
+
+
+	# Chance of male children being named after their paternal or maternal grandfather, or their father. Sum must not exceed 100.
+	pat_grf_name_chance = 20
+	mat_grf_name_chance = 10
+	father_name_chance = 5
+
+	# Chance of female children being named after their paternal or maternal grandmother, or their mother. Sum must not exceed 100.
+	pat_grm_name_chance = 20
+	mat_grm_name_chance = 10
+	mother_name_chance = 5
+
+	founder_named_dynasties = yes
+
+	mercenary_names = {
+	}
+}
+
+#name_list_anarikean - Should be a mix of Khyan and Adunaic

@@ -1,0 +1,148 @@
+﻿name_list_hobbit = {
+	cadet_dynasty_names = {
+		"dynn_butcher" 
+		"dynn_drinkwater" 
+		"dynn_goldlace" 
+		"dynn_hogg" 
+		"dynn_hogpen" 
+		"dynn_leafturner" 
+		"dynn_longholes" 
+		"dynn_mugwort" 
+		"dynn_pendle" 
+		"dynn_puddifoot" 
+		"dynn_pott" 
+		"dynn_riverhole" 
+		"dynn_rootwhistle" 
+		"dynn_rumble" 
+		"dynn_sandheaver"
+		"dynn_tunnelly" 
+		"dynn_underhill" 
+		"dynn_whitlock"
+		"dynn_sempster"
+ 		"dynn_scutcher"
+ 		"dynn_tunner"
+ 		"dynn_honeystock"
+ 		"dynn_tubbin"
+ 		"dynn_leedfallow"
+ 		"dynn_paddle"
+ 		"dynn_smidge"
+ 		"dynn_peatshorne"
+ 		"dynn_baler"
+ 		"dynn_bargeman"
+ 		"dynn_barker"
+ 		"dynn_caddiewax"
+ 		"dynn_fanthorpe"
+ 		"dynn_ashlodger"
+ 		"dynn_fowler"
+ 		"dynn_gorsel"
+ 		"dynn_gotehorner"
+ 		"dynn_hushop"
+ 		"dynn_wettswurth"
+ 		"dynn_stocking"
+ 		"dynn_billock"
+ 		"dynn_padds"
+ 		"dynn_hopthorp"
+ 		"dynn_bodger"
+ 		"dynn_potladle"
+ 		"dynn_hodge"
+ 		"dynn_tolman"
+ 		"dynn_brooker"
+	}
+
+	dynasty_names = {
+		"dynn_butcher" 
+		"dynn_drinkwater" 
+		"dynn_goldlace" 
+		"dynn_hogg" 
+		"dynn_hogpen" 
+		"dynn_leafturner" 
+		"dynn_longholes" 
+		"dynn_mugwort" 
+		"dynn_pendle" 
+		"dynn_puddifoot" 
+		"dynn_pott" 
+		"dynn_riverhole" 
+		"dynn_rootwhistle" 
+		"dynn_rumble" 
+		"dynn_sandheaver" 
+		"dynn_tunnelly" 
+		"dynn_underhill" 
+		"dynn_whitlock"
+		"dynn_sempster"
+ 		"dynn_scutcher"
+ 		"dynn_tunner"
+ 		"dynn_honeystock"
+ 		"dynn_tubbin"
+ 		"dynn_leedfallow"
+ 		"dynn_paddle"
+ 		"dynn_smidge"
+ 		"dynn_peatshorne"
+ 		"dynn_baler"
+ 		"dynn_bargeman"
+ 		"dynn_barker"
+ 		"dynn_caddiewax"
+ 		"dynn_fanthorpe"
+ 		"dynn_ashlodger"
+ 		"dynn_fowler"
+ 		"dynn_gorsel"
+ 		"dynn_gotehorner"
+ 		"dynn_hushop"
+ 		"dynn_wettswurth"
+ 		"dynn_stocking"
+ 		"dynn_billock"
+ 		"dynn_padds"
+ 		"dynn_hopthorp"
+ 		"dynn_bodger"
+ 		"dynn_potladle"
+ 		"dynn_hodge"
+ 		"dynn_tolman"
+ 		"dynn_brooker"
+	}
+	
+	
+	male_names = {
+		20 = { # most common
+			Adalbert Adalgar Adalgrim Adelard Auradoc Bandobard Bandobras Bandogrim Bandogar Bandomond Baramac Basso Beogol Berilac Blaidoc Blanco Bledda Bob Bodo Boladoc Bosco Bowman Briffo Bucca Buckfast Buffo Carl Cottar Cotman Deric Dodinas Doderic Doradoc Dinolas Drogodoc Dudo Ern Falco Fastolph Ferdibrand Ferdinand Ferumbras Filibert Flambard Fortinbras Fosco Fredegar Goodman Gorhendad Goradoc Gorbadoc Gorbulas Gorimac Gormabald Gormadas Gormadoc Griffo Gruffo Gundabald Gundahad Gundahar Gundamac Gundolpho Hending Herugar Heribald Hildibrand Hildifons Hildigrim Hob Holman Hugo Ilberic Isembard Isembold Isembrand Isembras Isengar Isengrim Isumbras Jago Jagobard Largo Lofast Longo Lotho Marmadoc Marmadas Marroc Menadad Menamac Menedoc Meriadoc Merimac Merimas Milo Minto Mosco Moro Mungo Nob Odo Odovacar Olo Otho Otto Orgulas Paladin Peregrin Percy Ponto Polo Posco Porto Reginard Rithregol Rollo Rorimac Rudibert Rudigar Rudoplh Rufus Sadulas Sadoc Sancho Saradoc Sarandas Seredic Sigismond Theobald Tobahar Tobagar Tobald Tobard Tobold Tobrand Toffo Tongo Tosser Tosto Tristdad Uffo Vigo Wilcome Willie Wilibald Wilimar
+		}
+		10 = { # Rarer
+			Abbo Anson Andwise Balbo Bingo Bogman Bungo Dodder Gerontius Hamond Maggot Marcho
+		}
+		5 = { # Very Rare
+			Bilbo Drogo Frodo Cavallo
+		}
+		0 = {
+			Smeagol  Deagol
+		}
+	}
+	female_names = {
+		10 = { # most common
+			Adamanta Amaranth Alfrida Amethyst Anemone Angelica Alphanea Belladonna Berylla Broomhild Buttercup Camellia Caramella Celadine Chica Cora Daffodilly Daisy Dina Donnamira Dora Druda Eglantine Erica Estella Euphorbia Eustoma Everard Gilly Hanna Hilda Hildigard Ildra Iris Ivy Jessamine Lalia Laura Lavender Lily Linda Lobelia Malva Mango Meliliot Menegilda Mentha Mimosa Mirabella Myrtle Nina Nora Olivia Opal Pansy Pearl Peony Pervinca Pimpernel Primrose Primula Prisca Rosa Roselda Rowan Ruby Rosamunda Salvia Sapphira Saredic Snowdrop Tansy Tanta Tulip Vera Violet
+		}
+		5 = { # Rarer
+			Adaldrida Aster Belba Gretle Jaspera Limnantha Pomella Rhaga 
+		}
+	}
+	
+	dynasty_of_location_prefix = "dynnp_of"
+	patronym_suffix_male = "dynnpat_suf_s"
+	patronym_suffix_female = "dynnpat_suf_s"
+	
+	# Chance of male children being named after their paternal or maternal grandfather, or their father. Sum must not exceed 100.
+	pat_grf_name_chance = 30
+	mat_grf_name_chance = 10
+	father_name_chance = 25
+	
+	# Chance of female children being named after their paternal or maternal grandmother, or their mother. Sum must not exceed 100.
+	pat_grm_name_chance = 20
+	mat_grm_name_chance = 40
+	mother_name_chance = 5
+	
+	mercenary_names = {
+		{ name = mercenary_company_place_neighbourhood_watch }
+		{ name = mercenary_company_place_homeowners_association }
+		{ name = mercenary_company_volunteer_stable_watch }
+		{ name = mercenary_company_pony_riding_club }
+		{ name = mercenary_company_shire_archery_club } 
+		{ name = mercenary_company_farmstead_watchmen } 
+	}
+}

@@ -18,6 +18,23 @@ def _build_indices(traits: list[dict]) -> tuple[dict, dict, dict]:
     return by_id, by_group_level, group_max
 
 
+def _resolve_conflicts(traits: set[str], by_id: dict) -> list[str]:
+    """Remove traits that are listed as opposites of already-accepted traits.
+
+    Iterates in sorted order for determinism; first accepted trait wins and
+    marks all its opposites as excluded.
+    """
+    kept: list[str] = []
+    excluded: set[str] = set()
+    for t_id in sorted(traits):
+        if t_id in excluded:
+            continue
+        kept.append(t_id)
+        for opp in by_id.get(t_id, {}).get("opposites", []):
+            excluded.add(opp)
+    return kept
+
+
 def _trait_at(by_group_level: dict, group: str, level: int) -> Optional[str]:
     return by_group_level.get(group, {}).get(level)
 
@@ -27,14 +44,12 @@ def inherit_traits(
     father_traits: list[str],
     registry: list[dict],
     rng: random.Random,
+    trait_multiplier: float = 1.0,
 ) -> list[str]:
     """Compute the genetic trait list for a child given the parents'.
 
-    Implements:
-      1. Parent trait evaluation (cancel opposite pairs)
-      2. Active inheritance (homogenous: same group)
-      3. Passive inheritance (heterogenous: only one parent has it)
-      4. Spontaneous mutation against random_creation
+    trait_multiplier scales birth_chance and random_creation before rolling.
+    Values > 1.0 increase frequency; < 1.0 reduce it.
     """
     by_id, by_group_level, group_max = _build_indices(registry)
 
@@ -42,7 +57,7 @@ def inherit_traits(
     mom = [t for t in mother_traits if t in by_id]
     dad = [t for t in father_traits if t in by_id]
 
-    # Cancel opposite pairs across parents (if mom has X and dad has anti-X)
+    # Cancel opposite pairs across parents
     cancelled: set[str] = set()
     for mt in mom:
         opps = set(by_id[mt]["opposites"])
@@ -55,7 +70,6 @@ def inherit_traits(
 
     inherited: set[str] = set()
 
-    # 2/3. Walk every group present in either parent
     mom_by_group: dict[str, str] = {by_id[t]["group"]: t for t in mom}
     dad_by_group: dict[str, str] = {by_id[t]["group"]: t for t in dad}
     all_groups = set(mom_by_group) | set(dad_by_group)
@@ -66,10 +80,12 @@ def inherit_traits(
         if m and d:
             # Homogenous — both parents share the group
             highest_level = max(by_id[m]["level"], by_id[d]["level"])
+            # Scale thresholds: higher multiplier = more inheritance
+            inherit_threshold = min(0.80 * trait_multiplier, 1.0)
             roll = rng.random()
-            if roll < 0.80:
+            if roll < inherit_threshold:
                 chosen = _trait_at(by_group_level, group, highest_level)
-            elif roll < 1.00:
+            elif roll < min(1.00 * trait_multiplier, 1.0):
                 target = min(highest_level + 1, group_max[group])
                 chosen = _trait_at(by_group_level, group, target)
             else:
@@ -80,44 +96,48 @@ def inherit_traits(
             # Heterogenous — only one parent has it
             parent_trait_id = m or d
             parent_level = by_id[parent_trait_id]["level"]
+            inherit_threshold = min(0.50 * trait_multiplier, 1.0)
+            parent_threshold = min(0.60 * trait_multiplier, 1.0)
             roll = rng.random()
-            if roll < 0.50:
+            if roll < inherit_threshold:
                 target = max(parent_level - 1, 1)
                 chosen = _trait_at(by_group_level, group, target)
                 if chosen:
                     inherited.add(chosen)
-            elif roll < 0.60:
+            elif roll < parent_threshold:
                 inherited.add(parent_trait_id)
-            # else: not inherited
 
-    # 4. Spontaneous mutation — for groups neither parent has
+    # 4. Spontaneous mutation — for groups neither parent has.
+    # Apply an extra 0.1 scale so novel mutations are very rare even at multiplier=1.
     inherited_groups = {by_id[t]["group"] for t in inherited}
     for trait in registry:
         if trait["group"] in inherited_groups:
             continue
         if trait["random_creation"] <= 0:
             continue
-        if rng.random() < trait["random_creation"]:
-            # If multiple levels exist in this group, the lowest one wins by default
+        scaled_rc = min(trait["random_creation"] * trait_multiplier * 0.1, 1.0)
+        if rng.random() < scaled_rc:
             if by_id[trait["id"]]["level"] == 1:
                 inherited.add(trait["id"])
                 inherited_groups.add(trait["group"])
 
-    return sorted(inherited)
+    return _resolve_conflicts(inherited, by_id)
 
 
 def roll_birth_traits(
     registry: list[dict],
     rng: random.Random,
+    trait_multiplier: float = 1.0,
 ) -> list[str]:
     """Roll traits for a founder character (no parents). Uses birth_chance."""
+    by_id = {t["id"]: t for t in registry}
     chosen: dict[str, str] = {}  # group -> trait_id
     for trait in registry:
         if trait["birth_chance"] <= 0:
             continue
         if trait["level"] != 1:
-            # Only roll the base level for founders
             continue
-        if rng.random() < trait["birth_chance"]:
+        scaled_bc = min(trait["birth_chance"] * trait_multiplier, 1.0)
+        if rng.random() < scaled_bc:
             chosen[trait["group"]] = trait["id"]
-    return sorted(chosen.values())
+    return _resolve_conflicts(set(chosen.values()), by_id)

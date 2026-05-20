@@ -1,0 +1,386 @@
+﻿name_list_edain = {
+	cadet_dynasty_names = {
+		"dynn_bar_agathor"
+		"dynn_bar_amlach"
+		"dynn_bar_arachon"
+		"dynn_bar_balan"
+		"dynn_bar_baragund"
+		"dynn_bar_barahir"
+		"dynn_bar_baran"
+		"dynn_bar_baranor"
+		"dynn_bar_beldir"
+		"dynn_bar_belegor"
+		"dynn_bar_belegund"
+		"dynn_bar_belen"
+		"dynn_bar_beradir"
+		"dynn_bar_bereg"
+		"dynn_bar_boron"
+		"dynn_bar_boromir"
+		"dynn_bar_brandir"
+		"dynn_bar_brandir"
+		"dynn_bar_bregoldir"
+		"dynn_bar_bregolas"
+		"dynn_bar_bregor"
+		"dynn_bar_enthor"
+		"dynn_bar_galdor"
+		"dynn_bar_gundor"
+		"dynn_bar_haldad"
+		"dynn_bar_haldan"
+		"dynn_bar_haldar"
+		"dynn_bar_haldir"
+		"dynn_bar_halmir"
+		"dynn_bar_handir"
+		"dynn_bar_hardang"
+		"dynn_bar_hathol"
+		"dynn_bar_hundad"
+		"dynn_bar_hunthor"
+		"dynn_bar_hunleth"
+		"dynn_bar_imlach"
+		"dynn_bar_magor"
+		"dynn_bar_malach"
+		"dynn_bar_manthor"
+	}
+
+	dynasty_names = {
+		"dynn_bar_agathor"
+		"dynn_bar_amlach"
+		"dynn_bar_arachon"
+		"dynn_bar_balan"
+		"dynn_bar_baragund"
+		"dynn_bar_barahir"
+		"dynn_bar_baran"
+		"dynn_bar_baranor"
+		"dynn_bar_beldir"
+		"dynn_bar_belegor"
+		"dynn_bar_belegund"
+		"dynn_bar_belen"
+		"dynn_bar_beradir"
+		"dynn_bar_bereg"
+		"dynn_bar_boron"
+		"dynn_bar_boromir"
+		"dynn_bar_brandir"
+		"dynn_bar_brandir"
+		"dynn_bar_bregoldir"
+		"dynn_bar_bregolas"
+		"dynn_bar_bregor"
+		"dynn_bar_enthor"
+		"dynn_bar_galdor"
+		"dynn_bar_gundor"
+		"dynn_bar_haldad"
+		"dynn_bar_haldan"
+		"dynn_bar_haldar"
+		"dynn_bar_haldir"
+		"dynn_bar_halmir"
+		"dynn_bar_handir"
+		"dynn_bar_hardang"
+		"dynn_bar_hathol"
+		"dynn_bar_hundad"
+		"dynn_bar_hunthor"
+		"dynn_bar_hunleth"
+		"dynn_bar_imlach"
+		"dynn_bar_magor"
+		"dynn_bar_malach"
+		"dynn_bar_manthor"
+	}
+	
+	
+	male_names = {
+		10 = { # most common
+			Agathor Amlach Arachon Balan Baragund Barahir Baran Baranor Beldir Belegor Belegund Belen Beradir Bereg Beren Boron Boromir Brandir Bregoldir Bregolas Bregor Enthor Galdor Gundor Hador Haldad Haldan Haldar Haldir Haleth Halmir Handir Hardang Hathol Huor Hundad Hundar Hunthor Hunleth H_urin Imlach Magor Malach Marach Manthor Tuor T_urin
+		}	
+	}
+	female_names = {
+		10 = { # most common
+			Adanel Andreth Arachel Beldis Beleth Beril Bregil Emeldir Gildis Gilwen Gl_oredhel Haleth Hareth Hiril Hirwen Hunleth Meleth Morwen Nienor R_ian Urwen Zimrahin 
+		}
+	}
+	
+	dynasty_of_location_prefix = "dynnp_of"
+	# X, son of X,
+	patronym_prefix_male = "dynnpat_edain_male"
+	patronym_prefix_female = "dynnpat_edain_female"
+
+	always_use_patronym = yes
+	
+	# Chance of male children being named after their paternal or maternal grandfather, or their father. Sum must not exceed 100.
+	pat_grf_name_chance = 30
+	mat_grf_name_chance = 10
+	father_name_chance = 25
+	
+	# Chance of female children being named after their paternal or maternal grandmother, or their mother. Sum must not exceed 100.
+	pat_grm_name_chance = 20
+	mat_grm_name_chance = 40
+	mother_name_chance = 5
+	
+	mercenary_names = {
+		{ name = mercenary_company_deathbringers } # Deathbringers
+		{ name = mercenary_company_allslayers } # Allslayers
+	}
+}
+
+name_list_breemen = {
+	cadet_dynasty_names = {
+		"dynn_barleynook"
+		"dynn_cropfletch"
+		"dynn_cattlecob"
+		"dynn_littergrass"
+		"dynn_woodbatch"
+		"dynn_berrybrack"
+		"dynn_kettleback"
+		"dynn_grapebrook"
+		"dynn_oatsock"
+		"dynn_laddermoss"
+		"dynn_ciderbuck"
+		"dynn_mintfletch"
+		"dynn_leeknotch"
+		"dynn_barrelroot"
+		"dynn_carrotneck"
+		"dynn_ryeweave"
+		"dynn_wheybaker"
+		"dynn_wheatfern"
+		"dynn_ladderbranch"
+		"dynn_cobbsmire"
+		"dynn_cropfoot"
+		"dynn_nettletongue"
+		"dynn_mallowbreath"
+		"dynn_rosebuck"
+		"dynn_billock"
+		"dynn_nutwool"
+		"dynn_pepperboil"
+		"dynn_hazelstool"
+		"dynn_wattletoe"
+		"dynn_netty"
+		"dynn_leafy"
+		"dynn_wheatly"
+		"dynn_taterbridge"
+		"dynn_seedbuck"
+		"dynn_starchbur"
+		"dynn_brooksmunch"
+		"dynn_riverbutch"
+ 		"dynn_honeystock"
+ 		"dynn_leedfallow"
+ 		"dynn_peatshorne"
+ 		"dynn_baler"
+ 		"dynn_hushop"
+ 		"dynn_billock"
+ 		"dynn_hodge"
+	}
+
+	dynasty_names = {
+		"dynn_barleynook"
+		"dynn_cropfletch"
+		"dynn_cattlecob"
+		"dynn_littergrass"
+		"dynn_woodbatch"
+		"dynn_berrybrack"
+		"dynn_kettleback"
+		"dynn_grapebrook"
+		"dynn_oatsock"
+		"dynn_laddermoss"
+		"dynn_ciderbuck"
+		"dynn_mintfletch"
+		"dynn_leeknotch"
+		"dynn_barrelroot"
+		"dynn_carrotneck"
+		"dynn_ryeweave"
+		"dynn_wheybaker"
+		"dynn_wheatfern"
+		"dynn_ladderbranch"
+		"dynn_cobbsmire"
+		"dynn_cropfoot"
+		"dynn_nettletongue"
+		"dynn_mallowbreath"
+		"dynn_rosebuck"
+		"dynn_billock"
+		"dynn_nutwool"
+		"dynn_pepperboil"
+		"dynn_hazelstool"
+		"dynn_wattletoe"
+		"dynn_netty"
+		"dynn_leafy"
+		"dynn_wheatly"
+		"dynn_taterbridge"
+		"dynn_seedbuck"
+		"dynn_starchbur"
+		"dynn_brooksmunch"
+		"dynn_riverbutch"
+ 		"dynn_honeystock"
+ 		"dynn_leedfallow"
+ 		"dynn_peatshorne"
+ 		"dynn_baler"
+ 		"dynn_hushop"
+ 		"dynn_billock"
+ 		"dynn_hodge"
+	}
+	
+	
+	male_names = {
+		10 = { # most common
+			Barliman Bill Bodo Bosco Briffo Bucca Buckfast Bucky Buffo Carter Cory Darrel Derick Derry Deven Dinolas Doderic Doradoc Drogodoc Dustin Eward Ewart Falco Fastolph Ferdinand Flambard Fosco Fredegar Gavin Gorbulas Gormabald Gormadas Gormadoc Gundolpho Harry Hawk Heribald Hildibrand Hildifons Hildigrim Huck Hugo Huntley Ilberic Isembard Isembold Isembrand Isembras Isengar Isengrim Isumbras Jago Jagobard Jamie Kile Largo Leroy Lofast Longo Lotho Marc Marmadas Mat Matt Merimas Miles Milo Milt Moro Nick Noel Odo Olo Orgulas Otho Otto Paladin Peregrin Polo Ponto Porto Posco Reginard Rob Robbie Robert Rollo Rolly Rowlie Rudibert Rudigar Rudoplh Rufus Sadulas Sancho Sarandas Sean Siggi Sigismond Ted Tedd Terry Theobald Tobald Tobard Tobold Tobrand Toby Tom Tomas Tombard Tommy Tristdad Uffo Wally Warley Wilibald Wilimar Willy
+		}
+		#5 = { # Rarer
+		
+		#}
+	}
+	female_names = {
+		10 = { # most common
+			Adaldrida Alfrida Alphanea Amaranth Anemone Angelica Belladonna Berylla Buttercup Camellia Celadine Cora Daisy Donnamira Dora Eglantine Emy Erica Estella Euphorbia Eustoma Everard Fernly Gilly Hanna Hilda Hildigard Iris Ivy Jessamine Kayla Kiley Lalia Laura Lavender Lily Linda Liss Lissa Lobelia Malva Marlon Melly Menegilda Mentha Milly Mimosa Mirabella Missy Myrtle Nora Pansy Pearl Penny Peony Pervinca Pimpernel Primrose Primula Prisca Rica Rosa Rosamunda Rose Ruby Salvia Sandy Saredic Sofy Tara Thistle Vera Vivy Zoe
+		}
+		#5 = { # Rarer
+		#}
+	}
+	
+	dynasty_of_location_prefix = "dynnp_of"
+	patronym_suffix_male = "dynnpat_suf_s"
+	patronym_suffix_female = "dynnpat_suf_s"
+	
+	# Chance of male children being named after their paternal or maternal grandfather, or their father. Sum must not exceed 100.
+	pat_grf_name_chance = 30
+	mat_grf_name_chance = 10
+	father_name_chance = 25
+	
+	# Chance of female children being named after their paternal or maternal grandmother, or their mother. Sum must not exceed 100.
+	pat_grm_name_chance = 20
+	mat_grm_name_chance = 40
+	mother_name_chance = 5
+	
+	mercenary_names = {
+		{ name = mercenary_company_armed_burghers_of_bree }
+		{ name = mercenary_company_breeland_bandits }
+		{ name = mercenary_company_eriadors_scoundrels }
+		{ name = mercenary_company_roaming_ruffians }
+		{ name = mercenary_company_bree_guardsmen_for_hire }
+	}
+}
+
+name_list_eriadorim = {
+	cadet_dynasty_names = { # TEMP!!!!
+		"dynn_barleynook"
+		"dynn_cropfletch"
+		"dynn_cattlecob"
+		"dynn_littergrass"
+		"dynn_woodbatch"
+		"dynn_berrybrack"
+		"dynn_kettleback"
+		"dynn_grapebrook"
+		"dynn_oatsock"
+		"dynn_laddermoss"
+		"dynn_ciderbuck"
+		"dynn_mintfletch"
+		"dynn_leeknotch"
+		"dynn_barrelroot"
+		"dynn_carrotneck"
+		"dynn_ryeweave"
+		"dynn_wheybaker"
+		"dynn_wheatfern"
+		"dynn_ladderbranch"
+		"dynn_cobbsmire"
+		"dynn_cropfoot"
+		"dynn_nettletongue"
+		"dynn_mallowbreath"
+		"dynn_rosebuck"
+		"dynn_billock"
+		"dynn_nutwool"
+		"dynn_pepperboil"
+		"dynn_hazelstool"
+		"dynn_wattletoe"
+		"dynn_netty"
+		"dynn_leafy"
+		"dynn_wheatly"
+		"dynn_taterbridge"
+		"dynn_seedbuck"
+		"dynn_starchbur"
+		"dynn_brooksmunch"
+		"dynn_riverbutch"
+ 		"dynn_honeystock"
+ 		"dynn_leedfallow"
+ 		"dynn_peatshorne"
+ 		"dynn_baler"
+ 		"dynn_hushop"
+ 		"dynn_billock"
+ 		"dynn_hodge"
+	}
+
+	dynasty_names = { # TEMP!!!!!
+		"dynn_barleynook"
+		"dynn_cropfletch"
+		"dynn_cattlecob"
+		"dynn_littergrass"
+		"dynn_woodbatch"
+		"dynn_berrybrack"
+		"dynn_kettleback"
+		"dynn_grapebrook"
+		"dynn_oatsock"
+		"dynn_laddermoss"
+		"dynn_ciderbuck"
+		"dynn_mintfletch"
+		"dynn_leeknotch"
+		"dynn_barrelroot"
+		"dynn_carrotneck"
+		"dynn_ryeweave"
+		"dynn_wheybaker"
+		"dynn_wheatfern"
+		"dynn_ladderbranch"
+		"dynn_cobbsmire"
+		"dynn_cropfoot"
+		"dynn_nettletongue"
+		"dynn_mallowbreath"
+		"dynn_rosebuck"
+		"dynn_billock"
+		"dynn_nutwool"
+		"dynn_pepperboil"
+		"dynn_hazelstool"
+		"dynn_wattletoe"
+		"dynn_netty"
+		"dynn_leafy"
+		"dynn_wheatly"
+		"dynn_taterbridge"
+		"dynn_seedbuck"
+		"dynn_starchbur"
+		"dynn_brooksmunch"
+		"dynn_riverbutch"
+ 		"dynn_honeystock"
+ 		"dynn_leedfallow"
+ 		"dynn_peatshorne"
+ 		"dynn_baler"
+ 		"dynn_hushop"
+ 		"dynn_billock"
+ 		"dynn_hodge"
+	}
+	
+	
+	male_names = {
+		10 = { # most common
+			Alcalec Arnethor Astoron Cadan Dawor Dion Elrede Helyane Loman Meliador Menthor Sieron Sion Thar Wair Vadalon
+		}
+		
+	}
+	female_names = {
+		10 = { # most common
+			Aine Anes Bainath Belis Eneli Gwerin Ide Innis Irrai Ithe Mor Nothle Olwen Rione Roth Siani 
+		}
+		
+	}
+	
+	dynasty_of_location_prefix = "dynnp_reise"
+	patronym_suffix_male = "dynnpat_suf_s"
+	patronym_suffix_female = "dynnpat_suf_s"
+	
+	# Chance of male children being named after their paternal or maternal grandfather, or their father. Sum must not exceed 100.
+	pat_grf_name_chance = 50
+	mat_grf_name_chance = 10
+	father_name_chance = 25
+	
+	# Chance of female children being named after their paternal or maternal grandmother, or their mother. Sum must not exceed 100.
+	pat_grm_name_chance = 30
+	mat_grm_name_chance = 30
+	mother_name_chance = 10
+	
+	mercenary_names = {
+		{ name = mercenary_company_armed_burghers_of_bree }
+		{ name = mercenary_company_breeland_bandits }
+		{ name = mercenary_company_eriadors_scoundrels }
+		{ name = mercenary_company_roaming_ruffians }
+		{ name = mercenary_company_bree_guardsmen_for_hire }
+	}
+}

@@ -6,7 +6,7 @@ import tempfile
 
 from .celery_app import celery_app
 from .schemas import SimulationPayload
-from .parser import parse, transform_titles, extract_genetic_traits, extract_death_reasons
+from .parser import parse, transform_titles, extract_genetic_traits, extract_secrets
 from .simulation import run_simulation
 from .output import package_zip
 
@@ -31,14 +31,46 @@ def run_generation(self, payload_json: dict) -> dict:
     traits_ast = parse(payload.parsed_files.traits_txt or "")
     traits = extract_genetic_traits(traits_ast)
 
-    log("Parsing deaths...")
-    deaths_ast = parse(payload.parsed_files.deaths_txt or "")
-    deaths = extract_death_reasons(deaths_ast)
+    log("Parsing secrets...")
+    secrets_txt = payload.parsed_files.secrets_txt or ""
+    secret_types = extract_secrets(parse(secrets_txt)) if secrets_txt else []
 
     log(f"Starting simulation ({payload.global_settings.start_year} → {payload.global_settings.end_year})...")
     world = run_simulation(
-        payload, traits, deaths, titles, logger=log,
+        payload, traits, titles,
+        secret_types=secret_types,
+        seed=payload.global_settings.random_seed,
+        logger=log,
     )
+
+    ruler_ids = {
+        cid
+        for holders in world.title_holders.values()
+        for _, cid in holders
+        if cid != "0"
+    }
+    family_tree = {
+        "characters": {
+            cid: {
+                "name": c.name,
+                "dynasty": c.dynasty or c.dynasty_house or "",
+                "is_female": c.is_female,
+                "birth_date": c.birth_date,
+                "death_date": c.death_date or "",
+                "father_id": c.father_id or "",
+                "mother_id": c.mother_id or "",
+                "is_bastard": c.is_bastard,
+                "spouse_ids": list({m["spouse_id"] for m in c.marriages}),
+                "is_ruler": cid in ruler_ids,
+            }
+            for cid, c in world.characters.items()
+        },
+        "title_holders": {
+            tid: holders
+            for tid, holders in world.title_holders.items()
+            if tid in world.explicit_title_ids
+        },
+    }
 
     log("Packaging ZIP...")
     zip_bytes = package_zip(world)
@@ -51,6 +83,6 @@ def run_generation(self, payload_json: dict) -> dict:
         "zip_path": out_path,
         "characters": len(world.characters),
         "titles_with_history": len(world.title_holders),
-        # Inline (small) — frontend can also fetch via /download/{task_id}
         "zip_b64": base64.b64encode(zip_bytes).decode("ascii"),
+        "family_tree": family_tree,
     }

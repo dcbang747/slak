@@ -11,7 +11,6 @@ export default function RightDrawer() {
 
   const lastMessageRef = useRef(null);
 
-  // Poll the backend every 1.2s while a task is in flight
   useEffect(() => {
     if (!task_id) return;
     if (task_state === 'SUCCESS' || task_state === 'FAILURE') return;
@@ -48,20 +47,20 @@ export default function RightDrawer() {
   if (!drawer_open) return null;
 
   return (
-    <aside className="w-[30vw] min-w-[360px] shrink-0 bg-gray-50 border-l border-gray-300 h-full flex flex-col">
-      <div className="px-4 py-3 border-b border-gray-300 flex justify-between items-center">
-        <div className="text-xs font-extrabold uppercase tracking-wider text-black">
+    <aside className="w-[30vw] min-w-[360px] shrink-0 bg-gray-50 dark:bg-gray-900 border-l border-gray-300 dark:border-gray-700 h-full flex flex-col">
+      <div className="px-4 py-3 border-b border-gray-300 dark:border-gray-700 flex justify-between items-center">
+        <div className="text-xs font-extrabold uppercase tracking-wider text-black dark:text-white">
           Generation Log
         </div>
         <button
           onClick={() => setDrawer(false)}
-          className="text-gray-600 hover:text-black text-sm"
+          className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white text-sm"
         >
           ✕
         </button>
       </div>
 
-      {/* Mocked terminal */}
+      {/* Terminal — intentionally stays dark in both modes */}
       <div className="flex-1 overflow-y-auto bg-black text-gray-300 font-mono text-xs p-3">
         {task_id && (
           <div className="text-gray-600 mb-2">$ task {task_id.slice(0, 8)}…</div>
@@ -80,24 +79,24 @@ export default function RightDrawer() {
         )}
       </div>
 
-      {/* Footer actions */}
-      <div className="px-3 py-3 border-t border-gray-300">
+      <div className="px-3 py-3 border-t border-gray-300 dark:border-gray-700">
         {task_state === 'SUCCESS' ? (
           <>
             <a
               href={downloadUrl(task_id)}
-              className="block w-full text-center bg-gray-800 text-white py-3 text-sm font-extrabold uppercase tracking-wider hover:bg-black"
+              download="CK3_HISTORY_GENERATOR_OUTPUT.zip"
+              className="block w-full text-center bg-gray-800 dark:bg-gray-200 text-white dark:text-black py-3 text-sm font-extrabold uppercase tracking-wider hover:bg-black dark:hover:bg-white"
             >
               Download ZIP
             </a>
             {task_result && (
-              <div className="text-xs text-gray-600 mt-2 text-center">
+              <div className="text-xs text-gray-600 dark:text-gray-400 mt-2 text-center">
                 {task_result.characters} characters · {task_result.titles_with_history} titles
               </div>
             )}
           </>
         ) : (
-          <div className="text-xs text-gray-600 text-center italic">
+          <div className="text-xs text-gray-600 dark:text-gray-400 text-center italic">
             Output will appear here when generation completes.
           </div>
         )}

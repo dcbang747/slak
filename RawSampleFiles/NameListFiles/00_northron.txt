@@ -1,0 +1,1033 @@
+﻿name_list_rohirrim = {
+	cadet_dynasty_names = {
+		"dynn_Aldoringas"
+		"dynn_Baldoring"
+		"dynn_Celmunding"
+		"dynn_Eoforing"
+		"dynn_Eogaring"
+		"dynn_Elfgaring"
+		"dynn_Gamlingas"
+		"dynn_Hardingas"
+		"dynn_Wulfing"
+		"dynn_Tordaging"
+		"dynn_Hamordryht"
+		"dynn_Scurdryht"
+		"dynn_Byrnsweord"
+		"dynn_Heorudrync"
+		"dynn_Sweordbora"
+		"dynn_Wundenmae"
+		"dynn_Bogadryht"
+		"dynn_Abugan"
+		"dynn_Eomunding"
+		"dynn_Cenlafing"
+		"dynn_Griming"
+		"dynn_Godwarding"
+		"dynn_Hamaing"
+		"dynn_Wulfhelming"
+		"dynn_Swithelming"
+		"dynn_Harolding"
+		"dynn_Arngriming"
+		"dynn_Werestaning"
+		"dynn_Cytelbearning"
+		"dynn_Faermeglin"
+		"dynn_Fen"
+		"dynn_Slaighreluath"
+		"dynn_Stolesfrydin"
+		"dynn_Uisgeduin"
+	}
+
+	dynasty_names = {
+		"dynn_Aldoringas"
+		"dynn_Baldoring"
+		"dynn_Celmunding"
+		"dynn_Eoforing"
+		"dynn_Eogaring"
+		"dynn_Elfgaring"
+		"dynn_Gamlingas"
+		"dynn_Hardingas"
+		"dynn_Wulfing"
+		"dynn_Tordaging"
+		"dynn_Hamordryht"
+		"dynn_Scurdryht"
+		"dynn_Byrnsweord"
+		"dynn_Heorudrync"
+		"dynn_Sweordbora"
+		"dynn_Wundenmae"
+		"dynn_Bogadryht"
+		"dynn_Abugan"
+		"dynn_Eomunding"
+		"dynn_Cenlafing"
+		"dynn_Griming"
+		"dynn_Godwarding"
+		"dynn_Hamaing"
+		"dynn_Wulfhelming"
+		"dynn_Swithelming"
+		"dynn_Harolding"
+		"dynn_Arngriming"
+		"dynn_Werestaning"
+		"dynn_Cytelbearning"
+		"dynn_Faermeglin"
+		"dynn_Fen"
+		"dynn_Slaighreluath"
+		"dynn_Stolesfrydin"
+		"dynn_Uisgeduin"
+	}	
+	
+	male_names = {
+		10 = { # most common
+			Arncytel Balthere Beorhtfrith Beorhthelm BeorhtmE_r Beorhtnoth Beorhtric Beorhtsige Beorhtwine Beorn BeornrE_d Beornwulf
+			Burgheard Byrhtnoth Cearl Cenfus CenrE_d Cenwulf Ceolwulf Cerdic Copsige
+			Cuthberht CuthrE_d Cynehelm Cynewulf Cytelbearn Eadberht Eadfrith Eadgar Eadmund EadmE_r Eadric
+			EadrE_d Eadsige Eadulf Eadweald Eadweard Eadwig Eadwine Eadwulf Ealdhun Ealdmund EaldrE_d Ealdwine _Eobrand _Eofara
+			Ealdwulf Eanberht Eanfrith Eanhere Eardwulf Eastmund Ecgberht Ecgfrith Freared Gamall Gamling Geonging Godwine Gospatric Guthfrith Guthmund
+			Gyrth Hacon Harold Heahberht Hereberht Hereweald Hereweard Hlothere Hrodberht InwE_r Leofr Leofheah Leofhelm
+			Leofric Leofweald Leofwine Maccus Morcar ME_rleswegn Offa Onlaf Ordgar
+			Oscytel Oshere Osmund Osric OsrE_d Osulf Osweald Oswine Oswulf Petre RE_dwulf RE_genweald Scule
+			Sigeberht Sigehelm Sigeric SigerE_d Sighere Siweard Stigand Swegn Swithelm SwithrE_d SwE_frE_d SE_bert SE_lrE_d SE_weald
+			SE_xbald SE_xrE_d ThorE_d Thurcytel Thurfrith Tostig UhtrE_d Ulf Ulfcytel Waltheof Werestan Wiglaf WihtrE_d
+			Wistan Wulf Wulfgar Wulfgeat Wulfhelm Wulfhere WulfmE_r Wulfnoth Wulfstan E_lfgar E_lfmE_r E_lfnoth E_lfric E_lfrE_d E_lfsige
+			E_lfstan E_lfwald E_lfweard E_lfwig E_lfwine E_lle E_thelbald E_thelberht E_thelfrith E_thelhere E_thelmE_r
+			E_thelric E_thelrE_d E_thelsige E_thelstan E_thelweald E_thelweard E_thelwine E_thelwold E_thelwulf
+			Eormenred Eorcenberht Eormenric Eadbald RE_dwald 
+		}	
+	}
+	female_names = {
+		10 = { # most common
+			Agatha Balthild BeorhtflE_d Beorhtgifu Beorhtgyth Beorhtwaru Beorhtwynn BeornflE_d Beorngyth BlE_ja BurgflE_d CeolflE_d 
+			Cuthburg Cwenburg Cyneburg Cynegyth Cynehild Cyneswith Cynethryth Eadburg EadflE_d Eadgifu Eadgyth Eadhburh Eadhild Ealdgyth
+			EalhflE_d Ealhswith Eanswith Ecgfrida Ecgwyn Godgifu Gunhilda Gytha Helga Heregyth Hereswith Hextilda Hungifu Judith
+			LeofflE_d Leofgifu Leofrun Leofwaru Leofwynn Margaret Maud Mildrith Octreda SifflE_d Sigrid SE_thryth WulfflE_d Wulfgifu
+			Wulfgyth Wulfhild Wulfrun Wulfthryth Wulfwaru Wulfwynn WynnflE_d WE_rburg E_bba E_lfflE_d E_lfgifu E_lfgyth E_lflE_da E_lfrida
+			E_lfswith E_lfthryth E_lfwynn E_thelburg E_thelflE_d E_thelgifu E_thelhild E_thelrE_da E_thelswith E_thelthryth
+			E_thelburh Seaxburh Wihtburh
+		}	
+	}
+	dynasty_of_location_prefix = "dynnp_of"
+
+	patronym_suffix_male = "dynnpat_suf_son"
+	
+	# Chance of male children being named after their paternal or maternal grandfather, or their father. Sum must not exceed 100.
+	pat_grf_name_chance = 5
+	mat_grf_name_chance = 0
+	father_name_chance = 0
+	
+	# Chance of female children being named after their paternal or maternal grandmother, or their mother. Sum must not exceed 100.
+	pat_grm_name_chance = 5
+	mat_grm_name_chance = 10
+	mother_name_chance = 0
+	
+	mercenary_names = {
+		{ name = "mercenary_company_riders_of_despair" coat_of_arms = "mc_ridersofdespair" } # Riders of Despair
+		{ name = "mercenary_company_the_oathbreakers" }			# The Oathbreakers
+		{ name = "mercenary_company_bregossons_retinue" }		# Bregosson's Retinue
+		{ name = "mercenary_company_thens_guard" }				# Then's Guard
+		{ name = "mercenary_company_eoh_band" }					# Eoh's Band
+		{ name = "mercenary_company_masters_of_doom" }			# Masters of Doom
+		{ name = "mercenary_company_helm_and_hauberk" }			# Helm and Hauberk
+		{ name = "mercenary_company_hand_on_the_harpstring" }	# Hand on the Harpstring
+		{ name = "mercenary_company_redfire" }					# Redfire
+		{ name = "mercenary_company_lancers_of_bema" }			# Lancers of Béma
+	}
+}
+
+name_list_leofring = {		# Juke note: copy of Rohirrim, added merc comps
+	cadet_dynasty_names = {
+		"dynn_Aldoringas"
+		"dynn_Baldoring"
+		"dynn_Celmunding"
+		"dynn_Eoforing"
+		"dynn_Eogaring"
+		"dynn_Elfgaring"
+		"dynn_Gamlingas"
+		"dynn_Hardingas"
+		"dynn_Wulfing"
+		"dynn_Tordaging"
+		"dynn_Hamordryht"
+		"dynn_Scurdryht"
+		"dynn_Byrnsweord"
+		"dynn_Heorudrync"
+		"dynn_Sweordbora"
+		"dynn_Wundenmae"
+		"dynn_Bogadryht"
+		"dynn_Abugan"
+		"dynn_Eomunding"
+		"dynn_Cenlafing"
+		"dynn_Griming"
+		"dynn_Godwarding"
+		"dynn_Hamaing"
+		"dynn_Wulfhelming"
+		"dynn_Swithelming"
+		"dynn_Harolding"
+		"dynn_Arngriming"
+		"dynn_Werestaning"
+		"dynn_Cytelbearning"
+		"dynn_Faermeglin"
+		"dynn_Fen"
+		"dynn_Slaighreluath"
+		"dynn_Stolesfrydin"
+		"dynn_Uisgeduin"
+	}
+
+	dynasty_names = {
+		"dynn_Aldoringas"
+		"dynn_Baldoring"
+		"dynn_Celmunding"
+		"dynn_Eoforing"
+		"dynn_Eogaring"
+		"dynn_Elfgaring"
+		"dynn_Gamlingas"
+		"dynn_Hardingas"
+		"dynn_Wulfing"
+		"dynn_Tordaging"
+		"dynn_Hamordryht"
+		"dynn_Scurdryht"
+		"dynn_Byrnsweord"
+		"dynn_Heorudrync"
+		"dynn_Sweordbora"
+		"dynn_Wundenmae"
+		"dynn_Bogadryht"
+		"dynn_Abugan"
+		"dynn_Eomunding"
+		"dynn_Cenlafing"
+		"dynn_Griming"
+		"dynn_Godwarding"
+		"dynn_Hamaing"
+		"dynn_Wulfhelming"
+		"dynn_Swithelming"
+		"dynn_Harolding"
+		"dynn_Arngriming"
+		"dynn_Werestaning"
+		"dynn_Cytelbearning"
+		"dynn_Faermeglin"
+		"dynn_Fen"
+		"dynn_Slaighreluath"
+		"dynn_Stolesfrydin"
+		"dynn_Uisgeduin"
+	}	
+	
+	male_names = {
+		10 = { # most common
+			Arncytel Balthere Beorhtfrith Beorhthelm BeorhtmE_r Beorhtnoth Beorhtric Beorhtsige Beorhtwine Beorn BeornrE_d Beornwulf
+			Burgheard Byrhtnoth Cearl Cenfus CenrE_d Cenwulf Ceolwulf Cerdic Copsige
+			Cuthberht CuthrE_d Cynehelm Cynewulf Cytelbearn Eadberht Eadfrith Eadgar Eadmund EadmE_r Eadric
+			EadrE_d Eadsige Eadulf Eadweald Eadweard Eadwig Eadwine Eadwulf Ealdhun Ealdmund EaldrE_d Ealdwine
+			Ealdwulf Eanberht Eanfrith Eanhere Eardwulf Eastmund Ecgberht Ecgfrith Gamall Godwine Gospatric Guthfrith Guthmund
+			Gyrth Hacon Harold Heahberht Hereberht Hereweald Hereweard Hlothere Hrodberht InwE_r Leofr Leofheah Leofhelm
+			Leofric Leofweald Leofwine Maccus Morcar ME_rleswegn Offa Onlaf Ordgar
+			Oscytel Oshere Osmund Osric OsrE_d Osulf Osweald Oswine Oswulf Petre RE_dwulf RE_genweald Scule
+			Sigeberht Sigehelm Sigeric SigerE_d Sighere Siweard Stigand Swegn Swithelm SwithrE_d SwE_frE_d SE_bert SE_lrE_d SE_weald
+			SE_xbald SE_xrE_d ThorE_d Thurcytel Thurfrith Tostig UhtrE_d Ulf Ulfcytel Waltheof Werestan Wiglaf WihtrE_d
+			Wistan Wulf Wulfgar Wulfgeat Wulfhelm Wulfhere WulfmE_r Wulfnoth Wulfstan E_lfgar E_lfmE_r E_lfnoth E_lfric E_lfrE_d E_lfsige
+			E_lfstan E_lfwald E_lfweard E_lfwig E_lfwine E_lle E_thelbald E_thelberht E_thelfrith E_thelhere E_thelmE_r
+			E_thelric E_thelrE_d E_thelsige E_thelstan E_thelweald E_thelweard E_thelwine E_thelwold E_thelwulf
+			Eormenred Eorcenberht Eormenric Eadbald RE_dwald
+		}	
+	}
+	female_names = {
+		10 = { # most common
+			Agatha Balthild BeorhtflE_d Beorhtgifu Beorhtgyth Beorhtwaru Beorhtwynn BeornflE_d Beorngyth BlE_ja BurgflE_d CeolflE_d 
+			Cuthburg Cwenburg Cyneburg Cynegyth Cynehild Cyneswith Cynethryth Eadburg EadflE_d Eadgifu Eadgyth Eadhburh Eadhild Ealdgyth
+			EalhflE_d Ealhswith Eanswith Ecgfrida Ecgwyn Godgifu Gunhilda Gytha Helga Heregyth Hereswith Hextilda Hungifu Judith
+			LeofflE_d Leofgifu Leofrun Leofwaru Leofwynn Margaret Maud Mildrith Octreda SifflE_d Sigrid SE_thryth WulfflE_d Wulfgifu
+			Wulfgyth Wulfhild Wulfrun Wulfthryth Wulfwaru Wulfwynn WynnflE_d WE_rburg E_bba E_lfflE_d E_lfgifu E_lfgyth E_lflE_da E_lfrida
+			E_lfswith E_lfthryth E_lfwynn E_thelburg E_thelflE_d E_thelgifu E_thelhild E_thelrE_da E_thelswith E_thelthryth
+			E_thelburh Seaxburh Wihtburh
+		}	
+	}
+	dynasty_of_location_prefix = "dynnp_of"
+
+	patronym_suffix_male = "dynnpat_suf_son"
+	
+	# Chance of male children being named after their paternal or maternal grandfather, or their father. Sum must not exceed 100.
+	pat_grf_name_chance = 5
+	mat_grf_name_chance = 0
+	father_name_chance = 0
+	
+	# Chance of female children being named after their paternal or maternal grandmother, or their mother. Sum must not exceed 100.
+	pat_grm_name_chance = 5
+	mat_grm_name_chance = 10
+	mother_name_chance = 0
+	
+	mercenary_names = {
+		{ name = "mercenary_company_bandits_of_the_limlight" }		# Bandits of the Limlight
+		{ name = "mercenary_company_raiders_of_the_wold" }			# Raiders of the Wold
+		{ name = "mercenary_company_anduin_outriders" }				# Anduin Outriders
+		{ name = "mercenary_company_braying_horn_of_battle" }		# Braying Horn of Battle
+		
+		{ name = "mercenary_company_leofrs_freeriders" }			# Leofr's Freeriders
+		{ name = "mercenary_company_free_stallions_of_the_anduin" }	# Free Stallions of the Anduin
+		{ name = "mercenary_company_feylance_cohort" }				# Feylance Cohort
+		{ name = "mercenary_company_unbound_riders" }				# Unbound Riders 
+		{ name = "mercenary_company_clanless_horsemen" }			# Clanless Horsemen
+		{ name = "mercenary_company_brigands_of_the_drownholt" }	# Brigands of Drownholt
+	}
+}
+
+name_list_framling = {		# Juke note: copy of Rohirrim, added merc comps
+	cadet_dynasty_names = {
+		"dynn_Aldoringas"
+		"dynn_Baldoring"
+		"dynn_Celmunding"
+		"dynn_Eoforing"
+		"dynn_Eogaring"
+		"dynn_Elfgaring"
+		"dynn_Gamlingas"
+		"dynn_Hardingas"
+		"dynn_Wulfing"
+		"dynn_Tordaging"
+		"dynn_Hamordryht"
+		"dynn_Scurdryht"
+		"dynn_Byrnsweord"
+		"dynn_Heorudrync"
+		"dynn_Sweordbora"
+		"dynn_Wundenmae"
+		"dynn_Bogadryht"
+		"dynn_Abugan"
+		"dynn_Eomunding"
+		"dynn_Cenlafing"
+		"dynn_Griming"
+		"dynn_Godwarding"
+		"dynn_Hamaing"
+		"dynn_Wulfhelming"
+		"dynn_Swithelming"
+		"dynn_Harolding"
+		"dynn_Arngriming"
+		"dynn_Werestaning"
+		"dynn_Cytelbearning"
+		"dynn_Faermeglin"
+		"dynn_Fen"
+		"dynn_Slaighreluath"
+		"dynn_Stolesfrydin"
+		"dynn_Uisgeduin"
+	}
+
+	dynasty_names = {
+		"dynn_Aldoringas"
+		"dynn_Baldoring"
+		"dynn_Celmunding"
+		"dynn_Eoforing"
+		"dynn_Eogaring"
+		"dynn_Elfgaring"
+		"dynn_Gamlingas"
+		"dynn_Hardingas"
+		"dynn_Wulfing"
+		"dynn_Tordaging"
+		"dynn_Hamordryht"
+		"dynn_Scurdryht"
+		"dynn_Byrnsweord"
+		"dynn_Heorudrync"
+		"dynn_Sweordbora"
+		"dynn_Wundenmae"
+		"dynn_Bogadryht"
+		"dynn_Abugan"
+		"dynn_Eomunding"
+		"dynn_Cenlafing"
+		"dynn_Griming"
+		"dynn_Godwarding"
+		"dynn_Hamaing"
+		"dynn_Wulfhelming"
+		"dynn_Swithelming"
+		"dynn_Harolding"
+		"dynn_Arngriming"
+		"dynn_Werestaning"
+		"dynn_Cytelbearning"
+		"dynn_Faermeglin"
+		"dynn_Fen"
+		"dynn_Slaighreluath"
+		"dynn_Stolesfrydin"
+		"dynn_Uisgeduin"
+	}	
+	
+	male_names = {
+		10 = { # most common
+			Arncytel Balthere Beorhtfrith Beorhthelm BeorhtmE_r Beorhtnoth Beorhtric Beorhtsige Beorhtwine Beorn BeornrE_d Beornwulf
+			Burgheard Byrhtnoth Cearl Cenfus CenrE_d Cenwulf Ceolwulf Cerdic Copsige
+			Cuthberht CuthrE_d Cynehelm Cynewulf Cytelbearn Eadberht Eadfrith Eadgar Eadmund EadmE_r Eadric
+			EadrE_d Eadsige Eadulf Eadweald Eadweard Eadwig Eadwine Eadwulf Ealdhun Ealdmund EaldrE_d Ealdwine
+			Ealdwulf Eanberht Eanfrith Eanhere Eardwulf Eastmund Ecgberht Ecgfrith Gamall Godwine Gospatric Guthfrith Guthmund
+			Gyrth Hacon Harold Heahberht Hereberht Hereweald Hereweard Hlothere Hrodberht InwE_r Leofr Leofheah Leofhelm
+			Leofric Leofweald Leofwine Maccus Morcar ME_rleswegn Offa Onlaf Ordgar
+			Oscytel Oshere Osmund Osric OsrE_d Osulf Osweald Oswine Oswulf Petre RE_dwulf RE_genweald Scule
+			Sigeberht Sigehelm Sigeric SigerE_d Sighere Siweard Stigand Swegn Swithelm SwithrE_d SwE_frE_d SE_bert SE_lrE_d SE_weald
+			SE_xbald SE_xrE_d ThorE_d Thurcytel Thurfrith Tostig UhtrE_d Ulf Ulfcytel Waltheof Werestan Wiglaf WihtrE_d
+			Wistan Wulf Wulfgar Wulfgeat Wulfhelm Wulfhere WulfmE_r Wulfnoth Wulfstan E_lfgar E_lfmE_r E_lfnoth E_lfric E_lfrE_d E_lfsige
+			E_lfstan E_lfwald E_lfweard E_lfwig E_lfwine E_lle E_thelbald E_thelberht E_thelfrith E_thelhere E_thelmE_r
+			E_thelric E_thelrE_d E_thelsige E_thelstan E_thelweald E_thelweard E_thelwine E_thelwold E_thelwulf
+			Eormenred Eorcenberht Eormenric Eadbald RE_dwald
+		}	
+	}
+	female_names = {
+		10 = { # most common
+			Agatha Balthild BeorhtflE_d Beorhtgifu Beorhtgyth Beorhtwaru Beorhtwynn BeornflE_d Beorngyth BlE_ja BurgflE_d CeolflE_d 
+			Cuthburg Cwenburg Cyneburg Cynegyth Cynehild Cyneswith Cynethryth Eadburg EadflE_d Eadgifu Eadgyth Eadhburh Eadhild Ealdgyth
+			EalhflE_d Ealhswith Eanswith Ecgfrida Ecgwyn Godgifu Gunhilda Gytha Helga Heregyth Hereswith Hextilda Hungifu Judith
+			LeofflE_d Leofgifu Leofrun Leofwaru Leofwynn Margaret Maud Mildrith Octreda SifflE_d Sigrid SE_thryth WulfflE_d Wulfgifu
+			Wulfgyth Wulfhild Wulfrun Wulfthryth Wulfwaru Wulfwynn WynnflE_d WE_rburg E_bba E_lfflE_d E_lfgifu E_lfgyth E_lflE_da E_lfrida
+			E_lfswith E_lfthryth E_lfwynn E_thelburg E_thelflE_d E_thelgifu E_thelhild E_thelrE_da E_thelswith E_thelthryth
+			E_thelburh Seaxburh Wihtburh
+		}	
+	}
+	dynasty_of_location_prefix = "dynnp_of"
+
+	patronym_suffix_male = "dynnpat_suf_son"
+	founder_named_dynasties = yes
+	always_use_patronym = yes
+	
+	# Chance of male children being named after their paternal or maternal grandfather, or their father. Sum must not exceed 100.
+	pat_grf_name_chance = 5
+	mat_grf_name_chance = 0
+	father_name_chance = 0
+	
+	# Chance of female children being named after their paternal or maternal grandmother, or their mother. Sum must not exceed 100.
+	pat_grm_name_chance = 5
+	mat_grm_name_chance = 10
+	mother_name_chance = 0
+	
+	mercenary_names = {
+		{ name = "mercenary_company_clanless_horsemen" }			# Clanless Horsemen
+		{ name = "mercenary_company_free_stallions_of_the_anduin" }	# Free Stallions of the Anduin
+		{ name = "mercenary_company_northern_cohort" }			# Northern Cohort
+		{ name = "mercenary_company_anduin_outriders" }				# Anduin Outriders
+		{ name = "mercenary_company_braying_horn_of_battle" }		# Braying Horn of Battle
+		{ name = "mercenary_company_unbound_riders" }				# Unbound Riders 
+		
+		{ name = "mercenary_company_scarlet_axes" }				# Scarlet Axes
+		{ name = "mercenary_company_goblin_slayers" }			# Goblin Slayers
+		{ name = "mercenary_company_black_hooves" }				# Black Hooves
+	}
+}
+
+name_list_northron = {
+
+	cadet_dynasty_names = {
+		"dynn_Erwigiana"
+		"dynn_Kindasuinthiana"
+		"dynn_Athanagildid"
+		"dynn_Athaulf"
+		"dynn_Sigireik"
+		"dynn_Gaisalaik"
+		"dynn_Thiudis"
+		"dynn_Liwa"
+		"dynn_Guntimer"
+		"dynn_Swinthila"
+		"dynn_Tulga"
+		"dynn_Hairwig"
+		"dynn_Witiza"
+		"dynn_Rotreik"
+		"dynn_Lewigild"
+		"dynn_Walja"
+		"dynn_Witireik"
+		"dynn_Sisibaud"
+		"dynn_Kindila"
+		"dynn_Wanbs"
+		"dynn_StO_rr"
+		"dynn_Borg"
+		"dynn_KrA_ka"
+		"dynn_Mikli"
+		"dynn_SmiD_r"
+		"dynn_MO_ring"
+		"dynn_GA_rdske2"
+		"dynn_Trolli"
+		"dynn_Kven"
+		"dynn_Toki"
+		"dynn_HA_rde"
+		"dynn_Eyjing"
+		"dynn_Orming"
+		"dynn_GoD_i"
+		"dynn_AustmaD_r"
+		"dynn_HA_vi"
+		"dynn_Rakki"
+		"dynn_Skrauti"
+		"dynn_Snarfari"
+		"dynn_Strangi"
+		"dynn_Snjalli"
+		"dynn_SU_rr"
+		"dynn_SkA_ld"
+		"dynn_Viss"
+		"dynn_T_rymr"
+		"dynn_T_vari"
+		"dynn_O_lfU_ss"
+		"dynn_O_rn"
+		"dynn_HvI_ti"
+		"dynn_Sterki"
+		"dynn_AuD_gi"
+		"dynn_RauD_i"
+		"dynn_Spaki"
+		"dynn_Svarti"
+		"dynn_Rammi"
+		"dynn_MjO_vi"
+		"dynn_RI_ki"
+		"dynn_Lambi"
+		"dynn_Skarfr"
+		"dynn_SkA_l"
+		"dynn_Sleggja"
+		"dynn_SmjO_r"
+		"dynn_Stjarna"
+		"dynn_StrU_gr"
+		"dynn_SA_lendingr"
+		"dynn_SU_rr"
+		"dynn_SA_lingr"
+		"dynn_Trausti"
+		"dynn_VeD_r"
+		"dynn_VA_mU_li"
+		"dynn_VA_ni"
+		"dynn_T_istill"
+		"dynn_T_jO_fi"
+		"dynn_T_ynning"
+		"dynn_Eirikson"
+		"dynn_Sognsdal"
+		"dynn_Gunarrson"
+		"dynn_Firdi"
+	}
+	
+	dynasty_names = {
+		"dynn_Erwigiana"
+		"dynn_Kindasuinthiana"
+		"dynn_Athanagildid"
+		"dynn_Athaulf"
+		"dynn_Sigireik"
+		"dynn_Gaisalaik"
+		"dynn_Thiudis"
+		"dynn_Liwa"
+		"dynn_Guntimer"
+		"dynn_Swinthila"
+		"dynn_Tulga"
+		"dynn_Hairwig"
+		"dynn_Witiza"
+		"dynn_Rotreik"
+		"dynn_Lewigild"
+		"dynn_Walja"
+		"dynn_Witireik"
+		"dynn_Sisibaud"
+		"dynn_Kindila"
+		"dynn_Wanbs"
+		"dynn_StO_rr"
+		"dynn_Borg"
+		"dynn_KrA_ka"
+		"dynn_Mikli"
+		"dynn_SmiD_r"
+		"dynn_MO_ring"
+		"dynn_GA_rdske2"
+		"dynn_Trolli"
+		"dynn_Kven"
+		"dynn_Toki"
+		"dynn_HA_rde"
+		"dynn_Eyjing"
+		"dynn_Orming"
+		"dynn_GoD_i"
+		"dynn_AustmaD_r"
+		"dynn_HA_vi"
+		"dynn_Rakki"
+		"dynn_Skrauti"
+		"dynn_Snarfari"
+		"dynn_Strangi"
+		"dynn_Snjalli"
+		"dynn_SU_rr"
+		"dynn_SkA_ld"
+		"dynn_Viss"
+		"dynn_T_rymr"
+		"dynn_T_vari"
+		"dynn_O_lfU_ss"
+		"dynn_O_rn"
+		"dynn_HvI_ti"
+		"dynn_Sterki"
+		"dynn_AuD_gi"
+		"dynn_RauD_i"
+		"dynn_Spaki"
+		"dynn_Svarti"
+		"dynn_Rammi"
+		"dynn_MjO_vi"
+		"dynn_RI_ki"
+		"dynn_Lambi"
+		"dynn_Skarfr"
+		"dynn_SkA_l"
+		"dynn_Sleggja"
+		"dynn_SmjO_r"
+		"dynn_Stjarna"
+		"dynn_StrU_gr"
+		"dynn_SA_lendingr"
+		"dynn_SU_rr"
+		"dynn_SA_lingr"
+		"dynn_Trausti"
+		"dynn_VeD_r"
+		"dynn_VA_mU_li"
+		"dynn_VA_ni"
+		"dynn_T_istill"
+		"dynn_T_jO_fi"
+		"dynn_T_ynning"
+		"dynn_Eirikson"
+		"dynn_Sognsdal"
+		"dynn_Gunarrson"
+		"dynn_Firdi"
+	}
+
+	male_names = {
+		Adelfonso Adelgaster Agila Airmanagildo Alaricho Alatheo Aloito Amalaricho Amalmondo Ambroz Aoricho Ardo Arias Assur Atawulfo Athanagildo Athanaricho Aurelio Bego Bera Berengario Diaco Egica Ermengar Erwigio Euricho Fafila Fredol Friedenando Friednand Fruella GarC_i Gaton Gauzberto Geila Gesalecho GonC_alo Gundemar Guttier Khindaswintho Khintila Leovigildo Liuva Liuvericho Lucidio Lupo Madrubal Matheo Mauregato Miron Monnio Nunno Obada Oddilon Odoario Oliba Olmondo Oppas Oersted Ordonno Pelagio Petro Radulfo Ranimiro Rekkaredo Rekkeswintho Ricimero Riculfo Rocesthes Rodericho Rostan Sans Savarico Silo Sisebuto Sisenando Streibough Suinthila Suneario Suniefredo Tello Theodefredo Theodemiro Theodoricho Theudigislo Theudis Thorismondo Tulga Veremondo Wifredo Wimarano Witiza Wittericho
+	}
+	female_names = {
+		Adelgundis Adosinda Agnes Alethea Aragonte Argilo Ariberga Ava Baddo Brunechildis Cixillo Creusa Egilona Eldonza Elduara Elvira Ercheswintha Ermeneberga Ermengardis Ermenierdis Ermenisinda Fafinia Flamula Froiliuva Fronilde Gado Gaudiosa Gonterote Gothina Gudilona Iberia Ingundis Leodegundis Liuvigothona Menenda Monnia Monniadomna Onecca Paterna Patruina Ralindis Riciberga Ricilo Sibilia Sisenanda Theodora Urraca Winidilda
+	}
+	dynasty_of_location_prefix = "dynnp_de"
+	#grammar_transform = french
+	patronym_suffix_male = "dynnpat_suf_sson"
+	patronym_suffix_female = "dynnpat_suf_sdottir"
+	founder_named_dynasties = yes
+	always_use_patronym = yes	
+
+	# Chance of male children being named after their paternal or maternal grandfather, or their father. Sum must not exceed 100.
+	pat_grf_name_chance = 50
+	mat_grf_name_chance = 5
+	father_name_chance = 10
+	
+	# Chance of female children being named after their paternal or maternal grandmother, or their mother. Sum must not exceed 100.
+	pat_grm_name_chance = 10
+	mat_grm_name_chance = 50
+	mother_name_chance = 5
+
+	mercenary_names = {
+		{ name = "mercenary_company_lancers_of_bema" }			# Lancers of Béma
+		{ name = "mercenary_company_lance_and_pike" }			# Lance and Pike
+		{ name = "mercenary_company_masters_of_doom" }			# Masters of Doom
+	#	{ name = "mercenary_company_helm_and_hauberk" }			# Helm and Hauberk
+	#	{ name = "mercenary_company_riders_of_despair" coat_of_arms = "mc_ridersofdespair" } # Riders of Despair
+	#	{ name = "mercenary_company_the_oathbreakers" }			# The Oathbreakers
+		{ name = "mercenary_company_bregossons_retinue" }		# Bregosson's Retinue
+		{ name = "mercenary_company_thens_guard" }				# Then's Guard
+		{ name = "mercenary_company_eoh_band" }					# Eoh's Band
+	#	{ name = "mercenary_company_hand_on_the_harpstring" }	# Hand on the Harpstring
+	#	{ name = "mercenary_company_redfire" }					# Redfire
+		{ name = "mercenary_company_caravan_guard" }			# Caravan Guard
+		{ name = "mercenary_company_trusty_hounds" }			# Trusty Hounds
+		{ name = "mercenary_company_torolfs_axelords" }			# Torolf's Axelords
+		{ name = "mercenary_company_miklas_men_for_hire" }		# Mikla's Men for Hire
+		{ name = "mercenary_company_olavs_fists" }				# Olav's Fists
+	}
+}
+
+name_list_woodsmen = { # Duplicate of Northron, to allow for use in flavorization titles # now with custom mercs
+	cadet_dynasty_names = {
+		"dynn_Erwigiana"
+		"dynn_Kindasuinthiana"
+		"dynn_Athanagildid"
+		"dynn_Athaulf"
+		"dynn_Sigireik"
+		"dynn_Gaisalaik"
+		"dynn_Thiudis"
+		"dynn_Liwa"
+		"dynn_Guntimer"
+		"dynn_Swinthila"
+		"dynn_Tulga"
+		"dynn_Hairwig"
+		"dynn_Witiza"
+		"dynn_Rotreik"
+		"dynn_Lewigild"
+		"dynn_Walja"
+		"dynn_Witireik"
+		"dynn_Sisibaud"
+		"dynn_Kindila"
+		"dynn_Wanbs"
+		"dynn_StO_rr"
+		"dynn_Borg"
+		"dynn_KrA_ka"
+		"dynn_Mikli"
+		"dynn_SmiD_r"
+		"dynn_MO_ring"
+		"dynn_GA_rdske2"
+		"dynn_Trolli"
+		"dynn_Kven"
+		"dynn_Toki"
+		"dynn_HA_rde"
+		"dynn_Eyjing"
+		"dynn_Orming"
+		"dynn_GoD_i"
+		"dynn_AustmaD_r"
+		"dynn_HA_vi"
+		"dynn_Rakki"
+		"dynn_Skrauti"
+		"dynn_Snarfari"
+		"dynn_Strangi"
+		"dynn_Snjalli"
+		"dynn_SU_rr"
+		"dynn_SkA_ld"
+		"dynn_Viss"
+		"dynn_T_rymr"
+		"dynn_T_vari"
+		"dynn_O_lfU_ss"
+		"dynn_O_rn"
+		"dynn_HvI_ti"
+		"dynn_Sterki"
+		"dynn_AuD_gi"
+		"dynn_RauD_i"
+		"dynn_Spaki"
+		"dynn_Svarti"
+		"dynn_Rammi"
+		"dynn_MjO_vi"
+		"dynn_RI_ki"
+		"dynn_Lambi"
+		"dynn_Skarfr"
+		"dynn_SkA_l"
+		"dynn_Sleggja"
+		"dynn_SmjO_r"
+		"dynn_Stjarna"
+		"dynn_StrU_gr"
+		"dynn_SA_lendingr"
+		"dynn_SU_rr"
+		"dynn_SA_lingr"
+		"dynn_Trausti"
+		"dynn_VeD_r"
+		"dynn_VA_mU_li"
+		"dynn_VA_ni"
+		"dynn_T_istill"
+		"dynn_T_jO_fi"
+		"dynn_T_ynning"
+		"dynn_Eirikson"
+		"dynn_Sognsdal"
+		"dynn_Gunarrson"
+		"dynn_Firdi"
+	}
+	
+	dynasty_names = {
+		"dynn_Erwigiana"
+		"dynn_Kindasuinthiana"
+		"dynn_Athanagildid"
+		"dynn_Athaulf"
+		"dynn_Sigireik"
+		"dynn_Gaisalaik"
+		"dynn_Thiudis"
+		"dynn_Liwa"
+		"dynn_Guntimer"
+		"dynn_Swinthila"
+		"dynn_Tulga"
+		"dynn_Hairwig"
+		"dynn_Witiza"
+		"dynn_Rotreik"
+		"dynn_Lewigild"
+		"dynn_Walja"
+		"dynn_Witireik"
+		"dynn_Sisibaud"
+		"dynn_Kindila"
+		"dynn_Wanbs"
+		"dynn_StO_rr"
+		"dynn_Borg"
+		"dynn_KrA_ka"
+		"dynn_Mikli"
+		"dynn_SmiD_r"
+		"dynn_MO_ring"
+		"dynn_GA_rdske2"
+		"dynn_Trolli"
+		"dynn_Kven"
+		"dynn_Toki"
+		"dynn_HA_rde"
+		"dynn_Eyjing"
+		"dynn_Orming"
+		"dynn_GoD_i"
+		"dynn_AustmaD_r"
+		"dynn_HA_vi"
+		"dynn_Rakki"
+		"dynn_Skrauti"
+		"dynn_Snarfari"
+		"dynn_Strangi"
+		"dynn_Snjalli"
+		"dynn_SU_rr"
+		"dynn_SkA_ld"
+		"dynn_Viss"
+		"dynn_T_rymr"
+		"dynn_T_vari"
+		"dynn_O_lfU_ss"
+		"dynn_O_rn"
+		"dynn_HvI_ti"
+		"dynn_Sterki"
+		"dynn_AuD_gi"
+		"dynn_RauD_i"
+		"dynn_Spaki"
+		"dynn_Svarti"
+		"dynn_Rammi"
+		"dynn_MjO_vi"
+		"dynn_RI_ki"
+		"dynn_Lambi"
+		"dynn_Skarfr"
+		"dynn_SkA_l"
+		"dynn_Sleggja"
+		"dynn_SmjO_r"
+		"dynn_Stjarna"
+		"dynn_StrU_gr"
+		"dynn_SA_lendingr"
+		"dynn_SU_rr"
+		"dynn_SA_lingr"
+		"dynn_Trausti"
+		"dynn_VeD_r"
+		"dynn_VA_mU_li"
+		"dynn_VA_ni"
+		"dynn_T_istill"
+		"dynn_T_jO_fi"
+		"dynn_T_ynning"
+		"dynn_Eirikson"
+		"dynn_Sognsdal"
+		"dynn_Gunarrson"
+		"dynn_Firdi"
+	}
+
+	male_names = {
+		Adelfonso Adelgaster Agila Airmanagildo Alaricho Alatheo Aloito Amalaricho Amalmondo Ambroz
+		Aoricho Ardo Arias Assur Atawulfo Athanagildo Athanaricho Aurelio Bego Bera
+		Berengario Diaco Egica Ermengar Erwigio Euricho Fafila Fredol Friedenando Friednand
+		Fruella GarC_i Gaton Gauzberto Geila Gesalecho GonC_alo Gundemar Guttier
+		Khindaswintho Khintila Leovigildo Liuva Liuvericho Lucidio Lupo Madrubal Matheo
+		Mauregato Miron Monnio Nunno Obada Oddilon Odoario Oliba Olmondo Oppas
+		Ordonno Pelagio Petro Radulfo Ranimiro Rekkaredo Rekkeswintho Ricimero Riculfo Rocesthes
+		Rodericho Rostan Sans Savarico Silo Sisebuto Sisenando Suinthila Suneario Suniefredo
+		Tello Theodefredo Theodemiro Theodoricho Theudigislo Theudis Thorismondo Tulga Veremondo Wifredo
+		Wimarano Witiza Wittericho
+
+		Alaric Alberic Arnulf Baldac Barald Eboric Frideger Garivald Grimbald Hildebald Iwgar Malaric Merovech Odovacar Ramnulf Roderic Sigeric Sigibert Theuderic Wulferd
+	}
+	female_names = {
+		Adelgundis Adosinda Agnes Aragonte Argilo Ariberga Ava Baddo Brunechildis Cixillo
+		Creusa Egilona Eldonza Elduara Elvira Ercheswintha Ermeneberga Ermengardis Ermenierdis Ermenisinda
+		Fafinia Flamula Froiliuva Fronilde Gado Gaudiosa Gonterote Gothina Gudilona Iberia
+		Ingundis Leodegundis Liuvigothona Menenda Monnia Monniadomna Onecca Paterna Patruina Ralindis
+		Riciberga Ricilo Sibilia Sisenanda Theodora Urraca Winidilda
+
+		Amalfrida Avagisa Avina Beranhild Brunihild Gailavira Garsendis Geleswinta Gelvira Grimhild Hermesind Heva Hilduara Radegund
+	}
+	dynasty_of_location_prefix = "dynnp_de"
+	#grammar_transform = french
+	patronym_suffix_male = "dynnpat_suf_sson"
+	patronym_suffix_female = "dynnpat_suf_sdottir"
+	founder_named_dynasties = yes
+	always_use_patronym = yes	
+
+	# Chance of male children being named after their paternal or maternal grandfather, or their father. Sum must not exceed 100.
+	pat_grf_name_chance = 50
+	mat_grf_name_chance = 5
+	father_name_chance = 10
+	
+	# Chance of female children being named after their paternal or maternal grandmother, or their mother. Sum must not exceed 100.
+	pat_grm_name_chance = 10
+	mat_grm_name_chance = 50
+	mother_name_chance = 5
+	mercenary_names = {	
+		{ name = "mercenary_company_freelance_foresters" }		# Freelance Foresters
+		{ name = "mercenary_company_spears_of_mirkwood" }		# Spears of Mirkwood
+		{ name = "mercenary_company_deep_forest_band" }			# Deep Forest Band
+		{ name = "mercenary_company_company_of_the_bear" }		# Company of the Bear
+		{ name = "mercenary_company_company_of_the_wolf" }		# Company of the Wolf
+		{ name = "mercenary_company_company_of_the_boar" }		# Company of the Boar
+		{ name = "mercenary_company_company_of_the_stag" }		# Company of the Stag
+		{ name = "mercenary_company_wild_honey_band" }			# Wild Honey Band
+		{ name = "mercenary_company_green_stripe_company" }		# Green Stripe Company
+		{ name = "mercenary_company_ardos_merry_band" }			# Ardo's Merry Band
+		{ name = "mercenary_company_beras_bows_and_spears" }	# Bera's Bows and Spears
+		
+		{ name = "mercenary_company_grey_company" }				# Grey Company
+		{ name = "mercenary_company_lance_and_pike" }			# Lance and Pike
+		{ name = "mercenary_company_caravan_guard" }			# Caravan Guard
+		{ name = "mercenary_company_trusty_hounds" }			# Trusty Hounds
+		
+	}
+}
+
+name_list_dalemen = {
+	cadet_dynasty_names = {
+		"dynn_Porse"
+		"dynn_Glysing"
+		"dynn_Sprakalegg"
+		"dynn_Sturlung"
+		"dynn_SvI_nfelling"
+		"dynn_VatnsfirD_ing"
+		"dynn_Galen"
+		"dynn_Vogelius"
+		"dynn_Brock"
+		"dynn_Banner"
+		"dynn_Thott"
+		"dynn_Botner"
+		"dynn_Darre"
+		"dynn_Egge"
+		"dynn_Kusse"
+		"dynn_Grand"
+		"dynn_GO_ye"
+		"dynn_GrO_n"
+		"dynn_Friis"
+		"dynn_Daa"
+		"dynn_Ryning"
+		"dynn_Reventlow"
+		"dynn_Ulfstand"
+		"dynn_Hack"
+		"dynn_Juul"
+		"dynn_Ulfeldt"
+		"dynn_Bang"
+		"dynn_Toll"
+		"dynn_Vognsen"
+		"dynn_Juel"
+	}
+
+	dynasty_names = {
+		"dynn_Porse"
+		"dynn_Glysing"
+		"dynn_Sprakalegg"
+		"dynn_Sturlung"
+		"dynn_SvI_nfelling"
+		"dynn_VatnsfirD_ing"
+		"dynn_Galen"
+		"dynn_Vogelius"
+		"dynn_Brock"
+		"dynn_Banner"
+		"dynn_Thott"
+		"dynn_Botner"
+		"dynn_Darre"
+		"dynn_Egge"
+		"dynn_Kusse"
+		"dynn_Grand"
+		"dynn_GO_ye"
+		"dynn_GrO_n"
+		"dynn_Friis"
+		"dynn_Daa"
+		"dynn_Ryning"
+		"dynn_Reventlow"
+		"dynn_Ulfstand"
+		"dynn_Hack"
+		"dynn_Juul"
+		"dynn_Ulfeldt"
+		"dynn_Bang"
+		"dynn_Toll"
+		"dynn_Vognsen"
+		"dynn_Juel"
+	}
+	
+	male_names = { #Combined Swedish + Danish List w/LOTR additions
+		Abel Adalvard A_ke Albrikt Alf Algot Anders Anund ArnbjO_rn Arne Arnfast AsbjO_rn Asger Astrad Azur Bagge Bain Balder Bard Benedikt Bengt Bertil Birger BjOErn BjO_rn Bo Borkvard Botulf Brage Brand Bridofin Brindal Bror Brynjolf Brynolf Dag Dalla Dan Dyre Edvard Egil Einar Eir_ikr Elstan Emund Erik Ernst Esben Eskild Faste Filip Folke Frani Fredrik Frej Frode Geirjarn Georg Gir Girion Girnir Gismund Glum Gnupa Gorm Gotfred Greger Gregers Grim GudrO_d Gunnar Gustav HA_kan Halfdan Halsten Halvor Hans Harald Harbard HA_rik Helge Helgi Hemming Henrik Hiarni Hjalmar Holger Holmger Inge Ingemar Ingolf Ingvar Jaerpulf Jakob Jedvard Jens Joakim JO_rgen JO_rn Karl Kettil Kettilmund Klas Knud Knut Kol KolbjO_rn Lars Leif Lennart Lifstan Lodin Ludvig Mads Magnus Malthe Markus Mats Mikkel Mogens Niels Niklas Nils Odd _Odgrim Olaf Olav Oluf Orvar O_sten Peder Poul PridbjO_rn Ragnar Ragnvald Reinhard Rodulvard Roland Rolf RO_rek RO_rik Rune SA_mund Severin SigbjO_rn Sigfred Sigtryg Sigtrygg Sigurd Sivard SO_lvi SO_rkver Starkad Steen Sten Stenar StyrbjO_rn Sune Sven Svend Sverker Thomas Thorolf Thorvald Tjudmund Toke Tolir Torben TorbjOErn TorbjO_rn Torbrand Tord Torfinn Torgils Torkel Torolf Torsten Toste Totil Ture Tyke Ubbe Uffe Ulf Valdemar Valentin Vilfred Yngvar
+	}
+	female_names = {
+		Agnethe Aleta Alfhild Alfridh Anna A_se Asta Astrid Arta Beata Benedikte Birgitta Bodil Bothild Cecilia Cecilie Cordelia Dagmar Dorothea Edla Elin Elisabet Elisabeth Ellinor Emilie Erika Ester Estrid Erna Frederikke Freja Grethe Gudrun Gunhild Gurli Gyda Gyla Gytha Hafrid Helena Helga Holmfrid Ida Iliana Inga Ingeborg Ingegerd Ingfrid Ingrid Jutta Karin Karoline Katarina Katrine Kirsten Kristina Klara Linda Lise Li_f Luitgard Lykke Maer MAErta Malmfrid Maren Margareta Margrethe Maria Martha Mikla Ragnfrid Ragnhild Rikissa Runa Saga Sanna Sara Signe Sigrid Silje Sofia Sofie Svanhild Thyra Tora Thordis Ulvhilde Ylva
+	}
+	
+	dynasty_of_location_prefix = "dynnp_af"
+	
+	patronym_suffix_male = "dynnpat_suf_sen"
+	patronym_suffix_female = "dynnpat_suf_sdatter"
+
+	# Chance of male children being named after their paternal or maternal grandfather, or their father. Sum must not exceed 100.
+	pat_grf_name_chance = 80
+	mat_grf_name_chance = 0
+	father_name_chance = 0
+	
+	# Chance of female children being named after their paternal or maternal grandmother, or their mother. Sum must not exceed 100.
+	pat_grm_name_chance = 10
+	mat_grm_name_chance = 50
+	mother_name_chance = 0
+
+	mercenary_names = {
+		{ name = "mercenary_company_free_bowmen_of_dale" }		# Free Bowmen of Dale
+		{ name = "mercenary_company_trusty_hounds" }			# Trusty Hounds
+		{ name = "mercenary_company_lance_and_pike" }			# Lance and Pike
+		{ name = "mercenary_company_lakemen_band" }				# Lakemen Band
+		{ name = "mercenary_company_grey_company" }				# Grey Company
+		{ name = "mercenary_company_caravan_guard" }			# Caravan Guard
+		{ name = "mercenary_company_torolfs_axelords" }			# Torolf's Axelords
+		{ name = "mercenary_company_miklas_men_for_hire" }		# Mikla's Men for Hire
+		{ name = "mercenary_company_olavs_fists" }				# Olav's Fists
+		{ name = "mercenary_company_freemen_of_dale" }			# Freemen of Dale
+		{ name = "mercenary_company_black_arrows" }				# Black Arrows
+		{ name = "mercenary_company_militia_of_lake_town" }		# Militia of Lake-town
+		{ name = "mercenary_company_border_reavers_band" }		# Border Reaver's Band
+	}
+}
+
+name_list_dorwinion = {
+	cadet_dynasty_names = {
+		"dynn_Porse"
+		"dynn_Glysing"
+		"dynn_Sprakalegg"
+		"dynn_Sturlung"
+		"dynn_SvI_nfelling"
+		"dynn_VatnsfirD_ing"
+		"dynn_Galen"
+		"dynn_Vogelius"
+		"dynn_Brock"
+		"dynn_Banner"
+		"dynn_Thott"
+		"dynn_Botner"
+		"dynn_Darre"
+		"dynn_Egge"
+		"dynn_Kusse"
+		"dynn_Grand"
+		"dynn_GO_ye"
+		"dynn_GrO_n"
+		"dynn_Friis"
+		"dynn_Daa"
+		"dynn_Ryning"
+		"dynn_Reventlow"
+		"dynn_Ulfstand"
+		"dynn_Hack"
+		"dynn_Juul"
+		"dynn_Ulfeldt"
+		"dynn_Bang"
+		"dynn_Toll"
+		"dynn_Vognsen"
+		"dynn_Juel"
+	}
+
+	dynasty_names = {
+		"dynn_Porse"
+		"dynn_Glysing"
+		"dynn_Sprakalegg"
+		"dynn_Sturlung"
+		"dynn_SvI_nfelling"
+		"dynn_VatnsfirD_ing"
+		"dynn_Galen"
+		"dynn_Vogelius"
+		"dynn_Brock"
+		"dynn_Banner"
+		"dynn_Thott"
+		"dynn_Botner"
+		"dynn_Darre"
+		"dynn_Egge"
+		"dynn_Kusse"
+		"dynn_Grand"
+		"dynn_GO_ye"
+		"dynn_GrO_n"
+		"dynn_Friis"
+		"dynn_Daa"
+		"dynn_Ryning"
+		"dynn_Reventlow"
+		"dynn_Ulfstand"
+		"dynn_Hack"
+		"dynn_Juul"
+		"dynn_Ulfeldt"
+		"dynn_Bang"
+		"dynn_Toll"
+		"dynn_Vognsen"
+		"dynn_Juel"
+	}
+	
+	male_names = {
+		Alwis Algar Ansovald Arnken Arnwin Arving Asabian Atagavia Athala Athalhere Athalward Athalwin Athanagild Athanaric Authari Augimund Baduila Bain Bard Bertram Biarn Bisinus Bladorthin Brathalwin Biravia Braegla Brand Brander Brego Breor Broehir Chararic Charibert Childebert Cormac Delling Dieraglir Dudannis Edwodyn Einar Eldacar Eoder Eodoric Ericavia Erland Eroder Euric Farman Fornagarth Frani Freagar Freahar Froedhir Forthwin Gangleren Gararic Garivald Gartila Girion Godomar Grimeric Gunderic Gus Gustaw Gustadolph Haed Hakon Hallam Halstein Halward Hamar Harald Harfast Hargast Harken Harkind Harward Hawin Herion Hengon Holden Holgeir Horsa Hross Ingar Ingemar Inwar Irkenwin Ivor Jeshan Jiord Kylroi Kynoden Landroi Lynodiv Lindenkind Lindor Lunt Marhere Marhold Marhwin Munderic Odagavia Odoacer Odovacer Odell Orduclax Priuth Raendoric Ragnachar Rathar Ranulf Ratahis Reccared Regna Ric Ricchar Roald Roland Rutleric Scyld Serenoa Shagelda Sichar Sigeric Silvio Sigibert Sigismund Sigiswulf Sigurd Sigurand Skaldir Stig Stormeriv Sutheric Swain Symon Tate Thain Thalas Thane Theoderic Theudebal Theoren Thiudakind Thiudamir Thorald Thorburn Thrain Thror Tor Tore Torwald Uirdriks Valacar Valamir Valemar Vandergast Vanderkind Vandermir Vandreren Vidugavia Vidugild Viduhar Vidureik Vidukind Vidumarh Vidusith Vidung Viloric Vinitharya Vogir Vogirion Widin Wuilaric Frygar
+	}
+	female_names = {
+		Adela Aldeniphel Aelfgifu Amalasuintha Amalsuntha Ariberga Aregisel Arnegisel Arva Asta Astrid Athalsintha Beawyn Berga Bergholda Berglind Bergwin Brenda Brunhilde Cordelia Cornelia Edith Erika Elfreda Erminga Dagmira Dagna Dystra Freowyn Frederica Folcwin Frideswide Gerda Gurdrun Gunnhild Gerlind Harebell Helewidis Hilda Hildegardis Helga Hulda Inga Ingaberg Ingaborg Inge Inger Ingrid Kelai Kelda Kolona Liw Marhmavi Marhsintha Mathilda Raganhildis Rosmunda Raghild Ronalda Rolande Signy Sigrid Sigrun Sisewyn Solweig Sulwyn Sunngifu Sunnegisil Swanahilda Tardonu Thora Thorberta Thordis Thraear Vidugerd Vidumavi Viduquen Vidusintha Vidugild Vinimarvi Walda Widonu Woedwyn Yvonen
+	}
+	
+	dynasty_of_location_prefix = "dynnp_of"
+
+
+	# Chance of male children being named after their paternal or maternal grandfather, or their father. Sum must not exceed 100.
+	pat_grf_name_chance = 40
+	mat_grf_name_chance = 10
+	father_name_chance = 0
+	
+	# Chance of female children being named after their paternal or maternal grandmother, or their mother. Sum must not exceed 100.
+	pat_grm_name_chance = 10
+	mat_grm_name_chance = 50
+	mother_name_chance = 0
+
+	mercenary_names = {
+		{ name = "mercenary_company_brothers_winion" }
+		{ name = "mercenary_company_spears_of_bladorthin" }
+		{ name = "mercenary_company_guardians_of_folyavuld" }
+		{ name = "mercenary_company_keepers_of_old" }
+		{ name = "mercenary_company_tradesfolk_of_blades" }
+		{ name = "mercenary_company_purple_vested" }
+		{ name = "mercenary_company_the_mithril_spears" }
+		{ name = "mercenary_company_lords_of_lance" }
+	}
+}

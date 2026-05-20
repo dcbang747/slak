@@ -1,0 +1,2372 @@
+#################################
+### dynasty_A | New Dynasty 1 ###
+#################################
+
+lineofA1 = {
+    name = Kuzaghi
+    dynasty = dynasty_A
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = bleeder
+    trait = dwarf
+    trait = hunchbacked
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = stuttering
+    trait = wheezing
+    trait = rowdy
+
+    6815.11.6 = {
+        birth = yes
+    }
+
+    6831.11.6 = {
+        trait = deceitful
+        trait = ambitious
+        trait = greedy
+    }
+
+    6889.6.8 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofA2 = {
+    name = Ba_a_mu
+    dynasty = dynasty_A
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofB8
+    mother = lineofA1
+
+    trait = albino
+    trait = beauty_good_1
+    trait = bleeder
+    trait = giant
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = scaly
+    trait = stuttering
+    trait = wheezing
+    trait = bossy
+
+    6840.12.19 = {
+        birth = yes
+    }
+
+    6856.12.19 = {
+        trait = gluttonous
+        trait = impatient
+        trait = humble
+    }
+
+    6899.11.4 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofA3 = {
+    name = Ru_u_be_e_r
+    dynasty = dynasty_A
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofB8
+    mother = lineofA1
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = giant
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = wheezing
+    trait = curious
+
+    6841.8.8 = {
+        birth = yes
+    }
+
+    6857.8.8 = {
+        trait = honest
+        trait = greedy
+        trait = gluttonous
+    }
+
+    6896.6.15 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofA4 = {
+    name = Drago_o_r
+    dynasty = dynasty_A
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofB8
+    mother = lineofA1
+
+    trait = albino
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = giant
+    trait = hunchbacked
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = stuttering
+    trait = wheezing
+    trait = charming
+
+    6844.1.9 = {
+        birth = yes
+    }
+
+    6860.1.9 = {
+        trait = paranoid
+        trait = zealous
+        trait = forgiving
+    }
+
+    6921.11.21 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofA5 = {
+    name = Bra_a_wi
+    dynasty = dynasty_A
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofB8
+    mother = lineofA1
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = giant
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = scaly
+    trait = stuttering
+    trait = wheezing
+    trait = curious
+
+    6845.4.21 = {
+        birth = yes
+    }
+
+    6861.4.21 = {
+        trait = honest
+        trait = patient
+        trait = diligent
+    }
+
+    6894.12.26 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofA6 = {
+    name = Bagha_a_d
+    dynasty = dynasty_A
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofB8
+    mother = lineofA1
+
+    trait = albino
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = scaly
+    trait = spindly
+    trait = stuttering
+    trait = wheezing
+    trait = curious
+
+    6852.7.11 = {
+        birth = yes
+    }
+
+    6868.7.11 = {
+        trait = craven
+        trait = zealous
+        trait = generous
+    }
+
+    6928.6.9 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofA7 = {
+    name = Sagha_a_n
+    dynasty = dynasty_A
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofB8
+    mother = lineofA1
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = giant
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = stuttering
+    trait = wheezing
+    trait = curious
+
+    6853.3.17 = {
+        birth = yes
+    }
+
+    6869.3.17 = {
+        trait = deceitful
+        trait = vengeful
+        trait = humble
+    }
+
+    6903.9.22 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+#################################
+### dynasty_B | New Dynasty 2 ###
+#################################
+
+lineofB1 = {
+    name = Dagha_a_n
+    dynasty = dynasty_B
+    religion = default_faith
+    culture = default_culture
+
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = infertile
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = stuttering
+    trait = bossy
+
+    6800.8.8 = {
+        add_spouse = lineofB2
+    }
+
+    6765.11.14 = {
+        birth = yes
+    }
+
+    6781.11.14 = {
+        trait = temperate
+        trait = arbitrary
+        trait = brave
+    }
+
+    6823.8.14 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofB2 = {
+    name = Zi_i_n
+    dynasty = dynasty_B
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    trait = albino
+    trait = clubfooted
+    trait = giant
+    trait = infertile
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = spindly
+    trait = curious
+
+    6767.10.13 = {
+        birth = yes
+    }
+
+    6783.10.13 = {
+        trait = wrathful
+        trait = chaste
+        trait = arrogant
+    }
+
+    6853.2.12 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofB3 = {
+    name = Bri_i_ghor
+    dynasty = dynasty_B
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofB1
+    mother = lineofB2
+
+    trait = clubfooted
+    trait = dwarf
+    trait = giant
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_2
+    trait = scaly
+    trait = stuttering
+    trait = charming
+
+    6823.4.11 = {
+        add_matrilineal_spouse = lineofB7
+    }
+
+    6802.9.4 = {
+        birth = yes
+    }
+
+    6818.9.4 = {
+        trait = brave
+        trait = impatient
+        trait = arrogant
+    }
+
+    6877.10.17 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofB4 = {
+    name = Wa_a_
+    dynasty = dynasty_B
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofB1
+    mother = lineofB2
+
+    trait = bleeder
+    trait = clubfooted
+    trait = giant
+    trait = infertile
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = spindly
+    trait = stuttering
+    trait = wheezing
+    trait = charming
+
+    6805.4.24 = {
+        birth = yes
+    }
+
+    6821.4.24 = {
+        trait = diligent
+        trait = shy
+        trait = craven
+    }
+
+    6884.5.16 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofB5 = {
+    name = Bagha_a_d
+    dynasty = dynasty_B
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofB1
+    mother = lineofB2
+
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = giant
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_2
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = spindly
+    trait = stuttering
+    trait = rowdy
+
+    6806.1.21 = {
+        birth = yes
+    }
+
+    6822.1.21 = {
+        trait = lustful
+        trait = vengeful
+        trait = paranoid
+    }
+
+    6840.1.6 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofB6 = {
+    name = Nagha_a_n
+    dynasty = dynasty_B
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofB1
+    mother = lineofB2
+
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = giant
+    trait = infertile
+    trait = intellect_good_2
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = spindly
+    trait = stuttering
+    trait = wheezing
+    trait = bossy
+
+    6808.9.28 = {
+        birth = yes
+    }
+
+    6824.9.28 = {
+        trait = honest
+        trait = diligent
+        trait = trusting
+    }
+
+    6867.4.26 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofB7 = {
+    name = Rha_a_nu
+    dynasty = dynasty_B
+    religion = default_faith
+    culture = default_culture
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = giant
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = spindly
+    trait = wheezing
+    trait = curious
+
+    6800.7.26 = {
+        birth = yes
+    }
+
+    6816.7.26 = {
+        trait = chaste
+        trait = forgiving
+        trait = fickle
+    }
+
+    6868.1.25 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofB8 = {
+    name = Ga_a_r
+    dynasty = dynasty_B
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofB7
+    mother = lineofB3
+
+    trait = albino
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = giant
+    trait = infertile
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = scaly
+    trait = spindly
+    trait = wheezing
+    trait = pensive
+
+    6837.1.26 = {
+        add_spouse = lineofA1
+    }
+
+    6833.9.13 = {
+        birth = yes
+    }
+
+    6849.9.13 = {
+        trait = lazy
+        trait = cynical
+        trait = temperate
+    }
+
+    6888.11.21 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofB9 = {
+    name = Mo_o_rghu
+    dynasty = dynasty_B
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofB7
+    mother = lineofB3
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = spindly
+    trait = wheezing
+    trait = pensive
+
+    6834.5.18 = {
+        birth = yes
+    }
+
+    6850.5.18 = {
+        trait = paranoid
+        trait = wrathful
+        trait = chaste
+    }
+
+    6894.3.7 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofB10 = {
+    name = Zari_i_n
+    dynasty = dynasty_B
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofB7
+    mother = lineofB3
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = stuttering
+    trait = wheezing
+    trait = rowdy
+
+    6836.6.5 = {
+        birth = yes
+    }
+
+    6852.6.5 = {
+        trait = just
+        trait = callous
+        trait = humble
+    }
+
+    6919.2.20 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofB11 = {
+    name = Ra_a_ma
+    dynasty = dynasty_B
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofB7
+    mother = lineofB3
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_2
+    trait = scaly
+    trait = spindly
+    trait = stuttering
+    trait = wheezing
+    trait = pensive
+
+    6837.8.24 = {
+        birth = yes
+    }
+
+    6853.8.24 = {
+        trait = arbitrary
+        trait = chaste
+        trait = diligent
+    }
+
+    6888.3.2 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofB12 = {
+    name = Bra_a_wa_a_
+    dynasty = dynasty_B
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofB7
+    mother = lineofB3
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_2
+    trait = lisping
+    trait = physique_bad_1
+    trait = scaly
+    trait = stuttering
+    trait = wheezing
+    trait = curious
+
+    6842.6.26 = {
+        birth = yes
+    }
+
+    6858.6.26 = {
+        trait = gregarious
+        trait = zealous
+        trait = honest
+    }
+
+    6886.3.8 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofB13 = {
+    name = Dru_u_nu
+    dynasty = dynasty_B
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofB7
+    mother = lineofB3
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = giant
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_2
+    trait = lisping
+    trait = physique_bad_1
+    trait = scaly
+    trait = stuttering
+    trait = wheezing
+    trait = bossy
+
+    6847.8.7 = {
+        birth = yes
+    }
+
+    6863.8.7 = {
+        trait = compassionate
+        trait = temperate
+        trait = paranoid
+    }
+
+    6878.6.1 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofB14 = {
+    name = Ba_a_mu
+    dynasty = dynasty_B
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofB8
+
+    trait = albino
+    trait = bleeder
+    trait = dwarf
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = lisping
+    trait = pensive
+
+    6873.12.5 = {
+        add_spouse = lineofD1
+    }
+
+    6848.11.7 = {
+        birth = yes
+    }
+
+    6864.11.7 = {
+        trait = paranoid
+        trait = generous
+        trait = content
+    }
+
+    6898.5.25 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+#################################
+### dynasty_C | New Dynasty 3 ###
+#################################
+
+lineofC1 = {
+    name = Gha_a_mi
+    dynasty = dynasty_C
+    religion = default_faith
+    culture = default_culture
+
+    trait = albino
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = giant
+    trait = hunchbacked
+    trait = intellect_bad_1
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = spindly
+    trait = wheezing
+    trait = charming
+
+    6800.7.14 = {
+        add_spouse = lineofC2
+    }
+
+    6765.4.3 = {
+        birth = yes
+    }
+
+    6781.4.3 = {
+        trait = eccentric
+        trait = greedy
+        trait = craven
+    }
+
+    6839.7.19 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofC2 = {
+    name = Ghe_e_rdu
+    dynasty = dynasty_C
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    trait = albino
+    trait = dwarf
+    trait = giant
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = pensive
+
+    6760.6.26 = {
+        birth = yes
+    }
+
+    6776.6.26 = {
+        trait = forgiving
+        trait = craven
+        trait = fickle
+    }
+
+    6810.10.23 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofC3 = {
+    name = E_E_rgha_a_n
+    dynasty = dynasty_C
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofC1
+    mother = lineofC2
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = spindly
+    trait = stuttering
+    trait = bossy
+
+    6839.3.7 = {
+        add_spouse = lineofC4
+    }
+
+    6802.7.21 = {
+        birth = yes
+    }
+
+    6818.7.21 = {
+        trait = shy
+        trait = arbitrary
+        trait = lustful
+    }
+
+    6880.5.24 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofC4 = {
+    name = Gha_a_wa
+    dynasty = dynasty_C
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    trait = albino
+    trait = clubfooted
+    trait = dwarf
+    trait = giant
+    trait = infertile
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_good_1
+    trait = scaly
+    trait = charming
+
+    6807.4.17 = {
+        birth = yes
+    }
+
+    6823.4.17 = {
+        trait = eccentric
+        trait = calm
+        trait = honest
+    }
+
+    6883.1.22 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofC5 = {
+    name = Mo_o_rghu
+    dynasty = dynasty_C
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofC3
+    mother = lineofC4
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = lisping
+    trait = physique_good_1
+    trait = scaly
+    trait = spindly
+    trait = stuttering
+    trait = wheezing
+    trait = pensive
+
+    6850.11.21 = {
+        add_spouse = lineofE1
+    }
+
+    6840.3.25 = {
+        birth = yes
+    }
+
+    6856.3.25 = {
+        trait = honest
+        trait = zealous
+        trait = impatient
+    }
+
+    6884.7.5 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofC6 = {
+    name = Iba_a_n
+    dynasty = dynasty_C
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofC3
+    mother = lineofC4
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = spindly
+    trait = wheezing
+    trait = bossy
+
+    6841.4.10 = {
+        birth = yes
+    }
+
+    6857.4.10 = {
+        trait = ambitious
+        trait = deceitful
+        trait = eccentric
+    }
+
+    6914.9.24 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofC7 = {
+    name = Gu_u_za
+    dynasty = dynasty_C
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofC3
+    mother = lineofC4
+
+    trait = albino
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_good_1
+    trait = scaly
+    trait = stuttering
+    trait = wheezing
+    trait = charming
+
+    6842.9.14 = {
+        birth = yes
+    }
+
+    6858.9.14 = {
+        trait = patient
+        trait = humble
+        trait = craven
+    }
+
+    6881.11.28 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofC8 = {
+    name = Gri_i_
+    dynasty = dynasty_C
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofC3
+    mother = lineofC4
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = lisping
+    trait = scaly
+    trait = stuttering
+    trait = wheezing
+    trait = charming
+
+    6849.8.16 = {
+        birth = yes
+    }
+
+    6865.8.16 = {
+        trait = lazy
+        trait = callous
+        trait = wrathful
+    }
+
+    6917.7.8 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofC9 = {
+    name = Aghan
+    dynasty = dynasty_C
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofC3
+    mother = lineofC4
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = spindly
+    trait = stuttering
+    trait = pensive
+
+    6851.2.10 = {
+        birth = yes
+    }
+
+    6867.2.10 = {
+        trait = cynical
+        trait = chaste
+        trait = eccentric
+    }
+
+    6911.6.19 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+#################################
+### dynasty_D | New Dynasty 4 ###
+#################################
+
+lineofD1 = {
+    name = Nari_i_gha
+    dynasty = dynasty_D
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    trait = albino
+    trait = beauty_good_1
+    trait = bleeder
+    trait = dwarf
+    trait = giant
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = physique_bad_1
+    trait = spindly
+    trait = curious
+
+    6851.12.15 = {
+        birth = yes
+        effect = {
+            learn_language = penis_taal
+        }
+    }
+
+    6867.12.15 = {
+        trait = callous
+        trait = lustful
+        trait = generous
+    }
+
+    6926.11.3 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofD2 = {
+    name = Izu_u_n
+    dynasty = dynasty_D
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofB14
+    mother = lineofD1
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = giant
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_2
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = spindly
+    trait = rowdy
+
+    6874.6.24 = {
+        birth = yes
+        effect = {
+            learn_language = penis_taal
+        }
+    }
+
+    6890.6.24 = {
+        trait = impatient
+        trait = vengeful
+        trait = deceitful
+    }
+
+    6901.9.3 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofD3 = {
+    name = Mo_o_rghu
+    dynasty = dynasty_D
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofB14
+    mother = lineofD1
+
+    trait = albino
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = giant
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = lisping
+    trait = spindly
+    trait = wheezing
+    trait = bossy
+
+    6877.3.2 = {
+        birth = yes
+        effect = {
+            learn_language = penis_taal
+        }
+    }
+
+    6893.3.2 = {
+        trait = diligent
+        trait = paranoid
+        trait = impatient
+    }
+
+    6929.1.28 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofD4 = {
+    name = Guri_i_gha
+    dynasty = dynasty_D
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofB14
+    mother = lineofD1
+
+    trait = albino
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_2
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_good_1
+    trait = scaly
+    trait = spindly
+    trait = wheezing
+    trait = charming
+
+    6879.11.11 = {
+        birth = yes
+        effect = {
+            learn_language = penis_taal
+        }
+    }
+
+    6895.11.11 = {
+        trait = shy
+        trait = craven
+        trait = patient
+    }
+
+    6925.7.2 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofD5 = {
+    name = Gha_a_mi
+    dynasty = dynasty_D
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofB14
+    mother = lineofD1
+
+    trait = albino
+    trait = bleeder
+    trait = dwarf
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = scaly
+    trait = spindly
+    trait = stuttering
+    trait = wheezing
+    trait = rowdy
+
+    6880.5.4 = {
+        birth = yes
+        effect = {
+            learn_language = penis_taal
+        }
+    }
+
+    6896.5.4 = {
+        trait = just
+        trait = greedy
+        trait = zealous
+    }
+
+    6970.12.2 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofD6 = {
+    name = Gu_u_bi
+    dynasty = dynasty_D
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofB14
+    mother = lineofD1
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = giant
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_2
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = spindly
+    trait = wheezing
+    trait = charming
+
+    6883.11.19 = {
+        birth = yes
+        effect = {
+            learn_language = penis_taal
+        }
+    }
+
+    6899.11.19 = {
+        trait = wrathful
+        trait = deceitful
+        trait = zealous
+    }
+
+    6964.11.18 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofD7 = {
+    name = Gri_i_ga
+    dynasty = dynasty_D
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofB14
+    mother = lineofD1
+
+    trait = albino
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = spindly
+    trait = stuttering
+    trait = wheezing
+    trait = pensive
+
+    6884.7.27 = {
+        birth = yes
+        effect = {
+            learn_language = penis_taal
+        }
+    }
+
+    6900.7.27 = {
+        trait = callous
+        trait = forgiving
+        trait = gluttonous
+    }
+
+    6958.1.12 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+#################################
+### dynasty_E | New Dynasty 5 ###
+#################################
+
+lineofE1 = {
+    name = Ade_e_r
+    dynasty = dynasty_E
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    trait = beauty_bad_1
+    trait = bleeder
+    trait = clubfooted
+    trait = giant
+    trait = hunchbacked
+    trait = intellect_bad_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = scaly
+    trait = wheezing
+    trait = curious
+
+    6828.5.19 = {
+        birth = yes
+        effect = {
+            learn_language = jis_taal
+            learn_language = seks_taal
+        }
+    }
+
+    6844.5.19 = {
+        trait = ambitious
+        trait = fickle
+        trait = cynical
+    }
+
+    6863.2.24 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofE2 = {
+    name = Dru_u_na
+    dynasty = dynasty_E
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofC5
+    mother = lineofE1
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = giant
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = spindly
+    trait = stuttering
+    trait = wheezing
+    trait = rowdy
+
+    6851.4.10 = {
+        birth = yes
+        effect = {
+            learn_language = jis_taal
+            learn_language = seks_taal
+        }
+    }
+
+    6867.4.10 = {
+        trait = wrathful
+        trait = honest
+        trait = zealous
+    }
+
+    6917.8.23 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofE3 = {
+    name = Mo_o_rghu
+    dynasty = dynasty_E
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofC5
+    mother = lineofE1
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = spindly
+    trait = stuttering
+    trait = wheezing
+    trait = pensive
+
+    6855.3.11 = {
+        birth = yes
+        effect = {
+            learn_language = jis_taal
+            learn_language = seks_taal
+        }
+    }
+
+    6871.3.11 = {
+        trait = cynical
+        trait = arrogant
+        trait = gregarious
+    }
+
+    6927.5.4 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofE4 = {
+    name = Ghu_u_m
+    dynasty = dynasty_E
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofC5
+    mother = lineofE1
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = giant
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = spindly
+    trait = stuttering
+    trait = wheezing
+    trait = bossy
+
+    6856.1.4 = {
+        birth = yes
+        effect = {
+            learn_language = jis_taal
+            learn_language = seks_taal
+        }
+    }
+
+    6872.1.4 = {
+        trait = lustful
+        trait = honest
+        trait = lazy
+    }
+
+    6895.12.2 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+lineofE5 = {
+    name = Wha_a_ka_a_
+    dynasty = dynasty_E
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofC5
+    mother = lineofE1
+
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = spindly
+    trait = wheezing
+    trait = charming
+
+    6860.11.27 = {
+        birth = yes
+        effect = {
+            learn_language = jis_taal
+            learn_language = seks_taal
+        }
+    }
+
+    6876.11.27 = {
+        trait = generous
+        trait = paranoid
+        trait = lustful
+    }
+
+    6937.3.13 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+###########################
+### BASTARDS | Bastards ###
+###########################
+
+bastard1 = {
+    name = Gi_i_ma
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofB1
+
+    trait = bleeder
+    trait = clubfooted
+    trait = giant
+    trait = hunchbacked
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = spindly
+    trait = rowdy
+
+    6813.10.14 = {
+        birth = yes
+    }
+
+    6829.10.14 = {
+        trait = honest
+        trait = gregarious
+        trait = trusting
+    }
+
+    6867.12.15 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+bastard2 = {
+    name = Wa_a_
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofB7
+
+    trait = albino
+    trait = clubfooted
+    trait = hunchbacked
+    trait = intellect_bad_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = wheezing
+    trait = bossy
+
+    6836.11.25 = {
+        birth = yes
+    }
+
+    6852.11.25 = {
+        trait = gluttonous
+        trait = honest
+        trait = patient
+    }
+
+    6891.8.24 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+bastard3 = {
+    name = Gu_u_za
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofB7
+
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = hunchbacked
+    trait = infertile
+    trait = intellect_bad_1
+    trait = intellect_good_1
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = spindly
+    trait = charming
+
+    6843.8.27 = {
+        birth = yes
+    }
+
+    6859.8.27 = {
+        trait = craven
+        trait = arrogant
+        trait = cynical
+    }
+
+    6930.4.4 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+bastard4 = {
+    name = Sari_i_gha
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    mother = lineofC4
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = bleeder
+    trait = clubfooted
+    trait = infertile
+    trait = lisping
+    trait = scaly
+    trait = stuttering
+    trait = wheezing
+    trait = charming
+
+    6848.4.10 = {
+        birth = yes
+    }
+
+    6864.4.10 = {
+        trait = deceitful
+        trait = cynical
+        trait = stubborn
+    }
+
+    6884.10.17 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+bastard5 = {
+    name = Gu_u_bi
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofC3
+
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = giant
+    trait = infertile
+    trait = scaly
+    trait = spindly
+    trait = bossy
+
+    6850.8.4 = {
+        birth = yes
+    }
+
+    6866.8.4 = {
+        trait = paranoid
+        trait = impatient
+        trait = deceitful
+    }
+
+    6906.8.18 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+bastard6 = {
+    name = E_E_rri_i_gha
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    mother = lineofC4
+
+    trait = albino
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = giant
+    trait = infertile
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = spindly
+    trait = stuttering
+    trait = wheezing
+    trait = pensive
+
+    6852.11.20 = {
+        birth = yes
+    }
+
+    6868.11.20 = {
+        trait = temperate
+        trait = deceitful
+        trait = callous
+    }
+
+    6877.2.6 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+bastard7 = {
+    name = Aru_u_
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    mother = lineofA1
+
+    trait = beauty_good_1
+    trait = bleeder
+    trait = giant
+    trait = hunchbacked
+    trait = lisping
+    trait = physique_bad_1
+    trait = spindly
+    trait = stuttering
+    trait = wheezing
+    trait = pensive
+
+    6853.2.1 = {
+        birth = yes
+    }
+
+    6869.2.1 = {
+        trait = impatient
+        trait = diligent
+        trait = lustful
+    }
+
+    6931.6.23 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+bastard8 = {
+    name = E_E_rri_i_gha
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofB7
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = dwarf
+    trait = giant
+    trait = hunchbacked
+    trait = intellect_bad_1
+    trait = physique_bad_1
+    trait = stuttering
+    trait = bossy
+
+    6859.3.21 = {
+        birth = yes
+    }
+
+    6875.3.21 = {
+        trait = fickle
+        trait = deceitful
+        trait = cynical
+    }
+
+    6939.7.12 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+bastard9 = {
+    name = Di_i_
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofB8
+
+    trait = dwarf
+    trait = giant
+    trait = wheezing
+    trait = rowdy
+
+    6860.4.27 = {
+        birth = yes
+    }
+
+    6876.4.27 = {
+        trait = ambitious
+        trait = arrogant
+        trait = fickle
+    }
+
+    6930.12.22 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+bastard10 = {
+    name = Nari_i_gha
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofB7
+
+    trait = clubfooted
+    trait = dwarf
+    trait = intellect_bad_1
+    trait = physique_bad_1
+    trait = physique_good_1
+    trait = scaly
+    trait = spindly
+    trait = wheezing
+    trait = rowdy
+
+    6862.7.13 = {
+        birth = yes
+    }
+
+    6878.7.13 = {
+        trait = lustful
+        trait = trusting
+        trait = zealous
+    }
+
+    6939.12.2 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+bastard11 = {
+    name = O_O_rgrin
+    religion = default_faith
+    culture = default_culture
+
+    father = lineofC3
+
+    trait = beauty_bad_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = giant
+    trait = infertile
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_good_1
+    trait = scaly
+    trait = stuttering
+    trait = wheezing
+    trait = curious
+
+    6869.6.6 = {
+        birth = yes
+    }
+
+    6885.6.6 = {
+        trait = deceitful
+        trait = fickle
+        trait = craven
+    }
+
+    6898.8.4 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+bastard12 = {
+    name = Gharu_u_
+    religion = default_faith
+    culture = default_culture
+
+    mother = lineofD1
+
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = clubfooted
+    trait = dwarf
+    trait = infertile
+    trait = lisping
+    trait = physique_good_1
+    trait = scaly
+    trait = wheezing
+    trait = curious
+
+    6876.3.12 = {
+        birth = yes
+    }
+
+    6892.3.12 = {
+        trait = impatient
+        trait = diligent
+        trait = sadistic
+    }
+
+    6945.11.23 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+bastard13 = {
+    name = Bru_u_dri
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    mother = lineofD1
+
+    trait = bleeder
+    trait = dwarf
+    trait = hunchbacked
+    trait = intellect_bad_1
+    trait = lisping
+    trait = physique_bad_1
+    trait = spindly
+    trait = wheezing
+    trait = bossy
+
+    6881.1.7 = {
+        birth = yes
+    }
+
+    6897.1.7 = {
+        trait = shy
+        trait = gluttonous
+        trait = diligent
+    }
+
+    6960.6.4 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+bastard14 = {
+    name = Drage_e_r
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofB14
+
+    trait = albino
+    trait = beauty_bad_1
+    trait = beauty_good_1
+    trait = bleeder
+    trait = clubfooted
+    trait = dwarf
+    trait = hunchbacked
+    trait = intellect_good_1
+    trait = lisping
+    trait = physique_good_1
+    trait = spindly
+    trait = wheezing
+    trait = charming
+
+    6885.8.13 = {
+        birth = yes
+    }
+
+    6901.8.13 = {
+        trait = deceitful
+        trait = stubborn
+        trait = craven
+    }
+
+    6960.10.26 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}
+
+bastard15 = {
+    name = Guri_i_gha
+    religion = default_faith
+    culture = default_culture
+
+    female = yes
+
+    father = lineofB14
+
+    trait = albino
+    trait = bleeder
+    trait = clubfooted
+    trait = lisping
+    trait = physique_bad_1
+    trait = scaly
+    trait = spindly
+    trait = curious
+
+    6886.12.4 = {
+        birth = yes
+    }
+
+    6902.12.4 = {
+        trait = vengeful
+        trait = callous
+        trait = eccentric
+    }
+
+    6948.6.3 = {
+        death = {
+            death_reason = death_natural_causes
+        }
+    }
+}

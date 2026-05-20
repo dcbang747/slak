@@ -1,11 +1,23 @@
 import { useStore } from '../../store';
 
 function Slider({ label, value, onChange, min, max, step }) {
+  const clamp = (v) => Math.min(max, Math.max(min, v));
   return (
     <label className="block mb-5">
       <div className="flex justify-between items-baseline mb-1">
-        <span className="text-xs font-extrabold uppercase tracking-wider text-gray-600">{label}</span>
-        <span className="text-sm text-black font-light">{value}</span>
+        <span className="text-xs font-extrabold uppercase tracking-wider text-gray-600 dark:text-gray-400">{label}</span>
+        <input
+          type="number"
+          value={value}
+          min={min}
+          max={max}
+          step={step}
+          onChange={(e) => {
+            const v = Number(e.target.value);
+            if (!Number.isNaN(v)) onChange(clamp(v));
+          }}
+          className="w-20 text-right bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 px-1.5 py-0.5 text-sm text-black dark:text-white focus:outline-none focus:border-black dark:focus:border-white"
+        />
       </div>
       <input
         type="range"
@@ -14,7 +26,7 @@ function Slider({ label, value, onChange, min, max, step }) {
         max={max}
         step={step}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full accent-black"
+        className="w-full accent-black dark:accent-white"
       />
     </label>
   );
@@ -24,8 +36,8 @@ export default function LifeCycleModifiers() {
   const { life_cycle, setLifeCycle } = useStore();
   return (
     <div className="max-w-xl">
-      <h2 className="text-2xl font-extrabold text-black mb-1">Life Cycle Modifiers</h2>
-      <p className="text-sm text-gray-600 mb-6">Demographic probabilities driving the engine.</p>
+      <h2 className="text-2xl font-extrabold text-black dark:text-white mb-1">Life Cycle Modifiers</h2>
+      <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">Demographic probabilities driving the engine.</p>
 
       <Slider
         label="Max Age Difference Between Partners"
@@ -56,6 +68,12 @@ export default function LifeCycleModifiers() {
         value={life_cycle.female_bastard_chance}
         onChange={(v) => setLifeCycle({ female_bastard_chance: v })}
         min={0} max={1} step={0.01}
+      />
+      <Slider
+        label="Dynasty Soft Cap"
+        value={life_cycle.dynasty_soft_cap}
+        onChange={(v) => setLifeCycle({ dynasty_soft_cap: v })}
+        min={5} max={500} step={5}
       />
     </div>
   );

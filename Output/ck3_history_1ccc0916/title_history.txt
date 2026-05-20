@@ -1,0 +1,25 @@
+k_eotheod = {
+    6800.1.1 = {
+        holder = lineofC1
+    }
+    6839.1.1 = {
+        holder = lineofC3
+    }
+    6850.6.15 = {
+        holder = lineofC5
+    }
+}
+k_anduin_vale = {
+    6800.1.1 = {
+        holder = lineofB1
+    }
+    6823.1.1 = {
+        holder = lineofB3
+    }
+    6837.6.15 = {
+        holder = lineofB8
+    }
+    6873.6.15 = {
+        holder = lineofB14
+    }
+}
