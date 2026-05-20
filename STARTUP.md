@@ -26,7 +26,7 @@ Run these two commands in sequence. The second one blocks — leave it running.
 # Step 1 — navigate to project root
 cd "C:\Users\Jaco\Documents\GitHub\slak"
 
-# Step 2 — build and start all 4 services (Redis, API, Celery worker, Frontend)
+# Step 2 — build and start both services (API, Frontend)
 docker compose up --build
 ```
 
@@ -78,9 +78,7 @@ Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
 
 | Container | Role |
 |---|---|
-| `redis-1` | Message broker + result store (Celery uses this) |
-| `api-1` | FastAPI on port 8000 — handles uploads and `/generate` |
-| `worker-1` | Celery worker — runs the actual simulation and writes ZIPs |
+| `api-1` | FastAPI on port 8000 — handles uploads, `/generate`, and runs the simulation in an in-process thread pool (`jobs.py`) |
 | `frontend-1` | Vite dev server on port 5173 — serves the React UI, proxies `/api/*` to api:8000 |
 
 ---
@@ -90,8 +88,8 @@ Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
 Backend code changes require a container rebuild. Frontend hot-reloads automatically via Chokidar polling — no rebuild needed for frontend-only edits.
 
 ```powershell
-# Rebuild only the backend services (faster than full rebuild)
-docker compose up --build api worker
+# Rebuild only the backend (faster than full rebuild)
+docker compose up --build api
 
 # Or rebuild everything
 docker compose up --build

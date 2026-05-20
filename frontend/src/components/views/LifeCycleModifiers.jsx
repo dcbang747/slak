@@ -40,6 +40,12 @@ export default function LifeCycleModifiers() {
       <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">Demographic probabilities driving the engine.</p>
 
       <Slider
+        label="Average Lifespan"
+        value={life_cycle.average_lifespan}
+        onChange={(v) => setLifeCycle({ average_lifespan: v })}
+        min={30} max={110} step={1}
+      />
+      <Slider
         label="Max Age Difference Between Partners"
         value={life_cycle.max_age_difference_between_partners}
         onChange={(v) => setLifeCycle({ max_age_difference_between_partners: v })}

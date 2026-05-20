@@ -12,16 +12,24 @@ from typing import Optional
 from .schemas import Character
 
 
-def base_mortality(age: int) -> float:
-    """Exponential mortality curve.
+_GOMPERTZ_STEEPNESS = 0.10   # hazard growth rate; death-age spread ≈ 1.28 / G ≈ 13 yrs
+_EULER_MASCHERONI = 0.5772156649
 
-    Roughly: ~0.2% at infancy, ~1% at 30, ~6% at 60, ~30% at 80, ~80%+ past 90.
+
+def base_mortality(age: int, avg_lifespan: float = 70.0) -> float:
+    """Annual death probability via a Gompertz hazard.
+
+    The scale is solved so the *mean* age at death equals `avg_lifespan`:
+    for hazard h(t) = A·e^(G·t), the Gompertz mean is (1/G)·ln(G/A) − γ/G, so
+    A = G·e^(−(G·avg_lifespan + γ)). Deaths cluster around `avg_lifespan` with a
+    spread of ~13 years, and the probability rises steeply past it (capped at
+    0.99), so characters rarely reach extreme ages.
     """
-    if age < 1:
-        return 0.05  # infant mortality bump
-    # exp curve calibrated so exp(age/18) - 1 normalized
-    p = (math.exp(age / 18.0) - 1.0) / 800.0
-    return min(p, 0.99)
+    if age < 0:
+        return 0.0
+    g = _GOMPERTZ_STEEPNESS
+    a = g * math.exp(-(g * max(avg_lifespan, 1.0) + _EULER_MASCHERONI))
+    return min(a * math.exp(g * age), 0.99)
 
 
 # Trait → death reason. A character is only eligible for a trait-death if they
@@ -75,12 +83,13 @@ def annual_death_check(
     character: Character,
     year: int,
     rng: random.Random,
+    avg_lifespan: float = 70.0,
 ) -> Optional[str]:
     """If the character dies this year, return the death reason ID; else None."""
     age = year - int(character.birth_date.split(".")[0])
     if age < 0:
         return None
-    p = base_mortality(age)
+    p = base_mortality(age, avg_lifespan)
     if rng.random() < p:
         return pick_death_reason(character, age, rng)
     return None

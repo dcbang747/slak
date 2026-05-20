@@ -26,8 +26,8 @@ The spec has two documents:
 |---|---|
 | Frontend | React 18, Vite, Tailwind CSS, Zustand 4.5.5 |
 | Backend API | FastAPI (Python 3.11+) |
-| Task queue | Celery + Redis |
-| Containerisation | Docker Compose (4 services: redis, api, worker, frontend) |
+| Generation | In-process `ThreadPoolExecutor` + in-memory job store (`jobs.py`) — no Celery/Redis |
+| Containerisation | Docker Compose (2 services: api, frontend) |
 | Output format | Paradox Clausewitz script |
 
 ---
@@ -44,21 +44,18 @@ docker compose up --build
 
 Backend code changes require a rebuild (`--build`). For backend-only rebuilds:
 ```bash
-docker compose up --build api worker
+docker compose up --build api
 ```
 
 Frontend hot-reloads automatically via Chokidar polling (volume mount + `CHOKIDAR_USEPOLLING=true`) — no rebuild needed for frontend-only changes.
 
-### Local backend (Python 3.11+, Redis on localhost:6379)
+### Local backend (Python 3.11+ — no Redis needed)
 ```bash
 cd backend
 pip install -r requirements.txt
-# Terminal 1 — Celery worker
-celery -A app.celery_app.celery_app worker --loglevel=info              # Linux/Mac
-celery -A app.celery_app.celery_app worker --loglevel=info --pool=solo  # Windows (no fork)
-# Terminal 2 — FastAPI
 uvicorn app.main:app --reload --port 8000
 ```
+Generation runs in an in-process thread pool inside the API (`jobs.py`), so there is no separate worker or broker to start.
 
 ### Local frontend
 ```bash
@@ -87,7 +84,7 @@ User defines dynasties in UI (Global Settings → Dynasties panel)
 User clicks Generate Simulation
     → store.buildPayload() serialises Zustand state → SimulationPayload JSON
     → POST /generate
-    → Celery task dispatched via Redis, task_id returned immediately
+    → jobs.submit_generation() queues the run on an in-process thread pool, task_id returned immediately
     → RightDrawer polls GET /status/{task_id} every 1.2 s
     → On SUCCESS: Download ZIP button appears → GET /download/{task_id}
 ```
@@ -95,10 +92,8 @@ User clicks Generate Simulation
 ### Docker service topology
 
 ```
-redis   ← broker + result backend
-  ↑
-api     (FastAPI) ← receives uploads + /generate, dispatches to worker
-worker  (Celery)  ← runs run_generation task: parse → simulate → render → ZIP
+api     (FastAPI) ← receives uploads + /generate; runs generation in a ThreadPoolExecutor (jobs.py)
+                    parse → simulate → render → ZIP, results held in an in-memory job store
 frontend (Vite)   ← proxies /api/* to api:8000
 ```
 
@@ -106,8 +101,9 @@ frontend (Vite)   ← proxies /api/* to api:8000
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `REDIS_URL` | `redis://localhost:6379/0` | Celery broker and result backend |
-| `RESULTS_DIR` | `tempfile.gettempdir()` | Worker writes result ZIPs here |
+| `RESULTS_DIR` | `tempfile.gettempdir()` | Where result ZIPs are written (same instance serves them back) |
+| `GENERATION_WORKERS` | `4` | Thread-pool size for concurrent generations |
+| `JOB_TTL_SECONDS` | `3600` | Finished jobs (and their ZIPs) are pruned after this |
 | `VITE_API_PROXY` | `http://localhost:8000` | Frontend → backend proxy target (Docker overrides to `http://api:8000`) |
 
 On Windows, generated ZIPs land in `C:\Users\<user>\AppData\Local\Temp\`.
@@ -116,17 +112,16 @@ On Windows, generated ZIPs land in `C:\Users\<user>\AppData\Local\Temp\`.
 
 ## Windows 10 Local Setup
 
-Redis has no native Windows binary.
+No Redis or message broker is required — generation runs inside the API process.
 
 **Option A — Docker Desktop (recommended):**
 1. Enable WSL2: `wsl --install` (admin, reboot)
 2. Install Docker Desktop (admin)
 3. `docker compose up --build` — no further admin needed
 
-**Option B — WSL2 + native Python/Node:**
-1. `wsl --install -d Ubuntu` (admin), then in WSL2: `sudo apt install redis-server && sudo service redis-server start`
-2. `winget install Python.Python.3.12` and `winget install OpenJS.NodeJS.LTS` (admin)
-3. Backend in PowerShell with `--pool=solo`; frontend with `npm run dev`
+**Option B — native Python/Node:**
+1. `winget install Python.Python.3.12` and `winget install OpenJS.NodeJS.LTS` (admin)
+2. Backend: `uvicorn app.main:app --reload --port 8000`; frontend: `npm run dev`
 
 Admin is only required for initial toolchain installation. All daily dev commands run without elevation.
 
@@ -142,7 +137,7 @@ Changes in one place **require** matching changes in the other:
 | `/status/{task_id}` response shape in `main.py` | `RightDrawer.jsx` (reads `data.state`, `data.message`, `data.result.*`, `data.error`) |
 | `_pick_name()` key convention | `extract_name_lists()` key format |
 | Vite proxy path prefix (`/api`) | All `api.js` fetch calls + FastAPI route paths |
-| Output ZIP contents in `tasks.py` | Download handling in `RightDrawer.jsx` |
+| Output ZIP contents in `jobs.py` | Download handling in `RightDrawer.jsx` |
 | `DynastyDefinition` schema fields | Dynasty card UI in `GlobalSettings.jsx` + `store.js` defaults + `buildPayload()` |
 | `GlobalSettings` schema fields | `store.js` `global_settings` initial state + `buildPayload()` |
 | Personality trait exclusion groups in `schemas.py` | `_defaultPersonalityTraits()` in `store.js` (must mirror exactly) |

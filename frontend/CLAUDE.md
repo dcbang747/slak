@@ -67,7 +67,7 @@ Single source of truth. Key sections:
 
 ```js
 {
-  // Sent to backend as raw txt for re-parsing by the worker
+  // Sent to backend as raw txt, re-parsed at generation time
   titles_txt: null, traits_txt: null, deaths_txt: null,
   religions_txt: null, secrets_txt: null,
   // Pre-extracted — used directly in payload

@@ -722,7 +722,7 @@ def run_simulation(
         for char in list(world.characters.values()):
             if not char.is_alive:
                 continue
-            reason = annual_death_check(char, year, rng)
+            reason = annual_death_check(char, year, rng, modifiers.average_lifespan)
             if reason:
                 world.kill(char, year, reason)
 
@@ -986,7 +986,7 @@ def run_simulation(
     # All characters who survived to end_year must receive a death date.
     # Without this they would appear immortal when the game loads — hundreds
     # of years old at the CK3 start date.
-    _kill_survivors(world, settings.end_year)
+    _kill_survivors(world, settings.end_year, modifiers.average_lifespan)
 
     # Optional post-passes. Both pick dates inside a character's lifespan, so they
     # run after _kill_survivors has stamped every character with a death date.
@@ -1002,7 +1002,7 @@ def run_simulation(
 # Post-simulation survivor cleanup
 # ---------------------------------------------------------------------------
 
-def _kill_survivors(world: WorldState, end_year: int) -> None:
+def _kill_survivors(world: WorldState, end_year: int, avg_lifespan: float = 70.0) -> None:
     """Simulate natural deaths for every character still alive at end_year.
 
     Continues the annual mortality tick until all characters have died or the
@@ -1015,7 +1015,7 @@ def _kill_survivors(world: WorldState, end_year: int) -> None:
         if not alive:
             break
         for char in alive:
-            reason = annual_death_check(char, year, world.rng)
+            reason = annual_death_check(char, year, world.rng, avg_lifespan)
             if reason:
                 world.kill(char, year, reason)
     # Hard cap: force-kill anyone who survived 200 extra years

@@ -114,6 +114,7 @@ class LifeCycleModifiers(BaseModel):
     male_bastard_chance: float = 0.05
     female_bastard_chance: float = 0.02
     dynasty_soft_cap: int = 50  # living-member count beyond which fertility damps toward zero
+    average_lifespan: int = 70  # mean age at death; calibrates the mortality curve
 
 
 class ConversionEvent(BaseModel):

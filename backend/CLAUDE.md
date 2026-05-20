@@ -8,14 +8,13 @@ See root `CLAUDE.md` for architecture overview, commands, and coupling points.
 
 | File | Role |
 |---|---|
-| `main.py` | FastAPI endpoints. Thin layer: upload endpoints parse on-the-fly and return previews; `/generate` dispatches to Celery. |
-| `celery_app.py` | Celery application factory — reads `REDIS_URL`. No logic. |
-| `tasks.py` | `run_generation` Celery task: re-parses raw txt strings from payload, runs `run_simulation()`, packages ZIP, writes to `RESULTS_DIR`. |
+| `main.py` | FastAPI endpoints. Thin layer: upload endpoints parse on-the-fly and return previews; `/generate` queues a job via `jobs.py`. |
+| `jobs.py` | In-process generation: a `ThreadPoolExecutor` + in-memory job store. `submit_generation()` queues a run (parse → `run_simulation()` → ZIP → `RESULTS_DIR`); `get_job()` reads its state. Replaces Celery/Redis. TTL-prunes finished jobs. |
 | `parser.py` | Paradox `.txt` → Python dict AST + all domain extractors. |
 | `schemas.py` | Pydantic models for `SimulationPayload` and all internal entities. |
 | `simulation.py` | `WorldState` class + `run_simulation()` year-tick loop + all transition helpers. |
 | `genetics.py` | `inherit_traits()` for children; `roll_birth_traits()` for founder characters. |
-| `mortality.py` | `annual_death_check()` — exponential age curve × event multipliers → death reason picker. |
+| `mortality.py` | `annual_death_check()` — Gompertz age curve calibrated to `average_lifespan` → death reason picker. |
 | `output.py` | Renders `WorldState` → Paradox `.txt` + `.yml` files. **Format is immutable per spec — do not alter output templates without a spec change.** |
 
 ---
@@ -32,11 +31,12 @@ See root `CLAUDE.md` for architecture overview, commands, and coupling points.
 | POST | `/upload/dynasties` | ⚠️ Exists but **unused by frontend** — dynasties are user-defined via UI, not uploaded |
 | POST | `/upload/religions` | Parses religion file → `{filename, religions (marital doctrines dict), raw}` |
 | POST | `/upload/secrets` | Parses secret types → `{filename, secret_ids (list), raw}` |
-| POST | `/generate` | Accepts `SimulationPayload`, returns `{task_id}` |
+| POST | `/generate` | Accepts `SimulationPayload`, queues a job, returns `{task_id}` |
 | GET | `/status/{task_id}` | Returns `{state, message?, result?, error?}` |
+| GET | `/result/{task_id}/tree` | Returns the family-tree JSON (used by the Family Tree view) |
 | GET | `/download/{task_id}` | Streams the result ZIP |
 
-The `/status` response shape: `state` (Celery state string), `message` (during PROGRESS), `result.characters` + `result.titles_with_history` on SUCCESS, `error` on FAILURE. `RightDrawer.jsx` reads exactly these keys — do not rename them.
+The `/status` response shape: `state` (`PENDING`/`PROGRESS`/`SUCCESS`/`FAILURE`), `message` (during PROGRESS), `result.characters` + `result.titles_with_history` on SUCCESS, `error` on FAILURE. `RightDrawer.jsx` reads exactly these keys — do not rename them. `jobs.py` emits these state strings to match what the frontend already expected from Celery.
 
 ---
 
@@ -229,9 +229,9 @@ The `Character` model has two distinct fields — exactly one should be set:
 
 ## Mortality — `mortality.py`
 
-`annual_death_check(character, year, rng)` → `base_mortality(age)` → if death rolls, pick a death reason via `pick_death_reason()`.
+`annual_death_check(character, year, rng, avg_lifespan)` → `base_mortality(age, avg_lifespan)` → if death rolls, pick a death reason via `pick_death_reason()`. `avg_lifespan` comes from `life_cycle.average_lifespan`.
 
-**Mortality curve**: `(exp(age / 18) - 1) / 800`, capped at 0.99. ~0.2% at infancy, ~1% at 30, ~6% at 60, ~30% at 80.
+**Mortality curve**: a Gompertz hazard `h(age) = A·e^(G·age)` with `G = 0.10`, and `A` solved so the **mean age at death equals `average_lifespan`** (`A = G·e^(−(G·L + γ))`, γ = Euler-Mascheroni). Capped at 0.99. Deaths cluster around `L` with a spread of ~13 years, so characters rarely exceed ~`L + 25`. Verified empirically: setting 50/70/90 yields mean death age ≈ 50/70/89 with the max staying below ~`L + 25`.
 
 **Death reasons are hardcoded** (no upload). `pick_death_reason()` builds a weighted pool: `death_natural_causes` (baseline), `death_old_age` for age ≥ 60, plus any trait-triggered death the character qualifies for (8× weight). Trait→reason map in `_TRAIT_DEATH_REASONS` (e.g. `giant`→`death_giant`, `physique_bad_1`→`death_physique_bad_1`). `pick_hostile_death(rng)` returns one of `death_murder` / `death_battle` / `death_execution` for usurpation transitions.
 
@@ -257,16 +257,18 @@ SimulationPayload
 │       └── traits: dict[name → {weight, excludes[]}]  ← 28 CK3 traits pre-populated
 ├── life_cycle: LifeCycleModifiers
 │   ├── max_age_difference_between_partners (default 20)
-│   ├── max_children_per_couple (default 6)
+│   ├── max_children_per_couple (default 3)
 │   ├── base_fertility_rate (default 0.35)
 │   ├── male_bastard_chance (default 0.05)
-│   └── female_bastard_chance (default 0.02)
+│   ├── female_bastard_chance (default 0.02)
+│   ├── dynasty_soft_cap (default 50)       ← living-member count beyond which fertility damps
+│   └── average_lifespan (default 70)       ← mean age at death; calibrates the mortality curve
 ├── parsed_files: ParsedFileData
-│   ├── titles_txt: str | null        ← raw .txt, re-parsed by worker
-│   ├── traits_txt: str | null        ← raw .txt, re-parsed by worker
+│   ├── titles_txt: str | null        ← raw .txt, re-parsed at generation time
+│   ├── traits_txt: str | null        ← raw .txt, re-parsed at generation time
 │   ├── deaths_txt: str | null        ← legacy field, unused (deaths are hardcoded)
 │   ├── name_lists: dict[str, list]   ← already-extracted, used directly
-│   ├── religions_txt: str | null     ← raw .txt, re-parsed by worker
+│   ├── religions_txt: str | null     ← raw .txt, re-parsed at generation time
 │   ├── secrets_txt: str | null       ← legacy field, unused (secrets are hardcoded)
 │   ├── dynasties_txt: str | null     ← legacy field, not sent by frontend
 │   └── dynasties: dict               ← legacy field, not sent by frontend

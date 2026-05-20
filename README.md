@@ -10,7 +10,7 @@ amendment **v2.0** (`Jis_Additional.pdf`) end-to-end.
 | -------- | ---------------------------------------------------------- |
 | Frontend | React + Vite, Tailwind CSS (monochrome), Zustand state     |
 | API      | FastAPI (file uploads, /generate, /status, /download)      |
-| Worker   | Celery + Redis (long-running simulation off the request)   |
+| Generation | In-process thread pool + in-memory job store (`jobs.py`) — no Celery/Redis |
 | Output   | Custom Paradox AST parser → simulation engine → ZIP bundle |
 
 ## Quick start
@@ -25,12 +25,11 @@ Open <http://localhost:5173>. Backend at <http://localhost:8000>.
 
 ### Local dev
 
-Backend (Python 3.11+, Redis on `localhost:6379`):
+Backend (Python 3.11+ — no Redis/worker needed):
 
 ```bash
 cd backend
 pip install -r requirements.txt
-celery -A app.celery_app.celery_app worker --loglevel=info --pool=solo  # Windows
 uvicorn app.main:app --reload --port 8000
 ```
 
@@ -64,8 +63,8 @@ Minimum required to enable the Generate button: **Title History + Name Lists**.
 
 ## Spec coverage
 
-* **Ch. 1** — Cloud architecture: FastAPI dispatches to Celery worker via Redis
-  broker; frontend polls `/status`; final ZIP at `/download/{task_id}`.
+* **Ch. 1** — FastAPI queues generation on an in-process thread pool (`jobs.py`);
+  frontend polls `/status`; final ZIP at `/download/{task_id}`.
 * **Ch. 2** — Three-column SPA: left sidebar (dropzones + nav + Generate),
   center contextual editor, right drawer with mock terminal log. Strict
   monochrome Tailwind palette.
@@ -108,8 +107,7 @@ Minimum required to enable the Generate button: **Title History + Name Lists**.
 backend/
   app/
     main.py          FastAPI endpoints
-    celery_app.py    Celery config
-    tasks.py         run_generation worker task
+    jobs.py          In-process thread-pool generation + job store
     parser.py        Paradox AST compiler (ch. 5)
     schemas.py       Pydantic models (ch. 4)
     genetics.py      Inheritance algorithm (ch. 6.1)
@@ -151,14 +149,14 @@ and implemented (secrets + relationships are rolled when their Global Settings f
 
 ## Deployment
 
-This is a Docker-Compose app (frontend + FastAPI API + Celery worker + Redis), so it is
-**not deployable to Vercel as a single unit**:
+Two pieces: a static **frontend** and a single **FastAPI backend** (generation runs in an
+in-process thread pool — no Celery, Redis, or separate worker).
 
-* **Frontend** (Vite SPA) *can* be hosted on Vercel. In dev, `/api/*` is proxied to the
-  backend by Vite; on Vercel that proxy doesn't exist, so you must either add a
-  `vercel.json` rewrite from `/api/*` to your backend URL, or make `api.js`'s `BASE`
-  read a `VITE_API_*` env var.
-* **Backend** cannot run on Vercel: it needs a long-lived Celery worker, a Redis
-  broker, and a shared filesystem for result ZIPs (`/download/{task_id}`), none of which
-  fit Vercel's stateless, time-limited serverless model. Host it on a platform that runs
-  persistent processes (Render, Railway, Fly.io, a VM, …) with managed Redis (e.g. Upstash).
+* **Frontend** (Vite SPA) → **Vercel**. In dev, `/api/*` is proxied to the backend by Vite;
+  on Vercel that proxy doesn't exist, so add a `vercel.json` rewrite from `/api/*` to your
+  backend URL, or point `api.js`'s `BASE` at a `VITE_API_*` env var.
+* **Backend** → any host that runs one always-(or sleep-)on web service: **Render free**
+  (sleeps when idle, ~30–60s cold start), Koyeb, Fly.io, or a small VM (Oracle Always Free,
+  etc.). It's a single process holding results in memory, so run **one instance** (no
+  horizontal autoscaling) and mount/keep a writable `RESULTS_DIR` for the ZIPs it streams.
+  Tighten CORS (currently `allow_origins=["*"]`) to your real domain before going public.

@@ -1,6 +1,9 @@
-// Thin wrapper over the backend (proxied via Vite at /api).
-
-const BASE = '/api';
+// Thin wrapper over the backend.
+// - Local dev: BASE = '/api', proxied to the backend by Vite (vite.config.js).
+// - Production: either keep '/api' and let a host rewrite forward it to the
+//   backend (see frontend/vercel.json), or set VITE_API_BASE to the backend URL
+//   at build time to call it directly (backend CORS must then allow this origin).
+const BASE = import.meta.env.VITE_API_BASE || '/api';
 
 async function postFile(path, file) {
   const fd = new FormData();

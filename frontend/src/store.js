@@ -78,6 +78,7 @@ function _defaultLifeCycle() {
     male_bastard_chance: 0.05,
     female_bastard_chance: 0.02,
     dynasty_soft_cap: 50,
+    average_lifespan: 70,
   };
 }
 
