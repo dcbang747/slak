@@ -194,7 +194,10 @@ class Character(BaseModel):
     relationships: list[dict] = Field(default_factory=list)
 
     # Secrets (set when enable_secrets) — written as dated add_secret effect blocks.
-    # Each entry: {"date": "YYYY.M.D", "type": "secret_deviant"}
+    # Each entry: {"date": "YYYY.M.D", "type": "secret_deviant",
+    #              "target_id"?: "char_id", "with_lover"?: True}
+    # target_id + block form for murder/murder_attempt/lover; with_lover also emits
+    # set_relation_lover in the same effect block (lover / incest-lover secrets).
     secrets: list[dict] = Field(default_factory=list)
 
     # Languages acquired at birth (written into birth block effect)

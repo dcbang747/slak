@@ -27,20 +27,40 @@ from .mortality import annual_death_check, pick_hostile_death
 
 # Built-in relationship types (no upload required). Each maps to the CK3 history
 # effect that establishes it. All are reciprocal in-game, so we record one side.
+#   soulmate / best_friend  — capped at one per character
+#   bully / crush           — childhood (age < 16) precursors of rival/nemesis
+#                             and lover/soulmate respectively
 RELATIONSHIP_EFFECTS: dict[str, str] = {
-    "friend": "set_relation_friend",
-    "rival": "set_relation_rival",
     "lover": "set_relation_lover",
     "soulmate": "set_relation_soulmate",
+    "rival": "set_relation_rival",
     "nemesis": "set_relation_nemesis",
+    "friend": "set_relation_friend",
+    "best_friend": "set_relation_best_friend",
+    "bully": "set_relation_bully",
+    "crush": "set_relation_crush",
 }
 
-# Secrets that require a target character; skipped when rolling random secrets
-# because we only emit the simple single-owner `add_secret` form.
-_TARGET_SECRETS: set[str] = {
-    "secret_murder", "secret_murder_attempt", "secret_lover",
-    "secret_embezzler", "secret_coup_plotter", "secret_raid_estate",
+# Hardcoded secret catalogue (no upload). Each entry declares how it is emitted:
+#   target=True  → block form `add_secret = { type = X target = character:Y }`
+#   lover=True   → also emits `set_relation_lover = character:Y` in the same block
+#   incest=True  → partner is a close blood relative (≤3rd degree); bare add_secret,
+#                  optionally accompanied by a lover relation
+# Anything with no flags uses the simple bare form `add_secret = secret_X`.
+_SECRET_CATALOGUE: dict[str, dict] = {
+    "secret_deviant": {},
+    "secret_homosexual": {},
+    "secret_cannibal": {},
+    "secret_non_believer": {},
+    "secret_murder_attempt": {"target": True},
+    "secret_murder": {"target": True},
+    "secret_lover": {"target": True, "lover": True},
+    "secret_incest": {"incest": True},
 }
+
+_SIMPLE_SECRETS: list[str] = [
+    "secret_deviant", "secret_homosexual", "secret_cannibal", "secret_non_believer",
+]
 
 
 # ---------------------------------------------------------------------------
@@ -224,7 +244,6 @@ class WorldState:
 
         # Parsed registries
         self.traits_registry: list[dict] = []
-        self.secret_types: list[str] = []
         self.titles: dict[str, dict] = {}
 
         # Per-dynasty ID counter for descriptive character IDs
@@ -581,14 +600,12 @@ def run_simulation(
     payload: SimulationPayload,
     traits_registry: list[dict],
     titles: dict[str, dict],
-    secret_types: Optional[list[str]] = None,
     seed: int = 1337,
     logger: Callable[[str], None] = lambda _: None,
 ) -> WorldState:
     rng = random.Random(seed)
     world = WorldState(payload, rng, logger)
     world.traits_registry = traits_registry
-    world.secret_types = secret_types or []
     world.titles = titles
     world.explicit_title_ids = set(payload.title_sequences.keys())
     world.placeholder_title_ids = set()
@@ -1024,66 +1041,132 @@ def _life_years(c: Character) -> tuple[int, int]:
     return b, d
 
 
-def _generate_relationships(world: WorldState) -> None:
-    """Assign built-in relationships between contemporaries who shared adulthood.
+def _lifespans_overlap(c: Character, o: Character) -> bool:
+    cb, cd = _life_years(c)
+    ob, od = _life_years(o)
+    return max(cb, ob) <= min(cd, od)
 
-    Each unordered pair is considered once, from the lexicographically smaller
-    character ID, so reciprocal relations aren't written twice. The date is a
-    random year both were living adults — required for the CK3 effect to apply.
+
+def _pick_contemporary(c: Character, pool: list, rng: random.Random) -> Optional[Character]:
+    """Return a random character from pool whose lifespan overlaps c's (not c)."""
+    cands = [o for o in pool if o.id != c.id and _lifespans_overlap(c, o)]
+    return rng.choice(cands) if cands else None
+
+
+def _generate_relationships(world: WorldState) -> None:
+    """Assign built-in relationships between contemporaries.
+
+    Each unordered pair is considered once (from the smaller character ID). A pair
+    that shared childhood (both < 16) may form a bully/crush, which then biases the
+    adult relationship toward rival/nemesis (bully) or lover/soulmate (crush). The
+    soulmate and best_friend upgrades are capped at one per character.
     """
     rng = world.rng
-    rel_types = list(RELATIONSHIP_EFFECTS.keys())
     chars = list(world.characters.values())
+    soulmate_used: set[str] = set()
+    best_friend_used: set[str] = set()
+
+    def _rand_date(lo: int, hi: int) -> str:
+        return _date(rng.randint(lo, hi), rng.randint(1, 12), rng.randint(1, 28))
+
     for c in chars:
-        if rng.random() > 0.20:  # ~20% of characters initiate a relationship
+        if rng.random() > 0.25:  # ~25% of characters initiate a relationship arc
             continue
         cb, cd = _life_years(c)
-        c_adult = cb + 16
-        candidates: list[tuple[Character, int, int]] = []
-        for other in chars:
-            if other.id <= c.id:  # only initiate toward larger IDs → each pair once
-                continue
-            ob, od = _life_years(other)
-            start = max(c_adult, ob + 16)
-            end = min(cd, od)
-            if start <= end:
-                candidates.append((other, start, end))
+        candidates = [o for o in chars if o.id > c.id and _lifespans_overlap(c, o)]
         if not candidates:
             continue
-        other, start, end = rng.choice(candidates)
-        rel = rng.choice(rel_types)
-        year = rng.randint(start, end)
-        c.relationships.append({
-            "date": _date(year, rng.randint(1, 12), rng.randint(1, 28)),
-            "effect": RELATIONSHIP_EFFECTS[rel],
-            "target_id": other.id,
-        })
+        o = rng.choice(candidates)
+        ob, od = _life_years(o)
+
+        # Childhood window: both alive and under 16.
+        ch_lo, ch_hi = max(cb, ob), min(cb + 15, ob + 15, cd, od)
+        had_bully = had_crush = False
+        if ch_lo <= ch_hi and rng.random() < 0.5:
+            kind = rng.choice(["bully", "crush"])
+            had_bully, had_crush = kind == "bully", kind == "crush"
+            c.relationships.append({
+                "date": _rand_date(ch_lo, ch_hi),
+                "effect": RELATIONSHIP_EFFECTS[kind],
+                "target_id": o.id,
+            })
+
+        # Adult window: both alive and 16+.
+        ad_lo, ad_hi = max(cb + 16, ob + 16), min(cd, od)
+        if ad_lo <= ad_hi:
+            if had_bully:
+                base = "rival"
+            elif had_crush:
+                base = "lover"
+            else:
+                base = rng.choice(["friend", "rival", "lover"])
+            key = base
+            if base == "rival" and rng.random() < 0.30:
+                key = "nemesis"
+            elif (base == "friend" and rng.random() < 0.30
+                  and c.id not in best_friend_used and o.id not in best_friend_used):
+                key = "best_friend"
+                best_friend_used.update({c.id, o.id})
+            elif (base == "lover" and rng.random() < 0.30
+                  and c.id not in soulmate_used and o.id not in soulmate_used):
+                key = "soulmate"
+                soulmate_used.update({c.id, o.id})
+            c.relationships.append({
+                "date": _rand_date(ad_lo, ad_hi),
+                "effect": RELATIONSHIP_EFFECTS[key],
+                "target_id": o.id,
+            })
 
 
 def _generate_secrets(world: WorldState) -> None:
-    """Assign random non-target secrets to a fraction of characters.
+    """Assign hardcoded secrets to a fraction of characters (no upload needed).
 
-    Only secret types that don't require a target character are used (the simple
-    single-owner `add_secret` form). No-op if no usable secret types were loaded.
+    Target/lover secrets resolve a contemporary; incest secrets resolve a close
+    blood relative (≤3rd degree). A partner-requiring secret with no eligible
+    partner downgrades to a simple secret. The output formatter decides between
+    the bare `add_secret = X` form and the block `add_secret = { type target }`
+    form (see output.py).
     """
-    usable = [s for s in world.secret_types if s not in _TARGET_SECRETS]
-    if not usable:
-        return
     rng = world.rng
-    for c in world.characters.values():
+    chars = list(world.characters.values())
+    catalogue = list(_SECRET_CATALOGUE.keys())
+    for c in chars:
         if rng.random() > 0.15:  # ~15% of characters hold a secret
             continue
+        stype = rng.choice(catalogue)
+        meta = _SECRET_CATALOGUE[stype]
         cb, cd = _life_years(c)
-        earliest = cb + 16
-        if earliest > cd:        # died before adulthood — secret from birth year
-            earliest = cb
-        if earliest > cd:
+
+        partner: Optional[Character] = None
+        if meta.get("incest"):
+            pool = [world.characters[r] for r in _relatives_within_degree(c.id, world.characters, 3)
+                    if r in world.characters]
+            partner = _pick_contemporary(c, pool, rng)
+        elif meta.get("target") or meta.get("lover"):
+            partner = _pick_contemporary(c, chars, rng)
+
+        # Partner-requiring secret with no eligible partner → downgrade to simple.
+        if partner is None and meta:
+            stype, meta = rng.choice(_SIMPLE_SECRETS), {}
+
+        # Date window: overlap with partner if any, else c's own adulthood.
+        if partner is not None:
+            pb, pd = _life_years(partner)
+            lo, hi = max(cb, pb), min(cd, pd)
+        else:
+            lo, hi = (cb + 16, cd) if cb + 16 <= cd else (cb, cd)
+        if lo > hi:
             continue
-        year = rng.randint(earliest, cd)
-        c.secrets.append({
-            "date": _date(year, rng.randint(1, 12), rng.randint(1, 28)),
-            "type": rng.choice(usable),
-        })
+
+        entry = {
+            "date": _date(rng.randint(lo, hi), rng.randint(1, 12), rng.randint(1, 28)),
+            "type": stype,
+        }
+        if partner is not None:
+            entry["target_id"] = partner.id
+            if meta.get("lover") or (meta.get("incest") and rng.random() < 0.5):
+                entry["with_lover"] = True
+        c.secrets.append(entry)
 
 
 # ---------------------------------------------------------------------------

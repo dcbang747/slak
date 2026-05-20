@@ -121,10 +121,12 @@ frontend/
     App.jsx
     store.js                 Zustand single source of truth
     api.js                   Backend client
+    yearConvert.js           In-game era year conversion helpers
     components/
-      LeftSidebar.jsx        Dropzones + nav + Generate button
+      LeftSidebar.jsx        Dropzones + nav + Generate button + Tutorial toggle
       CenterWorkspace.jsx    View router
       RightDrawer.jsx        Polled task log + download
+      TutorialOverlay.jsx    Onboarding coachmark tour
       Dropzone.jsx
       GanttChart.jsx         Interactive Gantt for title sequences
       views/
@@ -145,4 +147,18 @@ Jis_Additional.pdf  amendment v2.0
 Culling mechanics, dynamic nicknames, 3D DNA strings.
 
 Cadet branches, secrets, and relationships are **in scope** via `Jis_Additional.pdf`
-but not yet fully implemented in the simulation engine.
+and implemented (secrets + relationships are rolled when their Global Settings flags are on).
+
+## Deployment
+
+This is a Docker-Compose app (frontend + FastAPI API + Celery worker + Redis), so it is
+**not deployable to Vercel as a single unit**:
+
+* **Frontend** (Vite SPA) *can* be hosted on Vercel. In dev, `/api/*` is proxied to the
+  backend by Vite; on Vercel that proxy doesn't exist, so you must either add a
+  `vercel.json` rewrite from `/api/*` to your backend URL, or make `api.js`'s `BASE`
+  read a `VITE_API_*` env var.
+* **Backend** cannot run on Vercel: it needs a long-lived Celery worker, a Redis
+  broker, and a shared filesystem for result ZIPs (`/download/{task_id}`), none of which
+  fit Vercel's stateless, time-limited serverless model. Host it on a platform that runs
+  persistent processes (Render, Railway, Fly.io, a VM, …) with managed Redis (e.g. Upstash).

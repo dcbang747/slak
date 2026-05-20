@@ -2,7 +2,7 @@ import { useStore } from '../store';
 import Dropzone from './Dropzone';
 import {
   uploadTitles, uploadTraits, uploadNames,
-  uploadReligions, uploadSecrets, uploadCultures,
+  uploadReligions, uploadCultures,
   startGeneration,
 } from '../api';
 
@@ -17,12 +17,12 @@ export default function LeftSidebar() {
     parsed_files, global_settings, active_view, setView,
     simplified_mode, setSimplified,
     dark_mode, setDarkMode,
+    tutorial_enabled, setTutorialEnabled,
     task_state,
     setParsedTitles, clearParsedTitles,
     setParsedTraits, clearParsedTraits,
     setParsedNames, clearParsedNames,
     setParsedReligions, clearParsedReligions,
-    setParsedSecrets, clearParsedSecrets,
     setParsedCultures, clearParsedCultures,
     setDrawer, setTaskState, resetTask, buildPayload, resetAll,
   } = useStore();
@@ -103,6 +103,18 @@ export default function LeftSidebar() {
             </button>
           </div>
         </div>
+        {/* Tutorial toggle — sits under the Simple/Advanced button */}
+        <div className="flex justify-end mt-2">
+          <label className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 cursor-pointer hover:text-black dark:hover:text-white">
+            <input
+              type="checkbox"
+              checked={tutorial_enabled}
+              onChange={(e) => setTutorialEnabled(e.target.checked)}
+              className="w-3 h-3 accent-amber-500"
+            />
+            Tutorial
+          </label>
+        </div>
       </div>
 
       {/* Dropzones */}
@@ -116,15 +128,17 @@ export default function LeftSidebar() {
             ? "Skip Title History is on — not required. Upload only if you want to configure title sequences."
             : "Found in your mod under:\\history\\titles"}
         />
-        <Dropzone
-          label="Name Lists"
-          multiple
-          onFile={handle(uploadNames, setParsedNames)}
-          filenames={parsed_files.names_filenames}
-          onClear={clearParsedNames}
-          error={hasNamesFile && !hasNames ? 'No names parsed — use format: list_id: name1, name2' : null}
-          info="Found in your mod under:\common\culture\name_lists"
-        />
+        <div data-tour="namelist">
+          <Dropzone
+            label="Name Lists"
+            multiple
+            onFile={handle(uploadNames, setParsedNames)}
+            filenames={parsed_files.names_filenames}
+            onClear={clearParsedNames}
+            error={hasNamesFile && !hasNames ? 'No names parsed — use format: list_id: name1, name2' : null}
+            info="Found in your mod under:\common\culture\name_lists"
+          />
+        </div>
         {!simplified_mode && (
           <Dropzone
             label="Genetic Traits"
@@ -135,32 +149,26 @@ export default function LeftSidebar() {
             info="Found in your mod under:\common\traits"
           />
         )}
-        <Dropzone
-          label="Religions"
-          multiple
-          onFile={handle(uploadReligions, setParsedReligions)}
-          filenames={parsed_files.religions_filenames}
-          onClear={clearParsedReligions}
-          info="Found in your mod under:\common\religion\religion_types — used to determine marital doctrine (monogamy, polygamy, concubines) per faith."
-        />
-        {!simplified_mode && (
+        <div data-tour="religion">
           <Dropzone
-            label="Secrets"
+            label="Religions"
             multiple
-            onFile={handle(uploadSecrets, setParsedSecrets)}
-            filenames={parsed_files.secrets_filenames}
-            onClear={clearParsedSecrets}
-            info="Found in your mod under:\common\secret_types — required to enable the Secrets simulation option."
+            onFile={handle(uploadReligions, setParsedReligions)}
+            filenames={parsed_files.religions_filenames}
+            onClear={clearParsedReligions}
+            info="Found in your mod under:\common\religion\religion_types — used to determine marital doctrine (monogamy, polygamy, concubines) per faith."
           />
-        )}
-        <Dropzone
-          label="Cultures"
-          multiple
-          onFile={handle(uploadCultures, setParsedCultures)}
-          filenames={parsed_files.cultures_filenames}
-          onClear={clearParsedCultures}
-          info="Found in your mod under:\common\culture\cultures — enables culture dropdown with name list info in dynasty settings."
-        />
+        </div>
+        <div data-tour="culture">
+          <Dropzone
+            label="Cultures"
+            multiple
+            onFile={handle(uploadCultures, setParsedCultures)}
+            filenames={parsed_files.cultures_filenames}
+            onClear={clearParsedCultures}
+            info="Found in your mod under:\common\culture\cultures — enables culture dropdown with name list info in dynasty settings."
+          />
+        </div>
 
         <div className="border-t border-gray-300 dark:border-gray-700 my-4" />
 
@@ -169,6 +177,7 @@ export default function LeftSidebar() {
           {nav.filter((item) => !simplified_mode || item.id !== 'lifecycle').map((item) => (
             <button
               key={item.id}
+              data-tour={item.id === 'tree' ? 'family-tree' : undefined}
               onClick={() => setView(item.id)}
               className={[
                 'text-left px-3 py-2 text-sm font-extrabold uppercase tracking-wide',
@@ -184,7 +193,7 @@ export default function LeftSidebar() {
       </div>
 
       {/* Execution button */}
-      <div className="px-3 py-3 border-t border-gray-300 dark:border-gray-700">
+      <div className="px-3 py-3 border-t border-gray-300 dark:border-gray-700" data-tour="generate">
         <button
           disabled={!ready}
           onClick={onGenerate}

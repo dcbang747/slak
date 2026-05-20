@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useStore } from '../../store';
 import InfoTip from '../InfoTip';
+import { toInGameYearLabel } from '../../yearConvert';
 
 // ---------------------------------------------------------------------------
 // Shared field components
 // ---------------------------------------------------------------------------
 
-function NumberField({ label, value, onChange, min, max, step = 1 }) {
+function NumberField({ label, value, onChange, min, max, step = 1, hint }) {
   return (
     <label className="block mb-4">
       <span className="block text-xs font-extrabold uppercase tracking-wider text-gray-600 dark:text-gray-400 mb-1">
@@ -21,6 +22,9 @@ function NumberField({ label, value, onChange, min, max, step = 1 }) {
         onChange={(e) => onChange(Number(e.target.value))}
         className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 px-3 py-2 text-sm text-black dark:text-white focus:outline-none focus:border-black dark:focus:border-white"
       />
+      {hint && (
+        <span className="block mt-0.5 text-[10px] italic text-gray-400 dark:text-gray-500">{hint}</span>
+      )}
     </label>
   );
 }
@@ -294,7 +298,7 @@ function DynastyCard({ dynasty }) {
   const {
     updateDynastyDef, removeDynastyDef,
     addCultureFaithPeriod, removeCultureFaithPeriod, updateCultureFaithPeriod,
-    parsed_files,
+    parsed_files, simplified_mode,
   } = useStore();
   const [expanded, setExpanded] = useState(true);
 
@@ -338,10 +342,10 @@ function DynastyCard({ dynasty }) {
 
           <div className="flex gap-2">
             <div className="flex-1">
-              <NumberField label="Start Year" value={dynasty.start_year} onChange={(v) => upd({ start_year: v })} />
+              <NumberField label="Start Year" value={dynasty.start_year} onChange={(v) => upd({ start_year: v })} hint={toInGameYearLabel(dynasty.start_year)} />
             </div>
             <div className="flex-1">
-              <NumberField label="End Year" value={dynasty.end_year} onChange={(v) => upd({ end_year: v })} />
+              <NumberField label="End Year" value={dynasty.end_year} onChange={(v) => upd({ end_year: v })} hint={toInGameYearLabel(dynasty.end_year)} />
             </div>
           </div>
 
@@ -374,27 +378,31 @@ function DynastyCard({ dynasty }) {
             </button>
           </div>
 
-          <div className="flex gap-2">
-            <div className="flex-1 min-w-0">
-              <SelectField
-                label="Succession Type"
-                value={dynasty.succession ?? 'PRIMOGENITURE'}
-                onChange={(v) => upd({ succession: v })}
-                options={SUCCESSION_OPTIONS}
-              />
-            </div>
-            <div className="flex-1 min-w-0">
-              <SelectField
-                label="Gender Law"
-                value={dynasty.gender_law ?? 'AGNATIC_COGNATIC'}
-                onChange={(v) => upd({ gender_law: v })}
-                options={GENDER_LAW_OPTIONS}
-              />
-            </div>
-          </div>
+          {!simplified_mode && (
+            <>
+              <div className="flex gap-2">
+                <div className="flex-1 min-w-0">
+                  <SelectField
+                    label="Succession Type"
+                    value={dynasty.succession ?? 'PRIMOGENITURE'}
+                    onChange={(v) => upd({ succession: v })}
+                    options={SUCCESSION_OPTIONS}
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <SelectField
+                    label="Gender Law"
+                    value={dynasty.gender_law ?? 'AGNATIC_COGNATIC'}
+                    onChange={(v) => upd({ gender_law: v })}
+                    options={GENDER_LAW_OPTIONS}
+                  />
+                </div>
+              </div>
 
-          <NameInheritanceSection dynasty={dynasty} />
-          <LanguagesSection dynasty={dynasty} />
+              <NameInheritanceSection dynasty={dynasty} />
+              <LanguagesSection dynasty={dynasty} />
+            </>
+          )}
 
           <div className="flex gap-4">
             <div className="flex-1 min-w-0">
@@ -490,7 +498,7 @@ export default function GlobalSettings() {
     global_settings, setGlobal,
     setPersonalityTraitsConfig, setPersonalityTraitWeight,
     dynasty_definitions, addDynastyDef,
-    parsed_files, simplified_mode,
+    simplified_mode,
   } = useStore();
 
   const ptConfig = global_settings.personality_traits;
@@ -502,8 +510,8 @@ export default function GlobalSettings() {
         <h2 className="text-2xl font-extrabold text-black dark:text-white mb-1">Global Settings</h2>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">Bounds of the simulation timeline.</p>
 
-        <NumberField label="Start Year" value={global_settings.start_year} onChange={(v) => setGlobal({ start_year: v })} step={1} />
-        <NumberField label="End Year" value={global_settings.end_year} onChange={(v) => setGlobal({ end_year: v })} min={global_settings.start_year + 1} step={1} />
+        <NumberField label="Start Year" value={global_settings.start_year} onChange={(v) => setGlobal({ start_year: v })} step={1} hint={toInGameYearLabel(global_settings.start_year)} />
+        <NumberField label="End Year" value={global_settings.end_year} onChange={(v) => setGlobal({ end_year: v })} min={global_settings.start_year + 1} step={1} hint={toInGameYearLabel(global_settings.end_year)} />
         {global_settings.end_year <= global_settings.start_year && (
           <p className="-mt-2 mb-4 text-[11px] leading-snug text-amber-600 dark:text-amber-400">
             End Year must be after Start Year — the simulation has no years to run.
@@ -543,25 +551,25 @@ export default function GlobalSettings() {
 
         <div className="border-t border-gray-300 dark:border-gray-700 my-6" />
         <h3 className="text-sm font-extrabold uppercase tracking-wider text-black dark:text-white mb-4">Output Options</h3>
-        <CheckboxField
-          label="Skip Title History"
-          description="Generate character_history.txt only — omits title_history.txt and removes the Title History upload requirement."
-          value={global_settings.ignore_title_generation}
-          onChange={(v) => setGlobal({ ignore_title_generation: v })}
-        />
+        <div data-tour="skip-title">
+          <CheckboxField
+            label="Skip Title History"
+            description="Generate character_history.txt only — omits title_history.txt and removes the Title History upload requirement."
+            value={global_settings.ignore_title_generation}
+            onChange={(v) => setGlobal({ ignore_title_generation: v })}
+          />
+        </div>
         {!simplified_mode && (
           <>
             <CheckboxField
               label="Enable Secrets"
-              description="Roll secrets for characters during simulation (requires a secrets file upload)."
+              description="Roll secrets (deviant, lover, murder, incest, …) for characters during simulation."
               value={global_settings.enable_secrets}
               onChange={(v) => setGlobal({ enable_secrets: v })}
-              disabled={!parsed_files.secrets_filenames.length}
-              info={!parsed_files.secrets_filenames.length ? "Upload a Secrets file using the sidebar dropzone to enable this option." : undefined}
             />
             <CheckboxField
               label="Enable Relationships"
-              description="Generate relationship blocks between characters in the output."
+              description="Generate relationship blocks (friend, rival, lover, bully, crush, …) between characters."
               value={global_settings.enable_relationships}
               onChange={(v) => setGlobal({ enable_relationships: v })}
             />
@@ -587,6 +595,7 @@ export default function GlobalSettings() {
             <p className="text-sm text-gray-600 dark:text-gray-400">Define dynasties to assign to title sequences.</p>
           </div>
           <button
+            data-tour="add-dynasty"
             onClick={addDynastyDef}
             className="text-xs font-extrabold uppercase tracking-wide border border-gray-300 dark:border-gray-700 hover:border-black dark:hover:border-white px-3 py-1.5 text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white shrink-0"
           >

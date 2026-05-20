@@ -111,11 +111,18 @@ Valid marital doctrine values: `doctrine_monogamy`, `doctrine_polygamy`, `doctri
 
 ### Secret type file format
 
-Extract root-level keys only. All internal blocks (`is_valid`, `on_expose`, etc.) are discarded.
+⚠️ **Secrets are no longer uploaded.** `extract_secrets()` still parses root-level keys (used by the `/upload/secrets` endpoint) but the simulation ignores it. Secrets come from a hardcoded catalogue in `simulation.py`:
 
-Secrets relevant to generation: `secret_deviant`, `secret_witch`, `secret_incest`, `secret_non_believer`, `secret_homosexual`, `secret_cannibal`.
+```
+_SECRET_CATALOGUE = {
+  secret_deviant, secret_homosexual, secret_cannibal, secret_non_believer,  # bare add_secret
+  secret_murder_attempt, secret_murder,                                     # block w/ target
+  secret_lover,                                                             # block w/ target + set_relation_lover
+  secret_incest,                                                            # bare; partner is a ≤3rd-degree relative; optional lover
+}
+```
 
-Secrets requiring a target character ID: `secret_murder`, `secret_lover` — special handling needed when implementing secret rolling.
+`_generate_secrets()` (post-pass, gated on `enable_secrets`) rolls these for ~15% of characters; `output.py` chooses the bare vs. block form via `_SECRET_TARGET_FORM`.
 
 ---
 
@@ -243,7 +250,7 @@ SimulationPayload
 │   ├── random_seed (default 1337)          ← always overwritten by buildPayload() with Math.random()
 │   ├── trait_frequency_multiplier (default 1.0)
 │   ├── ignore_title_generation (default false)
-│   ├── enable_secrets (default false)      ← when true, rolls secrets from the uploaded secret types
+│   ├── enable_secrets (default false)      ← when true, rolls hardcoded secrets (no upload)
 │   ├── enable_relationships (default false) ← when true, rolls built-in relationships between contemporaries
 │   └── personality_traits: PersonalityTraitsConfig
 │       ├── total_traits_per_character (default 3)
@@ -257,10 +264,10 @@ SimulationPayload
 ├── parsed_files: ParsedFileData
 │   ├── titles_txt: str | null        ← raw .txt, re-parsed by worker
 │   ├── traits_txt: str | null        ← raw .txt, re-parsed by worker
-│   ├── deaths_txt: str | null        ← raw .txt, re-parsed by worker
+│   ├── deaths_txt: str | null        ← legacy field, unused (deaths are hardcoded)
 │   ├── name_lists: dict[str, list]   ← already-extracted, used directly
 │   ├── religions_txt: str | null     ← raw .txt, re-parsed by worker
-│   ├── secrets_txt: str | null       ← raw .txt (not yet re-parsed by worker)
+│   ├── secrets_txt: str | null       ← legacy field, unused (secrets are hardcoded)
 │   ├── dynasties_txt: str | null     ← legacy field, not sent by frontend
 │   └── dynasties: dict               ← legacy field, not sent by frontend
 ├── title_sequences: dict[title_id → list[DynastySequence]]
@@ -318,8 +325,8 @@ Key formatting rules per character block (in order):
 5. `trait = {childhood_trait}` (top-level, no date block) if set
 6. Marriage date blocks: `YYYY.M.D = { add_spouse = id }` or `add_matrilineal_spouse`; sorted chronologically; before birth block
 7. Birth block: `YYYY.M.D = { birth = yes }` — with `effect = { learn_language = X }` lines if `birth_languages` is non-empty
-8. Relationship effect blocks (if any): `YYYY.M.D = { effect = { set_relation_friend = character:ID } }` — one per `Character.relationships` entry
-9. Secret effect blocks (if any): `YYYY.M.D = { effect = { add_secret = { type = secret_X } } }` — one per `Character.secrets` entry
+8. Relationship effect blocks (if any): `YYYY.M.D = { effect = { set_relation_X = character:ID } }` — one per `Character.relationships` entry (X ∈ lover/soulmate/rival/nemesis/friend/best_friend/bully/crush)
+9. Secret effect blocks (if any): bare `add_secret = secret_X`, or block `add_secret = { type = secret_X target = character:Y }` for murder/murder_attempt/lover; `secret_lover` (and incest-lover) also emit `set_relation_lover = character:Y` in the same block — one per `Character.secrets` entry
 10. Personality trait date block: `YYYY.M.D = { trait = ... }` at age-16 date; after birth block
 11. Employer block (claimant displacement) if `employer_id` and `employer_date`
 12. Death block if `death_date`
@@ -391,7 +398,7 @@ l_english:
 | Name Lists | `name_list_X = { male_names = { 10 = { ... } } }` | ✅ Fully supported — weighted groups, flat lists, weight-0 skip, BOM strip |
 | Dynasties | `dynasty_X = { ... }` and `house_Y = { dynasty = dynasty_X }` | ✅ Parser supported — but not used; dynasties are user-defined via UI |
 | Religions | `religion_id = { ... faiths = { faith_id = { ... } } }` | ✅ Supported — marital doctrines only; `extract_religions()` |
-| Secrets | Root-level `secret_type_id = { ... }` blocks | ✅ Supported — root keys only; `extract_secrets()` |
+| Secrets | Root-level `secret_type_id = { ... }` blocks | ⚠️ Parser exists but **unused** — secrets are a hardcoded catalogue in `simulation.py` (`_SECRET_CATALOGUE`), no upload needed |
 | Localization (.yml) | UTF-8 BOM + `l_english:` + ` key: "value"` | ✅ Output only — `render_dynasties_yml()` |
 
 ### Multiple files per upload

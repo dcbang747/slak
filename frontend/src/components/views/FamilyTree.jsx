@@ -6,6 +6,11 @@ import {
 import '@xyflow/react/dist/style.css';
 import { useStore } from '../../store';
 import { fetchTree } from '../../api';
+import { toInGameYear } from '../../yearConvert';
+
+// Display a raw simulation year as its in-game era number, falling back to the
+// raw value if it predates the conversion range.
+const disp = (y) => toInGameYear(y) || (y ? String(y) : '');
 
 const NODE_W = 190;
 const NODE_H = 105;
@@ -38,7 +43,7 @@ function CharacterNode({ data }) {
       <div className="text-gray-400 dark:text-gray-500 font-mono text-[10px] truncate">{c.id}</div>
       {(birthYear || deathYear) && (
         <div className="text-gray-600 dark:text-gray-300 mt-0.5">
-          {birthYear || '?'} – {deathYear || '…'}{age !== null ? ` (${age})` : ''}
+          {disp(birthYear) || '?'} – {disp(deathYear) || '…'}{age !== null ? ` (${age})` : ''}
         </div>
       )}
       {c.is_ruler && (
@@ -48,7 +53,7 @@ function CharacterNode({ data }) {
       )}
       {c.is_ruler && c.ruler_since && (
         <div className="text-amber-600 dark:text-amber-400 text-[10px]">
-          Years ruled: {c.ruler_since} – {deathYear || '…'}
+          Years ruled: {disp(c.ruler_since)} – {disp(deathYear) || '…'}
         </div>
       )}
     </div>
@@ -68,7 +73,7 @@ function ExternalNode({ data }) {
       <Handle type="target" position={Position.Right}  id="tgt-right" style={{ opacity: 0 }} />
       <Handle type="source" position={Position.Bottom} id="src-bottom" />
       <div className="font-semibold truncate">{c.name}</div>
-      {(birthYear || deathYear) && <div className="font-mono">{birthYear || '?'} – {deathYear || '…'}</div>}
+      {(birthYear || deathYear) && <div className="font-mono">{disp(birthYear) || '?'} – {disp(deathYear) || '…'}</div>}
     </div>
   );
 }

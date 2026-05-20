@@ -109,7 +109,6 @@ docker compose up --build
 | Genetic Traits | `RawSampleFiles/TraitFiles/` |
 | Name Lists | `RawSampleFiles/NameListFiles/` |
 | Religions | `RawSampleFiles/Religions/` |
-| Secrets | `RawSampleFiles/Secrets/` |
 
 Dynasties are **not uploaded from file** — they are defined directly in the UI under Global Settings → Dynasties panel.
 

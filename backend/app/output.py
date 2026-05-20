@@ -7,6 +7,10 @@ import zipfile
 from .simulation import WorldState
 from .schemas import Character
 
+# Secrets emitted with the block form `add_secret = { type = X target = ... }`;
+# every other secret uses the bare form `add_secret = secret_X`.
+_SECRET_TARGET_FORM = {"secret_murder", "secret_murder_attempt", "secret_lover"}
+
 
 def _format_character(c: Character, adopted_children: list | None = None) -> str:
     """Format a single character per spec 9.1.
@@ -94,14 +98,25 @@ def _format_character(c: Character, adopted_children: list | None = None) -> str
         lines.append("        }")
         lines.append("    }")
 
-    # Secret effects (dated) — add_secret = { type = secret_X }
+    # Secret effects (dated). Three shapes:
+    #   bare:   add_secret = secret_X
+    #   block:  add_secret = { type = secret_X target = character:Y }   (murder/lover)
+    #   lover:  set_relation_lover = character:Y precedes the add_secret in the block
     for sec in sorted(c.secrets, key=lambda s: s["date"]):
+        stype = sec["type"]
+        tgt = sec.get("target_id")
         lines.append("")
         lines.append(f"    {sec['date']} = {{")
         lines.append("        effect = {")
-        lines.append("            add_secret = {")
-        lines.append(f"                type = {sec['type']}")
-        lines.append("            }")
+        if sec.get("with_lover") and tgt:
+            lines.append(f"            set_relation_lover = character:{tgt}")
+        if tgt and stype in _SECRET_TARGET_FORM:
+            lines.append("            add_secret = {")
+            lines.append(f"                type = {stype}")
+            lines.append(f"                target = character:{tgt}")
+            lines.append("            }")
+        else:
+            lines.append(f"            add_secret = {stype}")
         lines.append("        }")
         lines.append("    }")
 

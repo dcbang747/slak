@@ -8,13 +8,14 @@ See root `CLAUDE.md` for architecture overview, commands, and coupling points.
 
 ```
 App.jsx
-├── LeftSidebar.jsx      — file dropzones (6 slots) + navigation + Generate button
+├── LeftSidebar.jsx      — file dropzones + navigation + Generate button + Tutorial toggle
 ├── CenterWorkspace.jsx  — renders the active view
 │   ├── GlobalSettings.jsx     — two-column: simulation settings (left) + Dynasties panel (right)
 │   ├── LifeCycleModifiers.jsx
 │   ├── TitleHistories.jsx → GanttChart.jsx
 │   └── FamilyTree.jsx     — React Flow tree (nav appears only after a successful run)
-└── RightDrawer.jsx      — task progress log + Download ZIP
+├── RightDrawer.jsx      — task progress log + Download ZIP
+└── TutorialOverlay.jsx  — onboarding coachmarks (glow + arrow + popup) over data-tour anchors
 ```
 
 Still pending (Jis_Additional.pdf):
@@ -33,6 +34,8 @@ Single source of truth. Key sections:
 | `parsed_files` | object | Raw txt strings + extracted previews from all upload types |
 | `title_sequences` | object | `{[titleId]: DynastySequence[]}` — Gantt chart state |
 | `dynasty_definitions` | array | User-defined dynasties with full properties |
+| `tutorial_enabled` | bool | Master switch for the onboarding tour (persisted); toggled by the header "Tutorial" checkbox. Finishing/skipping sets it false |
+| `tutorial_step` | number | Current coachmark index (ephemeral, resets to 0) |
 | `active_view` | string | `'global'` \| `'lifecycle'` \| `'events'` \| `'titles'` |
 | `drawer_open` | bool | Right drawer visibility |
 | `task_id/state/messages/result/error` | various | Simulation task state for the right drawer |
@@ -48,7 +51,7 @@ Single source of truth. Key sections:
   // Math.floor(Math.random() * 2147483647) at call time so every generation is unique.
   trait_frequency_multiplier: 1.0,  // scales birth_chance + random_creation in genetics
   ignore_title_generation: false,    // omit title_history.txt from ZIP
-  enable_secrets: false,             // when true, backend rolls secrets from the uploaded secret types
+  enable_secrets: false,             // when true, backend rolls a hardcoded secret catalogue (no upload)
   enable_relationships: false,       // when true, backend rolls built-in relationships between contemporaries
   personality_traits: {
     total_traits_per_character: 3,
@@ -177,10 +180,21 @@ Two-column flex layout (`flex gap-8 h-full`):
 - **Right column** (`flex-1 min-w-0 overflow-y-auto`) — Dynasties panel: add/remove/edit dynasty cards, each card has collapsible sections:
   - Basic info: ID, name, motto, start/end year
   - Culture & Faith Periods: list of `{start_year, culture, faith}` entries
-  - Gender Law: `<select>` — AGNATIC / AGNATIC_COGNATIC / ABSOLUTE_COGNATIC / ENATIC_COGNATIC / ENATIC
-  - Succession: `<select>` — PRIMOGENITURE / ULTIMOGENITURE / SENIORITY
-  - Name Inheritance: three probability inputs (grandparent / parent / no-name) with sum indicator
-  - Languages: list of `{id, start_year, end_year}` entries; serialized to strings in `buildPayload()`
-  - Lowborn Spouses / Guaranteed Survival checkboxes
+  - Succession + Gender Law: side-by-side `<select>`s — *hidden in Simple mode*
+  - Name Inheritance: three probability inputs (grandparent / parent / no-name) with sum indicator — *hidden in Simple mode*
+  - Languages: list of `{id, start_year, end_year}` entries; serialized to strings in `buildPayload()` — *hidden in Simple mode*
+  - Lowborn Spouses / Guaranteed Survival checkboxes (side by side; description shown via `(i)` `InfoTip`)
+
+All year inputs (simulation + dynasty start/end) show the converted in-game era year in weak italics below the field via `toInGameYearLabel()` from `src/yearConvert.js` (e.g. `6800 → F.A. 2767`). The Family Tree node years use the bare `toInGameYear()` form.
 
 Dynasty IDs entered here are referenced by the Title Histories Gantt chart when assigning dynasty sequences to titles. **Renaming a dynasty ID in GlobalSettings automatically propagates to all matching Gantt blocks** via `updateDynastyDef`.
+
+---
+
+## Onboarding tutorial (`TutorialOverlay.jsx`)
+
+A non-blocking coachmark tour rendered at the App level (z-1000, `pointer-events-none` except the popup, so the user can perform each step while it's shown). Driven by `tutorial_enabled` (header checkbox) + `tutorial_step`.
+
+Each step targets a `data-tour="..."` anchor and shows a glowing ring + arrow + popup; steps with a `view` switch the center workspace first; the position re-polls (200 ms interval + resize/scroll) so it survives view switches and async layout. A step whose anchor isn't on screen (e.g. `family-tree` before any run) shows a centered popup instead.
+
+Anchors: `namelist` / `religion` / `culture` (LeftSidebar dropzones), `skip-title` / `add-dynasty` (GlobalSettings, view `global`), `generate` (LeftSidebar button), `family-tree` (nav item, post-run). To add a step, drop a `data-tour` attribute on the target and append to the `STEPS` array.

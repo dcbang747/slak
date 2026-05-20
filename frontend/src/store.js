@@ -128,6 +128,11 @@ export const useStore = create(persist((set, get) => ({
   simplified_mode: true,
   dark_mode: localStorage.getItem('ck3_dark_mode') === 'true',
 
+  // Onboarding tutorial — `tutorial_enabled` is the master switch (persisted,
+  // toggled by the header checkbox); `tutorial_step` is the current coachmark.
+  tutorial_enabled: true,
+  tutorial_step: 0,
+
   // Simulation status
   task_id: null,
   task_state: null,
@@ -379,6 +384,10 @@ export const useStore = create(persist((set, get) => ({
   setView: (view) => set({ active_view: view }),
   setDrawer: (open) => set({ drawer_open: open }),
 
+  // Tutorial: enabling (re)starts at step 0; disabling dismisses it.
+  setTutorialEnabled: (val) => set({ tutorial_enabled: val, tutorial_step: 0 }),
+  setTutorialStep: (n) => set({ tutorial_step: n }),
+
   setTaskState: (patch) => set((s) => ({
     task_id: patch.task_id ?? s.task_id,
     task_state: patch.task_state ?? s.task_state,
@@ -452,5 +461,6 @@ export const useStore = create(persist((set, get) => ({
     simplified_mode: s.simplified_mode,
     dark_mode: s.dark_mode,
     active_view: s.active_view,
+    tutorial_enabled: s.tutorial_enabled,
   }),
 }));

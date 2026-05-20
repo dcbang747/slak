@@ -6,7 +6,7 @@ import tempfile
 
 from .celery_app import celery_app
 from .schemas import SimulationPayload
-from .parser import parse, transform_titles, extract_genetic_traits, extract_secrets
+from .parser import parse, transform_titles, extract_genetic_traits
 from .simulation import run_simulation
 from .output import package_zip
 
@@ -31,14 +31,9 @@ def run_generation(self, payload_json: dict) -> dict:
     traits_ast = parse(payload.parsed_files.traits_txt or "")
     traits = extract_genetic_traits(traits_ast)
 
-    log("Parsing secrets...")
-    secrets_txt = payload.parsed_files.secrets_txt or ""
-    secret_types = extract_secrets(parse(secrets_txt)) if secrets_txt else []
-
     log(f"Starting simulation ({payload.global_settings.start_year} → {payload.global_settings.end_year})...")
     world = run_simulation(
         payload, traits, titles,
-        secret_types=secret_types,
         seed=payload.global_settings.random_seed,
         logger=log,
     )

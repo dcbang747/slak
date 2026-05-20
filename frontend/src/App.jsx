@@ -2,6 +2,7 @@ import { useStore } from './store';
 import LeftSidebar from './components/LeftSidebar';
 import CenterWorkspace from './components/CenterWorkspace';
 import RightDrawer from './components/RightDrawer';
+import TutorialOverlay from './components/TutorialOverlay';
 
 export default function App() {
   const dark_mode = useStore((s) => s.dark_mode);
@@ -12,6 +13,7 @@ export default function App() {
       <LeftSidebar />
       <CenterWorkspace />
       <RightDrawer />
+      <TutorialOverlay />
     </div>
   );
 }
