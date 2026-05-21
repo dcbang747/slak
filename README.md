@@ -82,7 +82,8 @@ Minimum required to enable the Generate button: **Title History + Name Lists**.
   * Trait filter (`genetic = yes` only); `natural_death_trigger.has_trait` extraction.
 * **Ch. 6** — Genetics engine: parent trait evaluation w/ opposites cancellation,
   active inheritance (80%/20%), passive (50%/10%), spontaneous mutation against
-  `random_creation`. Mortality: exponential age curve with hardcoded trait/age death reasons.
+  `random_creation`. Mortality: Gompertz age curve calibrated so the mean age at
+  death equals the configurable **Average Lifespan**; hardcoded trait/age death reasons.
 * **Ch. 7** — Title transitions:
   * Marriage: forced heir + spouse from House B; child forced into House B.
   * Usurpation: hostile death w/ `killer_id`; family displacement via `employer_id`.
@@ -93,10 +94,15 @@ Minimum required to enable the Generate button: **Title History + Name Lists**.
   x-axis scrollable years, draggable resize handles on dynasty blocks, clickable
   transition-boundary nodes opening a transition-type popover.
 * **Ch. 9** — Output formatter (`backend/app/output.py`) emits:
-  * `character_history.txt` — conditional `female`/`killer`/`employer` blocks; dated relationship + secret effect blocks when enabled
+  * `character_history.txt` — grouped by dynasty, then **BASTARDS** (own `trait = bastard` + parent) and **LOWBORN** (married-in spouses/in-laws); conditional `female`/`killer`/`employer` blocks; adoption effect + memory for fabricated heirs; dated relationship + secret effect blocks when enabled
   * `title_history.txt` — sequential `YYYY.M.D = { holder = ... }` entries
   * `00_dynasties.txt` — Paradox dynasty definitions with real culture + optional motto
   * `dynasty_names_l_english.yml` / `dynasty_mottos_l_english.yml` — UTF-8 BOM localization, names and mottos split into two files
+* **Character IDs** — `lineof{dynasty}{N}` for dynasty members and bastards;
+  generated spouses use `{partnerID}wife` / `{partnerID}husband` (e.g. a wife for
+  `lineofA8` is `lineofA8wife`). No `bastardN` IDs.
+* **Culture/faith** — each character takes its dynasty's active culture/faith
+  **period for its birth year**, so later periods apply to later generations.
 * **Jis_Additional v2.0** — Dynasty definitions panel (culture/faith periods,
   succession type, gender preference, lowborn spouses, guaranteed survival);
   `dynasty_definitions` top-level payload field.
