@@ -688,6 +688,7 @@ def run_simulation(
             "index": 0,
             "started_year": settings.start_year,
             "generations": 0,
+            "total_generations": 0,
             "ruler_id": None,
         }
         world.explicit_title_ids.add(placeholder_tid)
