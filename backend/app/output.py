@@ -48,12 +48,14 @@ def _format_character(c: Character, adopted_children: list | None = None) -> str
             lines.append("")
 
     # Genetic traits (top-level, no date block)
+    if c.is_bastard:
+        lines.append("    trait = bastard")
     for trait in c.traits:
         lines.append(f"    trait = {trait}")
     # Childhood trait (also top-level, per CK3 spec)
     if c.childhood_trait:
         lines.append(f"    trait = {c.childhood_trait}")
-    if c.traits or c.childhood_trait:
+    if c.is_bastard or c.traits or c.childhood_trait:
         lines.append("")
 
     # Marriage events (sorted chronologically; before birth block)
@@ -166,15 +168,20 @@ def render_character_history(world: WorldState) -> str:
             if adopter_id:
                 adoptions.setdefault(adopter_id, []).append(c)
 
-    # Build dynasty → [characters] mapping preserving insertion order within each group
+    # Build dynasty → [characters] mapping preserving insertion order within each group.
+    # No-dynasty characters split two ways: actual bastards vs lowborn spouses/in-laws
+    # (married in from outside, no dynasty) — the latter must NOT be labelled bastards.
     dynasty_groups: dict[str, list] = {}
     bastards: list = []
+    lowborn: list = []
     for c in world.characters.values():
         did = c.dynasty_house or c.dynasty
         if did:
             dynasty_groups.setdefault(did, []).append(c)
-        else:
+        elif c.is_bastard:
             bastards.append(c)
+        else:
+            lowborn.append(c)
 
     def fmt(c):
         return _format_character(c, adoptions.get(c.id))
@@ -190,6 +197,10 @@ def render_character_history(world: WorldState) -> str:
     if bastards:
         sections.append(_dynasty_header("BASTARDS", "Bastards"))
         sections.append("\n\n".join(fmt(c) for c in bastards))
+
+    if lowborn:
+        sections.append(_dynasty_header("LOWBORN", "Lowborn (spouses & in-laws)"))
+        sections.append("\n\n".join(fmt(c) for c in lowborn))
 
     return "\n\n".join(sections) + "\n"
 

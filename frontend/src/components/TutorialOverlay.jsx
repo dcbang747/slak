@@ -93,17 +93,27 @@ export default function TutorialOverlay() {
   // Place the popup beside the anchor (right → left → below), else centre it.
   let popupStyle;
   let arrow = null;
+  const EST_H = 230; // approx popup height for on-screen clamping
   if (rect) {
     const spaceRight = window.innerWidth - (rect.left + rect.width);
     if (spaceRight > PW + 24) {
       popupStyle = { top: rect.top, left: rect.left + rect.width + 16 };
-      arrow = { left: -8, top: 18, borderRight: '8px solid rgb(17,24,39)', borderTop: '8px solid transparent', borderBottom: '8px solid transparent' };
+      arrow = { left: -8, borderRight: '8px solid rgb(17,24,39)', borderTop: '8px solid transparent', borderBottom: '8px solid transparent' };
     } else if (rect.left > PW + 24) {
       popupStyle = { top: rect.top, left: rect.left - PW - 16 };
-      arrow = { right: -8, top: 18, borderLeft: '8px solid rgb(17,24,39)', borderTop: '8px solid transparent', borderBottom: '8px solid transparent' };
+      arrow = { right: -8, borderLeft: '8px solid rgb(17,24,39)', borderTop: '8px solid transparent', borderBottom: '8px solid transparent' };
     } else {
       popupStyle = { top: rect.top + rect.height + 16, left: Math.max(8, Math.min(rect.left, window.innerWidth - PW - 8)) };
       arrow = { top: -8, left: 24, borderBottom: '8px solid rgb(17,24,39)', borderLeft: '8px solid transparent', borderRight: '8px solid transparent' };
+    }
+    // Keep the popup fully on screen — clamp its top so it never runs off the
+    // bottom (e.g. the Generate button near the sidebar's base).
+    const unclamped = popupStyle.top;
+    popupStyle.top = Math.max(8, Math.min(unclamped, window.innerHeight - EST_H));
+    // For side placements, re-aim the arrow at the anchor's vertical centre
+    // after any vertical shift so it still points at the highlighted element.
+    if (arrow && arrow.top === undefined) {
+      arrow.top = Math.max(8, Math.min((rect.top + rect.height / 2) - popupStyle.top - 8, EST_H - 24));
     }
   } else {
     popupStyle = { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' };

@@ -866,10 +866,19 @@ def run_simulation(
                 # Apply birth sex bias based on gender law
                 child_is_female = _biased_sex(world, char, ddef_char, year, rng)
 
+                # Culture/faith follow the child's dynasty's active period at its
+                # birth year (so later culture/faith periods actually apply); fall
+                # back to the parent's when the dynasty has no configured periods.
+                ddef_house = world.dynasty_defs.get(house)
+                if ddef_house and ddef_house.culture_faith_periods:
+                    child_culture, child_religion = _dynasty_culture_faith(ddef_house, year)
+                else:
+                    child_culture, child_religion = char.culture, char.religion
+
                 world.make_character(
                     dynasty=house,
-                    culture=char.culture,
-                    religion=char.religion,
+                    culture=child_culture,
+                    religion=child_religion,
                     is_female=child_is_female,
                     birth_year=year,
                     father_id=char.id,
