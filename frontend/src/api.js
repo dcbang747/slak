@@ -37,6 +37,22 @@ export async function startGeneration(payload) {
   return res.json();
 }
 
+// Jamie's Handy Character History Generator (linear single-dynasty mode).
+// Same response shape as startGeneration.
+export async function startJamieGeneration(payload) {
+  const res = await fetch(`${BASE}/generate_jamie`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    let detail = '';
+    try { detail = (await res.json()).detail || ''; } catch { /* ignore */ }
+    throw new Error(`generate failed (${res.status})${detail ? `: ${detail}` : ''}`);
+  }
+  return res.json();
+}
+
 // Turn the base64 ZIP from /generate into a downloadable object URL.
 export function zipBlobUrl(zipB64) {
   const bytes = Uint8Array.from(atob(zipB64), (c) => c.charCodeAt(0));

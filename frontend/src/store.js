@@ -85,6 +85,52 @@ function _defaultLifeCycle() {
   };
 }
 
+// Defaults for "Jamie's Handy Character History Generator" (the linear mode).
+// Mirrors backend JamieSettings; culture/faith/names are supplied from uploads.
+function _defaultJamie() {
+  return {
+    dynasty_id: 'dynasty_new',
+    faith_id: '',
+    culture_id: '',
+    char_id_string: 'myline',
+    initial_char_id: 1,
+    start_birth_year: 6897,
+    title_id: '',
+    generations: 4,
+    generation_siblings: 3,
+    marriage_min_age: 16,
+    marriage_max_age: 35,
+    agediff_min: -3,
+    agediff_max: 3,
+    childbirth_min_age: 20,
+    childbirth_max_age: 40,
+    children_max: 5,
+    battle_death_chance: 0.1,
+    battle_death_min_age: 20,
+    battle_death_max_age: 65,
+    ill_death_chance: 0.1,
+    ill_death_min_age: 25,
+    ill_death_max_age: 65,
+    intrigue_death_chance: 0.05,
+    intrigue_death_min_age: 25,
+    intrigue_death_max_age: 65,
+    old_death_min_age: 60,
+    old_death_max_age: 85,
+    dominant_sex: 'MALE',
+    option_male_line: false,
+    option_sexuality: true,
+    option_nicknames: true,
+    option_personality_traits: true,
+    option_skills: true,
+    option_education: true,
+    option_heroes: true,
+    option_loc_keys: false,
+    hero_chance: 0.01,
+    hero_buff_min: 5,
+    hero_buff_max: 10,
+  };
+}
+
 function _defaultParsedFiles() {
   return {
     titles_txt: null,
@@ -130,6 +176,11 @@ export const useStore = create(persist((set, get) => ({
   // Per-gap dynasty assignments for uploaded titles with existing history.
   // { [titleId]: [{ gap_start_year, gap_end_year, dynasty_id }] }
   title_gap_fills: {},
+
+  // Which generator is active. 'simulation' = the main timeline engine;
+  // 'jamie' = the linear single-dynasty port of Jamie's Handy Character Generator.
+  app_mode: 'simulation',
+  jamie_settings: _defaultJamie(),
 
   // UI navigation
   active_view: 'global',  // 'global' | 'lifecycle' | 'titles' | 'tree'
@@ -413,6 +464,11 @@ export const useStore = create(persist((set, get) => ({
   setView: (view) => set({ active_view: view }),
   setDrawer: (open) => set({ drawer_open: open }),
 
+  // Switch generator mode; reset the active view to that mode's landing tab so the
+  // center pane never shows a tab the other mode doesn't have.
+  setAppMode: (mode) => set({ app_mode: mode, active_view: mode === 'jamie' ? 'jamie' : 'global' }),
+  setJamie: (patch) => set((s) => ({ jamie_settings: { ...s.jamie_settings, ...patch } })),
+
   // Tutorial: enabling (re)starts at step 0; disabling dismisses it.
   setTutorialEnabled: (val) => set({ tutorial_enabled: val, tutorial_step: 0 }),
   setTutorialStep: (n) => set({ tutorial_step: n }),
@@ -444,6 +500,7 @@ export const useStore = create(persist((set, get) => ({
     title_sequences: {},
     title_gap_fills: {},
     dynasty_definitions: [],
+    jamie_settings: _defaultJamie(),
     task_state: null, task_result: null, task_error: null, tree_data: null, download_url: null,
   }),
 
@@ -482,6 +539,36 @@ export const useStore = create(persist((set, get) => ({
     };
   },
 
+  // Resolve the male/female name pools for a culture, using the uploaded
+  // cultures → name_list mapping when present (else treat the id as a list base).
+  jamieNames: () => {
+    const s = get();
+    const nl = s.parsed_files.name_lists;
+    const cultures = s.parsed_files.cultures;
+    const cultureId = s.jamie_settings.culture_id;
+    let base = cultureId;
+    if (cultures[cultureId]) base = cultures[cultureId].replace(/^name_list_/, '');
+    const male = nl[`${base}_male`] || nl.default_male || [];
+    const female = nl[`${base}_female`] || nl.default_female || [];
+    return { male, female, base };
+  },
+
+  // Build the JSON payload for /generate_jamie
+  buildJamiePayload: () => {
+    const s = get();
+    const { male, female } = get().jamieNames();
+    return {
+      settings: {
+        ...s.jamie_settings,
+        faith_id: s.jamie_settings.faith_id || 'faith_fallback',
+        culture_id: s.jamie_settings.culture_id || 'culture_fallback',
+        random_seed: Math.floor(Math.random() * 2147483647),
+      },
+      male_names: male,
+      female_names: female,
+    };
+  },
+
   isReady: () => {
     const s = get();
     return Boolean(s.parsed_files.titles_txt) && Object.keys(s.parsed_files.name_lists).length > 0;
@@ -497,6 +584,8 @@ export const useStore = create(persist((set, get) => ({
     title_sequences: s.title_sequences,
     title_gap_fills: s.title_gap_fills,
     dynasty_definitions: s.dynasty_definitions,
+    app_mode: s.app_mode,
+    jamie_settings: s.jamie_settings,
     simplified_mode: s.simplified_mode,
     // dark_mode is intentionally NOT persisted here — it derives from the dedicated
     // 'ck3_dark_mode' key (written only on an explicit toggle) so the default stays dark.

@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .schemas import SimulationPayload
 from .generation import run_generation
+from .jamie import JamiePayload, run_jamie_generation
 from .parser import (
     parse, extract_title_ids_from_history, extract_title_holder_events,
     extract_genetic_traits, extract_death_reasons,
@@ -123,3 +124,12 @@ async def upload_cultures(file: UploadFile = File(...)) -> dict:
 def generate(payload: SimulationPayload) -> dict:
     """Run the simulation and return {characters, titles_with_history, family_tree, zip_b64}."""
     return run_generation(payload.model_dump())
+
+
+@app.post("/generate_jamie")
+def generate_jamie(payload: JamiePayload) -> dict:
+    """Jamie's Handy Character History Generator (linear single-dynasty mode).
+
+    Same response shape as /generate so the frontend reuses the family-tree view
+    and ZIP download. Names/culture/faith are supplied from the upload system."""
+    return run_jamie_generation(payload.model_dump())

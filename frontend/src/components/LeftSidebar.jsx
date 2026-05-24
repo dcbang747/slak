@@ -3,7 +3,7 @@ import Dropzone from './Dropzone';
 import {
   uploadTitles, uploadTraits, uploadNames,
   uploadReligions, uploadCultures,
-  startGeneration, zipBlobUrl,
+  startGeneration, startJamieGeneration, zipBlobUrl,
 } from '../api';
 
 const BASE_NAV = [
@@ -12,6 +12,8 @@ const BASE_NAV = [
   { id: 'titles', label: 'Title Histories' },
 ];
 
+const JAMIE_NAV = [{ id: 'jamie', label: 'Generator' }];
+
 export default function LeftSidebar() {
   const {
     parsed_files, global_settings, active_view, setView,
@@ -19,6 +21,7 @@ export default function LeftSidebar() {
     dark_mode, setDarkMode,
     tutorial_enabled, setTutorialEnabled,
     task_state,
+    app_mode, setAppMode, buildJamiePayload, jamieNames,
     setParsedTitles, clearParsedTitles,
     setParsedTraits, clearParsedTraits,
     setParsedNames, clearParsedNames,
@@ -27,15 +30,20 @@ export default function LeftSidebar() {
     setDrawer, setTaskState, setGenerationResult, resetTask, buildPayload, resetAll,
   } = useStore();
 
+  const jamieMode = app_mode === 'jamie';
+  const baseNav = jamieMode ? JAMIE_NAV : BASE_NAV;
   const nav = task_state === 'SUCCESS'
-    ? [...BASE_NAV, { id: 'tree', label: 'Family Tree' }]
-    : BASE_NAV;
+    ? [...baseNav, { id: 'tree', label: 'Family Tree' }]
+    : baseNav;
 
   const hasTitles = parsed_files.titles.length > 0;
   const hasNames = Object.keys(parsed_files.name_lists).length > 0;
   const hasNamesFile = parsed_files.names_filenames.length > 0;
   const skipTitles = global_settings.ignore_title_generation;
-  const ready = (hasTitles || skipTitles) && hasNames;
+  // Jamie mode needs resolvable male+female name pools for the chosen culture;
+  // the simulation mode needs a title history (or placeholder mode) plus names.
+  const jamieNamesOk = jamieMode && (() => { const n = jamieNames(); return n.male.length > 0 && n.female.length > 0; })();
+  const ready = jamieMode ? jamieNamesOk : ((hasTitles || skipTitles) && hasNames);
 
   const handle = (uploader, setter) => async (file) => {
     try {
@@ -51,7 +59,9 @@ export default function LeftSidebar() {
     setDrawer(true);
     setTaskState({ task_state: 'RUNNING' });
     try {
-      const res = await startGeneration(buildPayload());
+      const res = jamieMode
+        ? await startJamieGeneration(buildJamiePayload())
+        : await startGeneration(buildPayload());
       setGenerationResult({
         characters: res.characters,
         titles_with_history: res.titles_with_history,
@@ -65,6 +75,9 @@ export default function LeftSidebar() {
 
   // Human-readable reason the Generate button is disabled (shown inline, not just on hover).
   const disabledReason = ready ? null
+    : jamieMode ? (!hasNames
+        ? 'Upload a Name Lists file, then pick a culture in the Generator.'
+        : 'Pick a culture with a matching name list in the Generator.')
     : (!hasNames && !hasTitles && !skipTitles) ? 'Upload a Title History and a Name Lists file to generate.'
     : (!hasNames && hasNamesFile) ? 'Name list is empty — use format: list_id: name1, name2'
     : !hasNames ? 'Upload a Name Lists file to generate.'
@@ -121,6 +134,15 @@ export default function LeftSidebar() {
             Tutorial
           </label>
         </div>
+
+        {/* Generator mode switch */}
+        <button
+          onClick={() => setAppMode(jamieMode ? 'simulation' : 'jamie')}
+          title={jamieMode ? 'Switch to the timeline simulation generator' : "Switch to Jamie's linear single-dynasty generator"}
+          className="mt-3 w-full text-[11px] font-extrabold uppercase tracking-wide px-2 py-2 border border-amber-500 text-amber-600 dark:text-amber-400 hover:bg-amber-500 hover:text-white dark:hover:text-black transition-colors"
+        >
+          {jamieMode ? '← Timeline Simulator' : "Jamie's Handy Generator →"}
+        </button>
       </div>
 
       {/* Dropzones */}
@@ -210,7 +232,7 @@ export default function LeftSidebar() {
               : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed',
           ].join(' ')}
         >
-          Generate Simulation
+          {jamieMode ? 'Generate Family' : 'Generate Simulation'}
         </button>
         {disabledReason && (
           <p className="mt-1.5 text-[11px] leading-snug text-amber-600 dark:text-amber-400">{disabledReason}</p>

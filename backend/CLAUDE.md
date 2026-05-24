@@ -8,8 +8,9 @@ See root `CLAUDE.md` for architecture overview, commands, and coupling points.
 
 | File | Role |
 |---|---|
-| `main.py` | FastAPI endpoints. Thin layer: upload endpoints parse on-the-fly and return previews; `/generate` runs generation synchronously via `generation.py`. |
+| `main.py` | FastAPI endpoints. Thin layer: upload endpoints parse on-the-fly and return previews; `/generate` runs generation synchronously via `generation.py`; `/generate_jamie` runs the linear port via `jamie.py`. |
 | `generation.py` | `run_generation(payload)` — synchronous: parse → `run_simulation()` → `package_zip()`. Returns `{characters, titles_with_history, family_tree, zip_b64}` (base64 ZIP, no files on disk). Stateless, so it runs as a serverless function too. |
+| `jamie.py` | *Jamie's Handy Character History Generator* — a standalone linear single-dynasty generator (port of the `RawSampleFiles/OldExcelGenerator/` VBA tool). Self-contained: built-in weighting tables, `JamieSettings`/`JamiePayload` schemas, recursive family build, output rendering, `family_tree`. Same response shape as `run_generation`; independent of `simulation.py`/`output.py`. |
 | `parser.py` | Paradox `.txt` → Python dict AST + all domain extractors. |
 | `schemas.py` | Pydantic models for `SimulationPayload` and all internal entities. |
 | `simulation.py` | `WorldState` class + `run_simulation()` year-tick loop + all transition helpers. |

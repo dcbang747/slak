@@ -14,6 +14,23 @@ The user uploads real CK3 mod files (title history, genetic traits, death reason
 
 The reference mod is a Lord of the Rings conversion mod; all `RawSampleFiles/` examples are from that mod.
 
+### Two generator modes
+
+The app has a header toggle (top-left, in `LeftSidebar`) that switches `app_mode`:
+
+- **`simulation`** (default) — the timeline engine described above (`simulation.py` → `/generate`).
+- **`jamie`** — *Jamie's Handy Character History Generator*, a faithful Python port of the
+  community Excel/VBA tool in `RawSampleFiles/OldExcelGenerator/`. It is **linear**: one
+  founder couple grown generation-by-generation into a single dynasty + a title-succession
+  chain. Lives entirely in `backend/app/jamie.py` (`/generate_jamie`) and
+  `frontend/src/components/views/JamieGenerator.jsx`. It shares the upload sidebar (culture,
+  faith and male/female name pools come from uploaded files) and the family-tree view, but has
+  its own inputs and generation logic. The LotR-specific Excel options (Númenórean blood tiers,
+  per-generation lifespan decline) were intentionally dropped; the generic hero skill-buff is
+  kept. `father`/`mother` are assigned by actual sex (the Excel swapped them for matrilineal
+  lines). Built-in weighting tables (deaths, traits, skills, education, sexuality, ~164
+  nicknames) are copied verbatim from the workbook.
+
 The spec has two documents:
 - `Jis.pdf` — original v7.0 spec (architecture, output format, simulation rules)
 - `Jis_Additional.pdf` — amendment v2.0 (cadet branches, secrets, relationships, religion parsing, dynasty output files, new UI panels)
@@ -140,6 +157,8 @@ Changes in one place **require** matching changes in the other:
 | `GlobalSettings` schema fields | `store.js` `global_settings` initial state + `buildPayload()` |
 | Personality trait exclusion groups in `schemas.py` | `_defaultPersonalityTraits()` in `store.js` (must mirror exactly) |
 | Dynasty ID renamed in `updateDynastyDef` | `title_sequences` entries are automatically rewritten — this is handled in the store action |
+| `JamieSettings` fields in `jamie.py` | `_defaultJamie()` + `buildJamiePayload()` in `store.js` + the form in `JamieGenerator.jsx` |
+| `/generate_jamie` response shape in `jamie.py` | `LeftSidebar.onGenerate` (shares the same reader as `/generate`) |
 
 ---
 

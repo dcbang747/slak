@@ -13,10 +13,18 @@ App.jsx
 │   ├── GlobalSettings.jsx     — two-column: simulation settings (left) + Dynasties panel (right)
 │   ├── LifeCycleModifiers.jsx
 │   ├── TitleHistories.jsx → GanttChart.jsx
-│   └── FamilyTree.jsx     — React Flow tree (nav appears only after a successful run)
+│   ├── FamilyTree.jsx     — React Flow tree (nav appears only after a successful run)
+│   └── JamieGenerator.jsx — linear single-dynasty form (shown when app_mode === 'jamie')
 ├── RightDrawer.jsx      — task progress log + Download ZIP
 └── TutorialOverlay.jsx  — onboarding coachmarks (glow + arrow + popup) over data-tour anchors
 ```
+
+**Generator modes.** `app_mode` (in `store.js`, persisted) is `'simulation'` or `'jamie'`,
+flipped by the amber toggle in `LeftSidebar`'s header. In `jamie` mode the center pane shows
+`JamieGenerator.jsx`, the nav collapses to *Generator* (+ *Family Tree* after a run), and
+`onGenerate` posts `buildJamiePayload()` to `/generate_jamie`. Culture/faith/name pools are
+resolved from uploaded files via `jamieNames()`. The result reuses the same `tree_data` +
+Download-ZIP plumbing as the simulation mode.
 
 Still pending (Jis_Additional.pdf):
 - `CharacterNodeEditor.jsx` — interactive character editor modal
