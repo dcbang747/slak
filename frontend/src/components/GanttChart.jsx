@@ -72,20 +72,42 @@ function YearRuler({ startYear, endYear, pxPerYear }) {
   );
 }
 
-function GapAssignSelect({ gap, value, dynastyOptions, onAssign, width }) {
+// A gap >100yr may be ruled by multiple dynasties in sequence (one extra slot per
+// additional 100 years). The gap width is split evenly among the visible slots.
+function GapSlots({ gap, assigned, dynastyOptions, onAssign, width }) {
+  const gapLen = gap.end - gap.start;
+  const maxDyn = 1 + Math.floor((gapLen - 1) / 100);
+  const slotCount = Math.min(maxDyn, assigned.length + 1);
+  const slotW = Math.max(width / slotCount, 80);
+
+  const change = (i, val) => {
+    const ids = [...assigned];
+    if (i < ids.length) {
+      if (val) ids[i] = val; else ids.splice(i, 1);
+    } else if (val) {
+      ids.push(val);
+    }
+    onAssign(gap.start, gap.end, ids);
+  };
+
   return (
-    <select
-      value={value || ''}
-      onChange={(e) => onAssign(gap.start, gap.end, e.target.value)}
-      title={`Gap ${gap.start}–${gap.end} (${gap.end - gap.start} yrs) — assign a dynasty to generate rulers here`}
-      className="absolute bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 border border-dashed border-amber-500 dark:border-amber-600 text-[11px] px-1 focus:outline-none focus:border-amber-700 cursor-pointer"
-      style={{ left: 0, top: 8, width: Math.max(width, 90), height: ROW_HEIGHT - 16 }}
-    >
-      <option value="">— gap: assign dynasty —</option>
-      {dynastyOptions.map((d) => (
-        <option key={d.id} value={d.id}>{d.name || d.id}</option>
+    <>
+      {Array.from({ length: slotCount }, (_, i) => (
+        <select
+          key={i}
+          value={assigned[i] || ''}
+          onChange={(e) => change(i, e.target.value)}
+          title={`Gap ${gap.start}–${gap.end} (${gapLen} yrs)${maxDyn > 1 ? ` — up to ${maxDyn} dynasties` : ''} — assign a dynasty to generate rulers here`}
+          className="absolute bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 border border-dashed border-amber-500 dark:border-amber-600 text-[11px] px-1 focus:outline-none focus:border-amber-700 cursor-pointer truncate"
+          style={{ left: i * slotW, top: 8, width: slotW - 2, height: ROW_HEIGHT - 16 }}
+        >
+          <option value="">{assigned.length === 0 ? '— gap: assign dynasty —' : '+ dynasty'}</option>
+          {dynastyOptions.map((d) => (
+            <option key={d.id} value={d.id}>{d.name || d.id}</option>
+          ))}
+        </select>
       ))}
-    </select>
+    </>
   );
 }
 
@@ -96,9 +118,9 @@ function TitleLane({ row, events, startYear, endYear, pxPerYear, gapFills, dynas
     [events, startYear, endYear],
   );
   const xOf = (year) => (year - startYear) * pxPerYear;
-  const fillFor = (g) => {
+  const assignedFor = (g) => {
     const hit = (gapFills || []).find((f) => f.gap_start_year === g.start && f.gap_end_year === g.end);
-    return hit ? hit.dynasty_id : '';
+    return hit ? (hit.dynasty_ids || []) : [];
   };
 
   return (
@@ -138,11 +160,11 @@ function TitleLane({ row, events, startYear, endYear, pxPerYear, gapFills, dynas
         {/* editable gaps (>50yr) with per-gap dynasty assignment */}
         {gaps.map((g, i) => (
           <div key={`gap${i}`} className="absolute" style={{ left: xOf(g.start), top: 0, width: (g.end - g.start) * pxPerYear, height: ROW_HEIGHT }}>
-            <GapAssignSelect
+            <GapSlots
               gap={g}
-              value={fillFor(g)}
+              assigned={assignedFor(g)}
               dynastyOptions={dynastyOptions}
-              onAssign={(s, e, dyn) => onAssign(row.id, s, e, dyn)}
+              onAssign={(s, e, ids) => onAssign(row.id, s, e, ids)}
               width={(g.end - g.start) * pxPerYear}
             />
           </div>
@@ -153,7 +175,7 @@ function TitleLane({ row, events, startYear, endYear, pxPerYear, gapFills, dynas
 }
 
 export default function GanttChart() {
-  const { parsed_files, global_settings, title_gap_fills, setTitleGapFill, dynasty_definitions } = useStore();
+  const { parsed_files, global_settings, title_gap_fills, setTitleGapFillDynasties, dynasty_definitions } = useStore();
   const [pxPerYear, setPxPerYear] = useState(6);
   const [filter, setFilter] = useState('');
 
@@ -242,7 +264,7 @@ export default function GanttChart() {
               pxPerYear={pxPerYear}
               gapFills={title_gap_fills[row.id]}
               dynastyOptions={dynasty_definitions}
-              onAssign={setTitleGapFill}
+              onAssign={setTitleGapFillDynasties}
             />
           ))}
         </div>

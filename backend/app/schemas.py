@@ -138,15 +138,15 @@ class DynastySequence(BaseModel):
 
 
 class TitleGapFill(BaseModel):
-    """A user assignment of a dynasty to fill one >50yr gap in a title's existing
-    (uploaded) history. The generator produces a confined dynastic line of
-    holders within [gap_start_year, gap_end_year] and injects them into the
-    original title-history text without touching the existing blocks."""
+    """A user assignment of one or more dynasties to fill a >50yr gap in a title's
+    existing (uploaded) history. The generator draws real members of each dynasty
+    (alive within the window, clamped to the dynasty's own start/end years) as
+    holders and injects them — chronologically ordered — into the original
+    title-history text without touching the existing blocks. Gaps longer than 100
+    years may list multiple dynasties; the gap is split evenly among them in order."""
     gap_start_year: int
     gap_end_year: int
-    dynasty_id: str
-    succession: Optional[str] = None    # falls back to the dynasty's own law if unset
-    gender_law: Optional[str] = None
+    dynasty_ids: list[str] = Field(default_factory=list)
 
 
 class ParsedFileData(BaseModel):

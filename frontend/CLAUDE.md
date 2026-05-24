@@ -33,7 +33,7 @@ Single source of truth. Key sections:
 | `life_cycle` | object | Fertility/mortality modifiers |
 | `parsed_files` | object | Raw txt strings + extracted previews from all upload types |
 | `title_sequences` | object | `{[titleId]: DynastySequence[]}` — legacy per-title block model (still in schema; superseded for uploaded titles by gap fills) |
-| `title_gap_fills` | object | `{[titleId]: [{gap_start_year, gap_end_year, dynasty_id}]}` — per-gap dynasty assignment for uploaded-history titles; sent in `buildPayload` |
+| `title_gap_fills` | object | `{[titleId]: [{gap_start_year, gap_end_year, dynasty_ids[]}]}` — per-gap dynasty assignment (gaps >100yr allow several, split in order); set via `setTitleGapFillDynasties`, sent in `buildPayload` |
 | `parsed_files.title_holder_events` | object | `{[titleId]: [{date, year, vacant}]}` from `/upload/titles` — drives the Gantt's locked bars + gap detection |
 | `dynasty_definitions` | array | User-defined dynasties with full properties |
 | `tutorial_enabled` | bool | Master switch for the onboarding tour (persisted); toggled by the header "Tutorial" checkbox. Finishing/skipping sets it false |
@@ -167,7 +167,7 @@ Note: `uploadDynasties` does **not** exist — dynasties are user-defined via th
 
 Rewritten around uploaded title history. Each title row renders, positioned by absolute year (`x = (year - start_year) * pxPerYear`):
 - **Locked grey bars** for existing occupied periods (any non-`0` holder) — read-only, never overwritten.
-- **Amber dashed gap dropdowns** for vacant stretches >50yr within the Start/End window — one `<select>` per gap; choosing a dynasty calls `setTitleGapFill(titleId, gapStart, gapEnd, dynastyId)`.
+- **Amber dashed gap dropdowns** for vacant stretches >50yr within the Start/End window. A gap >100yr shows multiple side-by-side slots (`maxDyn = 1 + floor((len-1)/100)`) splitting the gap; choosing dynasties calls `setTitleGapFillDynasties(titleId, gapStart, gapEnd, dynastyIds[])`. Holders are drawn backend-side from each dynasty's real simulated members.
 
 `computeSegments(events, start, end, minGap=50)` mirrors the backend `compute_title_gaps`/occupancy split exactly (verify both stay in sync). Gaps recompute live when Start/End years change. The legacy draggable-block model (`DynastyBlock`, drag/reorder, transition popover) was removed — assignment is now per-gap. `ROW_HEIGHT = 48`, `LABEL_WIDTH = 240`, `pxPerYear` auto-fits the container.
 

@@ -278,7 +278,7 @@ SimulationPayload
 │   └── {dynasty_id, duration_type, duration_value, transition_method,
 │        government_type, liege_title_id, lowborn_spouses_only, conversions[]}
 ├── title_gap_fills: dict[title_id → list[TitleGapFill]]   ← per-gap dynasty assignment for uploaded-history titles
-│   └── {gap_start_year, gap_end_year, dynasty_id, succession?, gender_law?}
+│   └── {gap_start_year, gap_end_year, dynasty_ids[]}   ← gaps >100yr may list several dynasties (split evenly, in order)
 └── dynasty_definitions: list[DynastyDefinition]
     └── {id, name, motto, start_year, end_year,
          culture_faith_periods[{start_year, culture, faith}],
@@ -318,7 +318,7 @@ SimulationPayload
 Renders `WorldState` into files packed into a ZIP:
 
 - `character_history.txt` — characters grouped by dynasty (sorted alphabetically by dynasty ID), each group preceded by a comment header; bastards appended last
-- `title_history.txt` — one block per **explicitly user-configured title** only (cascade-inherited child titles are filtered out); omitted entirely if `ignore_title_generation = true`. **Existing-history awareness:** titles present in the uploaded file (`world.uploaded_title_ids`) are reproduced **verbatim** and the generated gap-fill holders are *injected* into them via `merge_title_history` (text-level insertion before each title's closing brace — comments, `government`, `liege`, etc. are never touched). `render_title_history` skips uploaded titles; non-uploaded (user-added/placeholder) blocks are appended after the merged original. Gap-fill holders come from `_fill_title_gaps` (sim) using `payload.title_gap_fills`; each fill is a confined dynastic line within a >50yr gap, clamped to the Start/End window, stored in `world.injected_holders`
+- `title_history.txt` — one block per **explicitly user-configured title** only (cascade-inherited child titles are filtered out); omitted entirely if `ignore_title_generation = true`. **Existing-history awareness:** titles present in the uploaded file (`world.uploaded_title_ids`) are reproduced **verbatim** and the generated gap-fill holders are *injected* into them via `merge_title_history` at the **correct chronological position** (before the first existing date block dated later, else before the closing brace) — comments, `government`, `liege`, etc. are never touched. `render_title_history` skips uploaded titles; non-uploaded (user-added/placeholder) blocks are appended after the merged original. **Gap-fill (`_fill_title_gaps`)**: assigning a dynasty to a gap only says *when it rules that title* — holders are drawn from the dynasty's **real simulated members** (alive adults within the window, clamped to the dynasty's own start/end years). Gap dynasties are forced `guaranteed_survival` so their line persists; their placeholder title is simulated but **not** emitted. A gap with multiple `dynasty_ids` is split evenly among them in order; if real members run short of a segment, `_fabricate_gap_line` fills the remainder. Results land in `world.injected_holders`
 - `00_dynasties.txt` — Paradox dynasty definitions; generated from `world.dynasty_ids_used`, looked up against `world.dynasty_defs` for real culture and motto
 - `dynasty_names_l_english.yml` — UTF-8 BOM localization; dynasty display names only (`dynn_X: "..."`)
 - `dynasty_mottos_l_english.yml` — UTF-8 BOM localization; dynasty mottos only (`dynn_X_motto: "..."`). Names and mottos are split into two files; the `_l_english` suffix is mandatory for CK3 to load the localization. Both fall back to `#DEBUG TEMP#!` if blank.

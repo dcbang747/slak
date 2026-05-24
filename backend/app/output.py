@@ -300,15 +300,15 @@ def render_title_history(world: WorldState, only_ids: set | None = None) -> str:
     return "\n".join(out) + "\n"
 
 
-def _title_block_close_indices(text: str) -> dict[str, int]:
-    """Map each top-level title id to the index of its block's closing `}` in
-    the raw text. Comments (`# … EOL`) and quoted strings are skipped, so braces
-    inside commented-out blocks (common in real mod files) don't miscount depth."""
-    result: dict[str, int] = {}
+def _title_block_spans(text: str) -> dict[str, tuple[int, int]]:
+    """Map each top-level title id to ``(open_brace_index, close_brace_index)``.
+    Comments (`# … EOL`) and quoted strings are skipped, so braces inside
+    commented-out blocks (common in real mod files) don't miscount depth."""
+    result: dict[str, tuple[int, int]] = {}
     i, n = 0, len(text)
     depth = 0
     pending_name: str | None = None
-    block_stack: list[str | None] = []
+    block_stack: list[tuple[str | None, int]] = []
     while i < n:
         ch = text[i]
         if ch == "#":
@@ -320,22 +320,21 @@ def _title_block_close_indices(text: str) -> dict[str, int]:
             i = n if j == -1 else j + 1
             continue
         if ch == "{":
-            block_stack.append(pending_name if depth == 0 else None)
+            block_stack.append((pending_name if depth == 0 else None, i))
             depth += 1
             pending_name = None
             i += 1
             continue
         if ch == "}":
             depth -= 1
-            opened = block_stack.pop() if block_stack else None
+            opened, open_idx = block_stack.pop() if block_stack else (None, 0)
             if depth == 0 and opened:
-                result[opened] = i
+                result[opened] = (open_idx, i)
             i += 1
             continue
         if ch.isspace() or ch == "=":
             i += 1
             continue
-        # token
         j = i
         while j < n and not text[j].isspace() and text[j] not in '{}="#':
             j += 1
@@ -346,28 +345,46 @@ def _title_block_close_indices(text: str) -> dict[str, int]:
     return result
 
 
+_DATE_OPEN_RE = re.compile(r"(?m)^[ \t]*(\d+)\.(\d+)\.(\d+)[ \t]*=[ \t]*\{")
+
+
 def merge_title_history(original_text: str, injected: dict[str, list[tuple[str, str]]]) -> str:
     """Return the original uploaded title-history text with generated gap-fill
-    holder blocks inserted before each affected title's closing brace. Existing
-    blocks (holders, government, liege, names, comments) are left byte-for-byte
-    intact — CK3 applies date blocks by date, so insertion order is irrelevant."""
+    holder blocks inserted into each affected title block — **at the correct
+    chronological position** (before the first existing date block dated later,
+    else before the closing brace). Existing blocks (holders, government, liege,
+    names, comments) are left byte-for-byte intact."""
     if not injected:
         return original_text
-    closes = _title_block_close_indices(original_text)
-    inserts: list[tuple[int, str]] = []
+    spans = _title_block_spans(original_text)
+    # (absolute_insert_index, date_tuple, block_text) collected across all titles.
+    items: list[tuple[int, tuple, str]] = []
     for tid, holders in injected.items():
-        idx = closes.get(tid)
-        if idx is None or not holders:
+        span = spans.get(tid)
+        if span is None or not holders:
             continue
-        sorted_h = sorted(holders, key=_date_sort_key)
-        block_txt = "".join(
-            f"\t{date} = {{\n\t\tholder = {hid}\n\t}}\n" for date, hid in sorted_h
-        )
-        inserts.append((idx, block_txt))
+        open_idx, close_idx = span
+        # Existing date-block openings within this title, as (date_tuple, abs_index).
+        openings: list[tuple[tuple, int]] = []
+        for m in _DATE_OPEN_RE.finditer(original_text, open_idx, close_idx):
+            dt = (int(m.group(1)), int(m.group(2)), int(m.group(3)))
+            openings.append((dt, m.start()))
+        for date, hid in holders:
+            dt = _date_key(date)
+            later = [idx for (odt, idx) in openings if odt > dt]
+            ins_idx = min(later) if later else close_idx
+            items.append((ins_idx, dt, f"\t{date} = {{\n\t\tholder = {hid}\n\t}}\n"))
+
+    # Group by insertion index; emit each group's blocks in date order. Apply
+    # from highest index to lowest so earlier indices stay valid.
+    groups: dict[int, list[tuple[tuple, str]]] = {}
+    for idx, dt, txt in items:
+        groups.setdefault(idx, []).append((dt, txt))
     out = original_text
-    for idx, block_txt in sorted(inserts, key=lambda x: x[0], reverse=True):
+    for idx in sorted(groups, reverse=True):
+        chunk = "".join(t for _, t in sorted(groups[idx], key=lambda x: x[0]))
         prefix = "" if (idx > 0 and out[idx - 1] == "\n") else "\n"
-        out = out[:idx] + prefix + block_txt + out[idx:]
+        out = out[:idx] + prefix + chunk + out[idx:]
     return out
 
 

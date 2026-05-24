@@ -806,12 +806,22 @@ def run_simulation(
         for seq in seq_list
         if seq.dynasty_id and seq.dynasty_id != GAP_DYNASTY_ID
     }
-    # Dynasties assigned to fill a title gap generate their line in that gap, so
-    # they don't also need a standalone placeholder title.
-    for fills in (payload.title_gap_fills or {}).values():
-        for gf in fills:
-            if gf.dynasty_id:
-                used_dynasty_ids.add(gf.dynasty_id)
+    # Dynasties assigned to fill a title gap must still be simulated (so we can
+    # draw real members as holders) — but their placeholder title is NOT emitted;
+    # their rule is expressed by injecting holders into the uploaded title.
+    gap_dynasty_ids: set[str] = {
+        dyn
+        for fills in (payload.title_gap_fills or {}).values()
+        for gf in fills
+        for dyn in gf.dynasty_ids
+        if dyn
+    }
+    # A dynasty assigned to a gap must stay alive across its lifespan so real
+    # members exist to draw as holders — force guaranteed survival on its line.
+    for dyn in gap_dynasty_ids:
+        dd = world.dynasty_defs.get(dyn)
+        if dd:
+            dd.guaranteed_survival = True
     placeholder_duration = max(1, settings.end_year - settings.start_year + 1)
     for dyn_id in world.dynasty_defs.keys():
         if dyn_id in used_dynasty_ids:
@@ -832,8 +842,10 @@ def run_simulation(
             "total_generations": 0,
             "ruler_id": None,
         }
-        world.explicit_title_ids.add(placeholder_tid)
-        world.placeholder_title_ids.add(placeholder_tid)
+        # Gap-fill-only dynasties are simulated but their placeholder is not output.
+        if dyn_id not in gap_dynasty_ids:
+            world.explicit_title_ids.add(placeholder_tid)
+            world.placeholder_title_ids.add(placeholder_tid)
 
     if not title_state and not payload.title_gap_fills:
         logger("No title sequences configured and no dynasties defined — nothing to simulate.")
@@ -1236,66 +1248,141 @@ def run_simulation(
 # Title gap-fill (existing-history awareness)
 # ---------------------------------------------------------------------------
 
-_GAP_GENERATION_YEARS = 30  # reign length per holder in a gap-fill line
+_GAP_GENERATION_YEARS = 30  # reign length when fabricating a fallback gap line
+
+
+def _fabricate_gap_line(world: WorldState, tid: str, dyn: str, lo: int, hi: int) -> None:
+    """Last-resort gap fill: create a short confined dynastic line within [lo, hi]
+    when the dynasty has no simulated members covering the segment."""
+    rng = world.rng
+    ddef = world.dynasty_defs.get(dyn)
+    gl = ddef.gender_law if ddef else None
+    prev: Optional[Character] = None
+    i = 0
+    while True:
+        accession = lo + i * _GAP_GENERATION_YEARS
+        if accession >= hi:
+            break
+        culture, religion = (
+            _dynasty_culture_faith(ddef, accession) if ddef else ("default_culture", "default_faith")
+        )
+        parent_kwargs = {}
+        if prev is not None:
+            parent_kwargs = {"mother_id": prev.id} if prev.is_female else {"father_id": prev.id}
+        holder = world.make_character(
+            dynasty=dyn, culture=culture, religion=religion,
+            is_female=_ruler_sex_is_female(gl, rng), birth_year=accession - 30,
+            **parent_kwargs,
+        )
+        _assign_childhood_trait(holder, rng)
+        bp = holder.birth_date.split(".")
+        holder.personality_trait_date = _date(int(bp[0]) + 16, int(bp[1]), int(bp[2]))
+        _assign_personality_traits(holder, world.personality_traits_config, rng)
+        world.injected_holders.setdefault(tid, []).append(
+            (_date(lo if i == 0 else accession, rng.randint(1, 12), rng.randint(1, 28)), holder.id)
+        )
+        nxt = lo + (i + 1) * _GAP_GENERATION_YEARS
+        death_year = hi if nxt >= hi else nxt
+        holder.is_alive = False
+        holder.death_date = _date(death_year, rng.randint(1, 12), rng.randint(1, 28))
+        holder.death_reason = "death_natural_causes"
+        prev = holder
+        i += 1
 
 
 def _fill_title_gaps(world: WorldState, payload: SimulationPayload) -> None:
-    """For each user-assigned gap, generate a confined dynastic line of holders
-    within [gap_start, gap_end] (clamped to the sim window) and record them in
-    `world.injected_holders` for text-injection. The line's characters are added
-    to the world like any other (so they appear in character_history)."""
+    """Fill user-assigned title gaps with REAL members of the assigned dynasties.
+
+    Assigning a dynasty to a gap only says *when it rules that title* — the
+    dynasty's own members (simulated across its start/end years) become the
+    holders. We pick members who are adults alive within the window and let them
+    rule until death, then hand to the next viable member (succession). A holder
+    may start a few years into the window if that's when a member first qualifies.
+    Gaps with multiple assigned dynasties are split evenly among them, in order.
+    Results go to `world.injected_holders` for chronological text-injection.
+    """
     rng = world.rng
     settings = payload.global_settings
+
+    members_by_dyn: dict[str, list[Character]] = {}
+    for c in world.characters.values():
+        d = _char_dynasty_id(c)
+        if d:
+            members_by_dyn.setdefault(d, []).append(c)
+    for lst in members_by_dyn.values():
+        lst.sort(key=_birth_key)
+
+    def _yr(date_str: Optional[str], fallback: int) -> int:
+        try:
+            return int(date_str.split(".")[0])
+        except (AttributeError, ValueError, IndexError):
+            return fallback
+
+    def fill_segment(tid: str, dyn: str, lo: int, hi: int) -> None:
+        ddef = world.dynasty_defs.get(dyn)
+        if ddef and ddef.start_year:
+            lo = max(lo, ddef.start_year)
+        if ddef and ddef.end_year and ddef.end_year < 9999:
+            hi = min(hi, ddef.end_year)
+        if hi - lo <= 0:
+            return
+        members = members_by_dyn.get(dyn, [])
+        cursor = lo
+        used: set[str] = set()
+        while cursor < hi:
+            # Eligible: a dynasty member who reaches adulthood (before death and
+            # before the window ends) and is still alive after the cursor.
+            eligible = []
+            for c in members:
+                if c.id in used:
+                    continue
+                by = _yr(c.birth_date, hi)
+                dy = _yr(c.death_date, by + 80) if c.death_date else by + 80
+                adult = by + 16
+                if adult >= dy or dy <= cursor or adult >= hi:
+                    continue
+                eligible.append((c, by, dy, adult))
+            if not eligible:
+                break
+            # Prefer someone already adult at the cursor — the youngest such (so they
+            # reign longest); otherwise whoever comes of age soonest (a short vacancy
+            # before they take over is fine).
+            ready = [e for e in eligible if e[3] <= cursor]
+            if ready:
+                chosen, _, dy, _ = max(ready, key=lambda e: e[1])
+                accession = cursor
+            else:
+                chosen, _, dy, adult = min(eligible, key=lambda e: e[3])
+                accession = adult
+            if accession >= hi:
+                break
+            used.add(chosen.id)
+            world.injected_holders.setdefault(tid, []).append(
+                (_date(accession, rng.randint(1, 12), rng.randint(1, 28)), chosen.id)
+            )
+            cursor = max(dy, accession + 1)
+
+        # If real members ran short of the segment end (dynasty thinned out / never
+        # covered part of it), fabricate a confined line for the remainder so the
+        # user's assignment is honoured across the whole segment.
+        if cursor < hi:
+            _fabricate_gap_line(world, tid, dyn, cursor, hi)
+
     for tid, fills in payload.title_gap_fills.items():
         for gf in fills:
-            ddef = world.dynasty_defs.get(gf.dynasty_id)
+            dyn_ids = [d for d in (gf.dynasty_ids or []) if d]
+            if not dyn_ids:
+                continue
             gstart = max(gf.gap_start_year, settings.start_year)
             gend = min(gf.gap_end_year, settings.end_year)
             if gend - gstart <= 0:
                 continue
-            gl = gf.gender_law or (ddef.gender_law if ddef else None)
-            prev: Optional[Character] = None
-            i = 0
-            while True:
-                accession = gstart + i * _GAP_GENERATION_YEARS
-                if accession >= gend:
-                    break
-                culture, religion = (
-                    _dynasty_culture_faith(ddef, accession) if ddef
-                    else ("default_culture", "default_faith")
-                )
-                parent_kwargs = {}
-                if prev is not None:
-                    parent_kwargs = (
-                        {"mother_id": prev.id} if prev.is_female else {"father_id": prev.id}
-                    )
-                holder = world.make_character(
-                    dynasty=gf.dynasty_id,
-                    culture=culture,
-                    religion=religion,
-                    is_female=_ruler_sex_is_female(gl, rng),
-                    birth_year=accession - 30,
-                    **parent_kwargs,
-                )
-                # Childhood + personality traits (the main loop's age-milestone
-                # passes already ran, so assign them here for parity).
-                _assign_childhood_trait(holder, rng)
-                bp = holder.birth_date.split(".")
-                holder.personality_trait_date = _date(int(bp[0]) + 16, int(bp[1]), int(bp[2]))
-                _assign_personality_traits(holder, world.personality_traits_config, rng)
-
-                hold_year = gstart if i == 0 else accession
-                world.injected_holders.setdefault(tid, []).append(
-                    (_date(hold_year, rng.randint(1, 12), rng.randint(1, 28)), holder.id)
-                )
-
-                next_accession = gstart + (i + 1) * _GAP_GENERATION_YEARS
-                death_year = gend if next_accession >= gend else next_accession
-                holder.is_alive = False
-                holder.death_date = _date(death_year, rng.randint(1, 12), rng.randint(1, 28))
-                holder.death_reason = "death_natural_causes"
-                prev = holder
-                i += 1
+            n = len(dyn_ids)
+            span = (gend - gstart) / n
+            for i, dyn in enumerate(dyn_ids):
+                seg_lo = int(round(gstart + i * span))
+                seg_hi = gend if i == n - 1 else int(round(gstart + (i + 1) * span))
+                fill_segment(tid, dyn, seg_lo, seg_hi)
 
 
 # ---------------------------------------------------------------------------

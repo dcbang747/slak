@@ -269,15 +269,17 @@ export const useStore = create(persist((set, get) => ({
     title_sequences: { ...s.title_sequences, [titleId]: sequences },
   })),
 
-  // Assign (or clear, when dynastyId is falsy) a dynasty to a specific gap of a
-  // title's existing history. Gaps are identified by their start/end years.
-  setTitleGapFill: (titleId, gapStart, gapEnd, dynastyId) => set((s) => {
-    const existing = (s.title_gap_fills[titleId] || []).filter(
+  // Assign an ordered list of dynasties to a specific gap of a title's existing
+  // history (gaps >100yr may have several, ruling in sequence). Gaps are keyed by
+  // their start/end years. An empty list clears the gap.
+  setTitleGapFillDynasties: (titleId, gapStart, gapEnd, dynastyIds) => set((s) => {
+    const ids = (dynastyIds || []).filter(Boolean);
+    const others = (s.title_gap_fills[titleId] || []).filter(
       (g) => !(g.gap_start_year === gapStart && g.gap_end_year === gapEnd)
     );
-    const next = dynastyId
-      ? [...existing, { gap_start_year: gapStart, gap_end_year: gapEnd, dynasty_id: dynastyId }]
-      : existing;
+    const next = ids.length
+      ? [...others, { gap_start_year: gapStart, gap_end_year: gapEnd, dynasty_ids: ids }]
+      : others;
     const out = { ...s.title_gap_fills };
     if (next.length) out[titleId] = next; else delete out[titleId];
     return { title_gap_fills: out };
