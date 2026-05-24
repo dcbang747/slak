@@ -129,7 +129,8 @@ export const useStore = create(persist((set, get) => ({
   active_view: 'global',  // 'global' | 'lifecycle' | 'titles' | 'tree'
   drawer_open: false,
   simplified_mode: true,
-  dark_mode: localStorage.getItem('ck3_dark_mode') === 'true',
+  // Default to dark mode; only light if the user has explicitly chosen it before.
+  dark_mode: localStorage.getItem('ck3_dark_mode') !== 'false',
 
   // Onboarding tutorial — `tutorial_enabled` is the master switch (persisted,
   // toggled by the header checkbox); `tutorial_step` is the current coachmark.
@@ -470,8 +471,16 @@ export const useStore = create(persist((set, get) => ({
     title_sequences: s.title_sequences,
     dynasty_definitions: s.dynasty_definitions,
     simplified_mode: s.simplified_mode,
-    dark_mode: s.dark_mode,
+    // dark_mode is intentionally NOT persisted here — it derives from the dedicated
+    // 'ck3_dark_mode' key (written only on an explicit toggle) so the default stays dark.
     active_view: s.active_view,
     tutorial_enabled: s.tutorial_enabled,
+  }),
+  // On rehydrate, always recompute dark_mode from the explicit key so a previously
+  // persisted value can't override the dark default (default dark unless user picked light).
+  merge: (persisted, current) => ({
+    ...current,
+    ...persisted,
+    dark_mode: localStorage.getItem('ck3_dark_mode') !== 'false',
   }),
 }));
