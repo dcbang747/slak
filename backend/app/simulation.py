@@ -1469,6 +1469,24 @@ def _pick_contemporary(c: Character, pool: list, rng: random.Random) -> Optional
     return rng.choice(cands) if cands else None
 
 
+def _can_murder(murderer: Character, victim: Character) -> bool:
+    """True if `murderer` could have killed `victim` at the victim's death — i.e. a
+    secret_murder can be expressed as the victim's actual (mysterious) death.
+
+    The murder is dated at the victim's death, so the murderer must have been a
+    living adult at that moment, the victim must have a death date, and the victim
+    must not already be someone else's victim."""
+    if victim.id == murderer.id or victim.killer_id or not victim.death_date:
+        return False
+    mb, _ = _life_years(murderer)
+    _, vd = _life_years(victim)
+    if vd < mb + 16:  # murderer was not yet an adult when the victim died
+        return False
+    if murderer.death_date and _date_tuple(victim.death_date) > _date_tuple(murderer.death_date):
+        return False  # murderer was already dead
+    return True
+
+
 def _generate_relationships(world: WorldState) -> None:
     """Assign built-in relationships between contemporaries.
 
@@ -1564,6 +1582,23 @@ def _generate_secrets(world: WorldState) -> None:
         # Partner-requiring secret with no eligible partner → downgrade to simple.
         if partner is None and meta:
             stype, meta = rng.choice(_SIMPLE_SECRETS), {}
+
+        # A murder secret means the holder actually killed the target — the murder
+        # IS the victim's death. Date the secret at the victim's death and stamp the
+        # killer onto that death block (death_mysterious + killer = murderer). If the
+        # murderer could not have been a living adult at the victim's death, it
+        # becomes a mere murder *attempt* (the victim outlived/predated them).
+        if stype == "secret_murder" and partner is not None:
+            if _can_murder(c, partner):
+                partner.death_reason = "death_mysterious"
+                partner.killer_id = c.id
+                c.secrets.append({
+                    "date": partner.death_date,
+                    "type": "secret_murder",
+                    "target_id": partner.id,
+                })
+                continue
+            stype, meta = "secret_murder_attempt", _SECRET_CATALOGUE["secret_murder_attempt"]
 
         # Date window: overlap with partner if any, else c's own adulthood.
         if partner is not None:
