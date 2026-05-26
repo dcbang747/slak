@@ -71,7 +71,10 @@ def _format_character(c: Character, adopted_children: list | None = None) -> str
     # Childhood trait (also top-level, per CK3 spec)
     if c.childhood_trait:
         lines.append(f"    trait = {c.childhood_trait}")
-    if c.is_bastard or c.traits or c.childhood_trait:
+    # Númenórean blood (Realms/LotR) — top-level genetic trait, one tier only
+    if c.numenorean_tier:
+        lines.append(f"    trait = blood_of_numenor_{c.numenorean_tier}")
+    if c.is_bastard or c.traits or c.childhood_trait or c.numenorean_tier:
         lines.append("")
 
     # ------------------------------------------------------------------

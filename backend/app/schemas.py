@@ -44,6 +44,10 @@ class DynastyDefinition(BaseModel):
     succession: Literal["PRIMOGENITURE", "ULTIMOGENITURE", "SENIORITY"] = "PRIMOGENITURE"
     lowborn_spouses: bool = False
     guaranteed_survival: bool = False
+    # Realms/LotR only: members carry a blood_of_numenor_N trait (tier set by
+    # birth date, declining over the Third Age), with lifespan +tier*20 years and
+    # fertile window +tier*10 years. Off for normal dynasties.
+    numenorean_blood: bool = False
     name_inheritance: NameInheritance = Field(default_factory=NameInheritance)
     languages: list[str] = Field(default_factory=list)
     # Each language entry: "language_id,start_year,end_year" — parsed at simulation time
@@ -197,6 +201,14 @@ class Character(BaseModel):
 
     # Genetic traits from inheritance/mutation (written as top-level trait = lines)
     traits: list[str] = Field(default_factory=list)
+
+    # Númenórean blood tier (0 = none). When >0, the character carries
+    # blood_of_numenor_{tier} and gets +tier*20 lifespan / +tier*10 fertile years.
+    numenorean_tier: int = 0
+    # Internal flag: True for pure Númenórean lines (flagged dynasty + patrilineal
+    # descent). False when the blood was acquired via marriage into a line that
+    # originally lacked it — those "diluted" lines drop 1–2 tiers on inheritance.
+    numenorean_established: bool = False
 
     # Education and personality (assigned during simulation)
     education_skill: str = ""          # random: diplomacy/intrigue/martial/stewardship/learning

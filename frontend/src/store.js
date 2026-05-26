@@ -45,6 +45,7 @@ function _defaultDynasty(globalSettings) {
     succession: 'PRIMOGENITURE',
     lowborn_spouses: false,
     guaranteed_survival: false,
+    numenorean_blood: false,
     name_inheritance: {
       grandparent_chance: 0.05,
       parent_chance: 0.05,

@@ -47,6 +47,51 @@ RELATIONSHIP_EFFECTS: dict[str, str] = {
 CHILDHOOD_RELATIONSHIP_EFFECTS: set[str] = {"set_relation_bully", "set_relation_crush"}
 RELATIONSHIP_MIN_AGE = 16
 
+# --- Númenórean blood (Realms/LotR only) ----------------------------------
+# Generator years map to Third-Age years via: TA = generator_year - 4033
+# (7033 = TA 3000, 4035 = TA 2). Blood tier is set purely by birth date for now:
+# tier 10 (strongest) early, declining to tier 1 (weakest) late, at these TA
+# thresholds. The highest tier whose threshold the birth year falls within wins.
+NUMENOR_TA_OFFSET = 4033
+_NUMENOR_TIER_TA: list[tuple[int, int]] = [
+    (10, 250), (9, 900), (8, 1200), (7, 1650), (6, 1750),
+    (5, 1900), (4, 2100), (3, 2400), (2, 2850), (1, 3200),
+]
+
+
+def _numenorean_tier_for_year(year: int) -> int:
+    """Blood tier (1–10) a Númenórean line holds for a member born in `year`."""
+    ta = year - NUMENOR_TA_OFFSET
+    for tier, ta_max in _NUMENOR_TIER_TA:
+        if ta <= ta_max:
+            return tier
+    return 1  # past the last threshold → weakest tier
+
+
+def _effective_lifespan(c: Character, base: float) -> float:
+    """Mean age at death for `c`: blood_of_numenor_N adds N*20 years."""
+    return base + (c.numenorean_tier or 0) * 20
+
+
+def _fertility_cap(c: Character, base: int) -> int:
+    """Max fertile age for `c`: blood_of_numenor_N adds N*10 fertile years."""
+    return base + (c.numenorean_tier or 0) * 10
+
+
+def _numenorean_max_marriage_age(year: int) -> int:
+    """Max age a blood-bearer marries at, declining over the Age (Kings of Gondor
+    schedule, applied universally to anyone with the blood). TA = year - 4033."""
+    ta = year - NUMENOR_TA_OFFSET
+    if ta <= 750:
+        return 90   # Second Age / early TA: 90+
+    if ta <= 1000:
+        return 80
+    if ta <= 1500:
+        return 70
+    if ta <= 1800:
+        return 60
+    return 50       # late Third Age: under 50
+
 # Hardcoded secret catalogue (no upload). Each entry declares how it is emitted:
 #   target=True  → block form `add_secret = { type = X target = character:Y }`
 #   lover=True   → also emits `set_relation_lover = character:Y` in the same block
@@ -394,6 +439,8 @@ class WorldState:
         self.placeholder_title_ids: set[str] = set()
         # All unique dynasty/house IDs used in the simulation
         self.dynasty_ids_used: set[str] = set()
+        # Dynasty IDs flagged as Númenórean (members inherit blood_of_numenor)
+        self.numenorean_dynasties: set[str] = set()
 
         # Parsed registries
         self.traits_registry: list[dict] = []
@@ -419,8 +466,16 @@ class WorldState:
         # character gets a lineof{prefix}{n} id.
         prefix = _lineof_prefix(dynasty) if dynasty else "x"
         n = self._id_counters.get(prefix, 0) + 1
+        cid = f"lineof{prefix}{n}"
+        # `lineof{prefix}{n}` has no separator, so different prefixes can collide
+        # (e.g. d1+42 and d14+2 both yield 'lineofd142'). A collision would
+        # silently overwrite an existing character and corrupt the family graph,
+        # so bump until the id is genuinely free.
+        while cid in self.characters:
+            n += 1
+            cid = f"lineof{prefix}{n}"
         self._id_counters[prefix] = n
-        return f"lineof{prefix}{n}"
+        return cid
 
     # ------------------------------------------------------------------
     # Name picking (with optional inheritance)
@@ -588,6 +643,36 @@ class WorldState:
         )
         self.characters[cid] = char
 
+        # Númenórean blood. Any child of a blood-bearing parent can inherit it
+        # (either line). A founder of a flagged dynasty is seeded from its birth
+        # era. Lines that originally lacked the blood — it entered via a parent
+        # rather than the flagged dynasty itself, so numenorean_established stays
+        # False — have a high chance to inherit 1–2 tiers BELOW the parent
+        # ("diluted"); established lines keep the parent's tier. A declining date
+        # ceiling caps everyone, so blood weakens as the Age wears on.
+        f_tier = father.numenorean_tier if father else 0
+        m_tier = mother.numenorean_tier if mother else 0
+        dynasty_flagged = dynasty in self.numenorean_dynasties
+        if dynasty_flagged or f_tier or m_tier:
+            ceiling = _numenorean_tier_for_year(birth_year)
+            parent_tier = max(f_tier, m_tier)
+            if parent_tier <= 0:
+                # Founder of a flagged dynasty — seed the line from its era.
+                char.numenorean_tier = ceiling
+                char.numenorean_established = True
+            else:
+                established = dynasty_flagged or bool(
+                    father and father.numenorean_tier and father.numenorean_established
+                )
+                if established:
+                    tier = parent_tier
+                else:
+                    # Diluted line: high chance to slip 1–2 tiers below the parent.
+                    drop = self.rng.choice([1, 1, 2]) if self.rng.random() < 0.75 else 0
+                    tier = parent_tier - drop
+                char.numenorean_tier = max(1, min(tier, ceiling))
+                char.numenorean_established = established
+
         if dynasty:
             self.dynasty_ids_used.add(dynasty)
 
@@ -657,16 +742,22 @@ class WorldState:
         self,
         ruler: Character,
         year: int,
-    ) -> Character:
+    ) -> Optional[Character]:
         """Create a fresh lowborn spouse (no dynasty) and marry them to ruler.
 
         Used for founder/heir/non-heir marriages where the spouse should marry IN
         from outside the dynasty rather than appearing as another dynasty root.
+
+        Returns None without marrying if `ruler` carries Númenórean blood and is
+        already past the (era-declining) Gondor max-marriage-age — the cap applies
+        universally to blood-bearers, including rulers and succeeding heirs.
         """
         if ruler.spouse_ids:
             sp = self.characters.get(ruler.spouse_ids[-1])
             if sp and sp.is_alive:
                 return sp
+        if ruler.numenorean_tier and _age(ruler, year) > _numenorean_max_marriage_age(year):
+            return None
         ruler_age = _age(ruler, year)
         spouse_age = max(16, min(ruler_age + self.rng.randint(-5, 5), 40))
         spouse_is_female = not ruler.is_female
@@ -779,6 +870,10 @@ def run_simulation(
     world.traits_registry = traits_registry
     world.titles = titles
     world.explicit_title_ids = set(payload.title_sequences.keys())
+    world.numenorean_dynasties = {
+        d.id for d in (payload.dynasty_definitions or [])
+        if getattr(d, "numenorean_blood", False)
+    }
     world.placeholder_title_ids = set()
     # Titles present in the uploaded history file own their output via text-merge.
     world.uploaded_title_ids = {t for t in titles if isinstance(t, str)}
@@ -925,7 +1020,9 @@ def run_simulation(
         for char in list(world.characters.values()):
             if not char.is_alive:
                 continue
-            reason = annual_death_check(char, year, rng, modifiers.average_lifespan)
+            reason = annual_death_check(
+                char, year, rng, _effective_lifespan(char, modifiers.average_lifespan)
+            )
             if reason:
                 world.kill(char, year, reason)
 
@@ -1013,7 +1110,7 @@ def run_simulation(
                 continue
 
             dad_age = _age(char, year)
-            if 16 <= dad_age <= 70 and rng.random() < modifiers.male_bastard_chance:
+            if 16 <= dad_age <= _fertility_cap(char, 70) and rng.random() < modifiers.male_bastard_chance:
                 world.make_character(
                     dynasty="",
                     culture=char.culture,
@@ -1025,7 +1122,7 @@ def run_simulation(
                     id_hint=_char_dynasty_id(char),
                 )
             spouse_age = _age(spouse, year)
-            if 16 <= spouse_age <= 45 and rng.random() < modifiers.female_bastard_chance:
+            if 16 <= spouse_age <= _fertility_cap(spouse, 45) and rng.random() < modifiers.female_bastard_chance:
                 world.make_character(
                     dynasty="",
                     culture=char.culture,
@@ -1037,7 +1134,7 @@ def run_simulation(
                     id_hint=_char_dynasty_id(char),
                 )
 
-            if spouse_age < 16 or spouse_age > 45:
+            if spouse_age < 16 or spouse_age > _fertility_cap(spouse, 45):
                 continue
             legitimate_children = sum(
                 1 for cid in char.child_ids
@@ -1119,7 +1216,10 @@ def run_simulation(
             # the decay after the peak is gentler so late marriages remain possible.
             # Marriages still never start before 16.
             avg_marry = max(16, modifiers.average_marriage_age)
-            if age < 16 or age > avg_marry + 30:
+            # Blood-bearers follow the (declining) Gondor max-marriage-age schedule
+            # instead of the generic cap — early-Age Númenóreans can wed much later.
+            marry_cap = _numenorean_max_marriage_age(year) if char.numenorean_tier else avg_marry + 30
+            if age < 16 or age > marry_cap:
                 continue
             spread = max(2.5, avg_marry * 0.12) if age <= avg_marry else max(4.0, avg_marry * 0.25)
             peak = 0.45
@@ -1413,16 +1513,19 @@ def _kill_survivors(world: WorldState, last_year: int, avg_lifespan: float = 70.
     early break die at natural ages instead of being force-aged to ~200.
 
     Continues the annual mortality tick until all characters have died or the
-    hard cap (last_year + 200) is reached. Remaining immortals are force-killed
-    at the cap with death_natural_causes.
+    hard cap is reached. The cap normally sits at last_year + 200, but is extended
+    by the strongest Númenórean lifespan bonus present so long-lived blood-bearers
+    aren't force-killed prematurely. Remaining immortals are force-killed at the
+    cap with death_natural_causes.
     """
-    hard_cap = last_year + 200
+    max_tier = max((c.numenorean_tier or 0 for c in world.characters.values()), default=0)
+    hard_cap = last_year + 200 + max_tier * 20
     for year in range(last_year + 1, hard_cap + 1):
         alive = [c for c in world.characters.values() if c.is_alive]
         if not alive:
             break
         for char in alive:
-            reason = annual_death_check(char, year, world.rng, avg_lifespan)
+            reason = annual_death_check(char, year, world.rng, _effective_lifespan(char, avg_lifespan))
             if reason:
                 world.kill(char, year, reason)
     # Hard cap: force-kill anyone who survived 200 extra years
@@ -1896,7 +1999,16 @@ def _find_heir(
     reverse = (succ == "ULTIMOGENITURE")
 
     def _search(char_id: str, allow_bastard: bool, female_only: Optional[bool],
-                skip_id: Optional[str] = None) -> Optional[Character]:
+                skip_id: Optional[str] = None,
+                visited: Optional[set[str]] = None) -> Optional[Character]:
+        # Guard against cycles in the parent/child graph: a depth-first descent
+        # must never revisit a node. Without this, a corrupt link recurses until
+        # Python's recursion limit and crashes the whole generation.
+        if visited is None:
+            visited = set()
+        if char_id in visited:
+            return None
+        visited.add(char_id)
         char = world.characters.get(char_id)
         if char is None:
             return None
@@ -1920,7 +2032,7 @@ def _find_heir(
                 continue  # branch already covered when climbing up from it
             if _eligible(child, allow_bastard):
                 return child
-            found = _search(child.id, allow_bastard, female_only)
+            found = _search(child.id, allow_bastard, female_only, visited=visited)
             if found:
                 return found
         return None

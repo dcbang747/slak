@@ -32,3 +32,6 @@ results/
 /tmp/
 .vercel
 RawSampleFiles/
+
+# Local-only stress harness (kept on disk, not committed)
+backend/stress_test.py

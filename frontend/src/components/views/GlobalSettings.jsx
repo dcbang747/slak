@@ -452,6 +452,16 @@ function DynastyCard({ dynasty }) {
               />
             </div>
           </div>
+
+          <div className="mt-2">
+            <CheckboxField
+              label="Númenórean Blood (Realms)"
+              info="Realms/LotR only. Members carry a blood_of_numenor_N trait whose tier is set by birth date (T10 strongest in the early Third Age, declining to T1 by the late Third Age). Each tier adds +20 years of life expectancy and +10 fertile years, so these lines live far longer and breed later."
+              infoUp
+              value={dynasty.numenorean_blood}
+              onChange={(v) => upd({ numenorean_blood: v })}
+            />
+          </div>
         </div>
       )}
     </div>
